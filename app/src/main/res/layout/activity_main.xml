@@ -48,19 +48,23 @@
         android:orientation="horizontal"
         android:background="#FFFFFF">
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@mipmap/ic_launcher"/>
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@mipmap/ic_launcher"/>
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@mipmap/ic_launcher"/>
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@mipmap/ic_launcher"/>
     </LinearLayout>

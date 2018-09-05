@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayList<String> tags = new ArrayList<String>(
-                Arrays.asList(new String[]{"#오늘 서울은?", "#감성적", "#인생샷 서울"}));
+                Arrays.asList(new String[]{"#오늘 서울은?", "#감성적", "#인생샷 서울", "#데이트", "#레트로", "#여름"}));
 
         TagAdapter tagAdapter = new TagAdapter(this, tags);
 
