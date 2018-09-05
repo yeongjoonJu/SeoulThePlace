@@ -1,5 +1,7 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,5 +31,10 @@ public class LoginBackgroundActivity extends AppCompatActivity {
                 mp.setLooping(true);
             }
         }); //루프돌림
+
+//        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+//        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment,new LoginFragment());
+//        fragmentTransaction.commit(); //프래그먼트 바꿀때 쓰면됨
     }
 }

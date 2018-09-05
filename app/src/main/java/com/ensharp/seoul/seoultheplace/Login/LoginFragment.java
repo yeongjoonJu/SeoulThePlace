@@ -1,12 +1,15 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
+import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.auth.Session;
 import com.kakao.usermgmt.LoginButton;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragment extends android.support.v4.app.Fragment implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
 
     GoogleApiClient mGoogleApiClient;
     SignInButton googleLoginBtn;
@@ -38,16 +41,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GlobalApplication globalApplication;
     private SessionCallback sessionCallback;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_first);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.login_first,null); //view를 불러온다.
 
-        kakaoLoginBtn = (LoginButton) findViewById(R.id.kakao_login);
+        kakaoLoginBtn = (LoginButton)view.findViewById(R.id.kakao_login);
         kakaoLoginBtn.setOnClickListener(this);
 
-        googleLoginBtn = (SignInButton) findViewById(R.id.google_login);
+        googleLoginBtn = (SignInButton)view.findViewById(R.id.google_login);
         googleLoginBtn.setSize(SignInButton.SIZE_STANDARD);
         googleLoginBtn.setOnClickListener(this);
 
@@ -56,9 +62,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Session.getCurrentSession().addCallback(sessionCallback);
 
         setGoogleLogin();
-        nameString = (TextView) findViewById(R.id.id);
-        emailString = (TextView) findViewById(R.id.email);
-        personIdString = (TextView) findViewById(R.id.etc);
+        nameString = (TextView)view.findViewById(R.id.id);
+        emailString = (TextView)view.findViewById(R.id.email);
+        personIdString = (TextView)view.findViewById(R.id.etc);
+
+        return view;//view를 불렀으니 view를 돌려준다.
     }
 
     //구글로그인 세팅을 합니다.
@@ -71,8 +79,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .requestEmail()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity(),this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         googleLoginBtn.setScopes(gso.getScopeArray());
@@ -95,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -117,14 +125,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
     //연결이 끊겼을때 토스트 메세지로 표시해 줍니다.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(getApplicationContext(), ""+connectionResult, Toast.LENGTH_SHORT).show();
     }
 
-    public void MakeNewID(View v){
 
-    }
 }

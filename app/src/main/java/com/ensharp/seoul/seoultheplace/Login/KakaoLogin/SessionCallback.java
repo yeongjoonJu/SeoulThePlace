@@ -2,7 +2,7 @@ package com.ensharp.seoul.seoultheplace.Login.KakaoLogin;
 import android.util.Log;
 
 
-import com.ensharp.seoul.seoultheplace.Login.LoginActivity;
+import com.ensharp.seoul.seoultheplace.Login.LoginFragment;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -42,9 +42,9 @@ public class SessionCallback implements ISessionCallback {
             // 사용자정보 요청에 성공한 경우,
             @Override
             public void onSuccess(UserProfile userProfile) {
-                LoginActivity.nameString.setText(userProfile.getNickname());
-                LoginActivity.emailString.setText(userProfile.getEmail());
-                LoginActivity.personIdString.setText(userProfile.getUUID());
+                LoginFragment.nameString.setText(userProfile.getNickname());
+                LoginFragment.emailString.setText(userProfile.getEmail());
+                LoginFragment.personIdString.setText(userProfile.getUUID());
             }
 
             // 사용자 정보 요청 실패
