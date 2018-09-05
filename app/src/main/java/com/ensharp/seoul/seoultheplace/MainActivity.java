@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.ensharp.seoul.seoultheplace.Login.LoginActivity;
+import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent login = new Intent(this,LoginActivity.class);
+        Intent login = new Intent(this,LoginBackgroundActivity.class);
         startActivity(login);
         finish();
     }
