@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SeoulThePlace</string>
+    <string name="facebook_app_id">717351961937108</string>
+    <string name="fb_login_protocol_scheme">fb717351961937108</string>
 </resources>

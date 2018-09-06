@@ -34,5 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:+'//원래 16.0.1
     implementation 'com.google.android.gms:play-services-auth:+'
+    //페북로그인
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
 apply plugin: 'com.google.gms.google-services'
