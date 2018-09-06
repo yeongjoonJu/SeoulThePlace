@@ -14,14 +14,19 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
 
-    <fragment
-        android:id="@+id/fragment"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:name="com.ensharp.seoul.seoultheplace.Login.LoginFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#80000000"/>
+    <!--80은 50% 66은 40% 99 는 60% B3 70%-->
+
+
+    <FrameLayout
+        android:id = "@+id/main_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"></FrameLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>

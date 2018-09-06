@@ -1,6 +1,5 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -13,6 +12,9 @@ import com.ensharp.seoul.seoultheplace.R;
 public class LoginBackgroundActivity extends AppCompatActivity {
     private String TAG = "VideoActivity";
     private VideoView mVideoview;
+
+    LoginFragment loginFragment;
+    MakeIDFragment makeIDFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +30,23 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         mVideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                mp.setVolume(0f,0f);
                 mp.setLooping(true);
             }
         }); //루프돌림
 
-//        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-//        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment,new LoginFragment());
-//        fragmentTransaction.commit(); //프래그먼트 바꿀때 쓰면됨
+        loginFragment = new LoginFragment();
+        makeIDFragment = new MakeIDFragment();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame,loginFragment);
+        fragmentTransaction.commit();
+    }
+    public void onFragmentChanged() {
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, makeIDFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit(); //프래그먼트 바꿀때 쓰면됨
     }
 }
