@@ -1,7 +1,10 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ListView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -15,75 +18,62 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DAO extends AsyncTask<String, String, String> {
+public class DAO extends AsyncTask<Void, Void, Void> {
+    // 상태 변수
+    private final int PROCESSING = 1;
+    private final int WAITING = 2;
+
+    // 처리할 내용
+    private final int INSERT = 3;
+    private final int MAIN_LIST_UPDATE = 4;
+    private final int TAG_LIST_UPDATE = 5;
+
+    private int status = WAITING;
+    private int processContent = 0;
 
     private JSONObject jsonObject;
     private URL url;
     private HttpURLConnection conn = null;
-    private String currentQuery;
 
-    public final String[] COURSE_TABLE_COLUMN = new String[] {
-            "code", "name", "simple_script", "detail_script", "place_order",
-            "address", "type", "tag", "area", "term", "good"
-    };
-    public final String[] PLACE_TABLE_COLUMN = new String[] {
-            "code", "name", "address", "simple_script", "picture1",
-            "picture2", "picture3", "tel", "detail_script", "tip",
-            "recommand", "tag", "good"
-    };
+    private ListView mListView;
 
-    public DAO() {
-        this("SeoulThePlace", "Furge");
+    public void insertMemberData(String[] information) {
+        String[] memberCategory = new String[]{"email", "password", "name", "age", "sex", "type"};
+        jsonObject = new JSONObject();
+        try {
+            for (int i = 0; i < memberCategory.length; i++)
+                jsonObject.accumulate(memberCategory[i], information[i]);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        processContent = INSERT;
+        status = PROCESSING;
     }
 
-    public DAO(String userID, String name) {
+    public void setUrl(String url) {
         try {
-            //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-            jsonObject = new JSONObject();
-            jsonObject.accumulate("user_id", userID);
-            jsonObject.accumulate("name", name);
-        } catch(Exception e) {
+            this.url = new URL(url);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
-    public void insertINTO(String table, String[] columns, String[] data) {
-        currentQuery = "INSERT INTO " + table + "(";
-        String columnName = "";
-        String dataStr = "";
-        for(int column = 0; column < columns.length; column++) {
-            columnName += columns[column];
-            dataStr += "\'" + data[column] + "\'";
-
-            if(column != columns.length - 1) {
-                columnName += ",";
-                dataStr += ",";
-            }
-            currentQuery += columnName;
-        }
-        currentQuery += ( columnName + ") VALUES(" + dataStr + ");" );
+    // UI 처리 예시 함수, 호출용
+    public void mainUpdate(ListView listView) {
+        mListView = listView;
+        processContent = MAIN_LIST_UPDATE;
+        status = PROCESSING;
     }
 
-    public void selectFrom(String table, String where) {
-        currentQuery = "SELECT * From " + table + " " + where + ";";
-    }
+    // 실제 처리 함수
+    protected void mainListViewUpdate(String data) {
 
-    public void selectFrom(String table, String[] columns, String where) {
-        currentQuery = "SELECT ";
-        String columnName = "";
-        for(int column = 0; column < columns.length; column++) {
-            columnName += columns[column];
-            if(column != columns.length - 1) {
-                columnName += ",";
-            }
-        }
-        currentQuery += columnName + " From " + table + " " + where + ";";
     }
 
     // 서버 연결 시도
-    protected void connectServer(String url) {
+    protected boolean connectServer() {
         try {
-            this.url = new URL(url);
             conn = (HttpURLConnection) this.url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Cache-Control", "no-cache");
@@ -92,57 +82,85 @@ public class DAO extends AsyncTask<String, String, String> {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.connect();
+            return true;
         }catch (Exception e) {
+            Log.e("connect", "fail");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    protected void sendData(JSONObject jsonObject) {
+        try {
+            OutputStream outputStream = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+            writer.write(jsonObject.toString());
+            writer.flush();
+            writer.close();
+        }catch (IOException e ) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    protected String doInBackground(String... urls) {
-
-        connectServer(urls[0]);
+    protected String getData() {
         BufferedReader reader = null;
+        try {
+            InputStream stream = conn.getInputStream();
 
-        try{
-            // 서버로 보내기 위해서 스트림 만듬
-            OutputStream outStream = conn.getOutputStream();
+            //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
+            reader = new BufferedReader(new InputStreamReader(stream));
+            StringBuffer buffer = new StringBuffer();
 
-            // 버퍼를 생성하고 쿼리를 넣음
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-            writer.write(currentQuery);
-            writer.flush();
-            writer.close();
+            String line = "";
 
-            // 질의문이 SELECT문인 경우만 결과를 반환한다
-            if(currentQuery.charAt(0) == 'S') {
-                // 서버로부터 데이터를 받음
-                InputStream stream = conn.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                return buffer.toString(); // 서버로부터 받은 값을 리턴해준다.
-            }
+            // 아래 라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
+            while ((line = reader.readLine()) != null)
+                buffer.append(line);
 
-        } catch (MalformedURLException e){
-            e.printStackTrace();
+            return buffer.toString();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if(conn != null){
-                conn.disconnect();
-            }
+        }finally {
             try {
-                if(reader != null){
+                if(reader != null) {
                     reader.close(); //버퍼를 닫아줌
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         return null;
+    }
+
+    @Override
+    protected Void doInBackground(Void... urls) {
+        while(true) {
+            // 요구 대기 중
+            while(status == WAITING);
+
+            // 서버와 연결 실패 시
+            if (!connectServer()) {
+                status = WAITING;
+                processContent = 0;
+                continue;
+            }
+
+            switch (processContent) {
+                case INSERT:
+                    sendData(jsonObject);
+                case MAIN_LIST_UPDATE:
+                    mainListViewUpdate(getData());
+                case TAG_LIST_UPDATE:
+                    break;
+                default:
+                    break;
+            }
+
+            if (conn != null)
+                conn.disconnect();
+
+            status = WAITING;
+            processContent = 0;
+        }
     }
 }
