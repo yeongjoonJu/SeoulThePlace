@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
+        CheckAlreadyLogin();
 
         mVideoview = (VideoView) findViewById(R.id.videoview);
         //play video
@@ -48,5 +51,17 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.main_frame, makeIDFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit(); //프래그먼트 바꿀때 쓰면됨
+    }
+
+    public void CheckAlreadyLogin(){
+        SharedPreferences sf = getSharedPreferences("data",0);
+        if(sf.getString("id","")!=""){
+            Intent intent = new Intent(this,CheckUserActivity.class);
+            intent.putExtra("email",String.valueOf(sf.getString("id","")));
+            intent.putExtra("name",String.valueOf(sf.getString("name","")));
+            intent.putExtra("password",String.valueOf(sf.getString("password","")));
+            startActivity(intent);
+            finish();
+        }
     }
 }
