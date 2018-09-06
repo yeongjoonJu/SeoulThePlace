@@ -8,38 +8,13 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="2"
-        android:background="@android:color/white"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="12dp"
-            android:text="@string/app_name"
-            android:textColor="#3B3B44"
-            android:textSize="28sp" />
-
-        <com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView
-            android:id="@+id/tagListView"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView>
-    </LinearLayout>
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment"
         android:background="#EBE7E6"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="8">
-    </LinearLayout>
+        android:layout_weight="11">
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,26 +22,43 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:background="#FFFFFF">
+
         <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/home_icon" />
+        <ImageButton
+            android:id="@+id/searchButton"
             android:layout_weight="1"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@mipmap/ic_launcher"/>
+            android:scaleType="centerInside"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:src="@drawable/search_icon"/>
         <ImageButton
+            android:id="@+id/bookmarkButton"
             android:layout_weight="1"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@mipmap/ic_launcher"/>
+            android:scaleType="centerInside"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:src="@drawable/bookmark_icon"/>
         <ImageButton
+            android:id="@+id/mypageButton"
             android:layout_weight="1"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@mipmap/ic_launcher"/>
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@mipmap/ic_launcher"/>
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:src="@drawable/mypage_icon"/>
     </LinearLayout>
 
 

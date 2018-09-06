@@ -54,8 +54,6 @@ public class TagAdapter extends ArrayAdapter<String> {
             }
         });
 
-
-
         return listItemView;
     }
 }
