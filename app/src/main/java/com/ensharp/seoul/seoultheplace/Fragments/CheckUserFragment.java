@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
-public class CheckUserFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class CheckUserFragment extends android.support.v4.app.Fragment {
 
     TextView email;
     TextView passwd;
@@ -38,7 +38,7 @@ public class CheckUserFragment extends android.support.v4.app.Fragment implement
         sex = (TextView)view.findViewById(R.id.checksex);
         type = (TextView)view.findViewById(R.id.checktype);
 
-        logout.setOnClickListener(this);
+        //logout.setOnClickListener(this);
 
         SharedPreferences sf = getActivity().getSharedPreferences("data",0);
 
@@ -51,26 +51,6 @@ public class CheckUserFragment extends android.support.v4.app.Fragment implement
 
 
         return view;//view를 불렀으니 view를 돌려준다.
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.logout:
-                SharedPreferences sf = getActivity().getSharedPreferences("data",0);
-                SharedPreferences.Editor editor = sf.edit();
-                editor.remove("email");
-                editor.remove("password");
-                editor.remove("name");
-                editor.remove("age");
-                editor.remove("type");
-                editor.remove("sex");
-                editor.commit();
-                Intent intent = new Intent(getActivity(),LoginBackgroundActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-                break;
-        }
     }
 
 }

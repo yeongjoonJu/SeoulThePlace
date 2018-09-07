@@ -188,9 +188,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             name = acct.getDisplayName();
             email = acct.getEmail();
             LActivity.onFragmentChanged();
-//            EditText email = (EditText)getActivity().findViewById(R.id.email);
-//            email.setFocusable(false);
-//            email.setClickable(false);
+
         }
     }
 

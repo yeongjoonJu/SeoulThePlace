@@ -43,7 +43,11 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,loginFragment).commit();
     }
     public void onFragmentChanged() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,makeIDFragment).commit();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame,makeIDFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
     //이미 로그인한 적이 있는지 확인.
