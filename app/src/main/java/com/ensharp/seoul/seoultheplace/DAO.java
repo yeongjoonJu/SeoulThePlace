@@ -1,9 +1,10 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.os.AsyncTask;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,79 +13,72 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class DAO extends AsyncTask<String, String, String> {
-
+public class DAO {
     private JSONObject jsonObject;
-    private URL url;
     private HttpURLConnection conn = null;
-    private String currentQuery;
 
-    public final String[] COURSE_TABLE_COLUMN = new String[] {
-            "code", "name", "simple_script", "detail_script", "place_order",
-            "address", "type", "tag", "area", "term", "good"
-    };
-    public final String[] PLACE_TABLE_COLUMN = new String[] {
-            "code", "name", "address", "simple_script", "picture1",
-            "picture2", "picture3", "tel", "detail_script", "tip",
-            "recommand", "tag", "good"
-    };
+    // 연결 주소
+    final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
 
-    public DAO() {
-        this("SeoulThePlace", "Furge");
+    public boolean insertMemberData(String[] information) {
+        String[] memberCategory = new String[]{"email", "password", "name", "age", "sex", "type"};
+        jsonObject = new JSONObject();
+        try {
+            // 서버 연결
+            if(!connectServer(BASE_URL + "/register"))
+                return false;
+
+            for (int i = 0; i < memberCategory.length; i++)
+                jsonObject.accumulate(memberCategory[i], information[i]);
+
+            sendData(jsonObject);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }finally {
+            if(conn != null)
+                conn.disconnect();
+        }
+        return true;
     }
 
-    public DAO(String userID, String name) {
+    // 태그 목록을 불러온다.
+    public String[] getTagList() {
+        String[] tags;
+        // 서버 연결
+        if(!connectServer(BASE_URL + "/tag"))
+            return null;
+        String result = getData().toString();
+        return result.split(",");
+    }
+
+    // 플레이스 검색
+    public ArrayList<PlaceVO> searchPlace(String keyword) {
+        ArrayList<PlaceVO> results = new ArrayList<PlaceVO>();
+        // 서버 연결
+        if(!connectServer(BASE_URL + "/place"))
+            return null;
+        JSONArray jsonResult = getData();
         try {
-            //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-            jsonObject = new JSONObject();
-            jsonObject.accumulate("user_id", userID);
-            jsonObject.accumulate("name", name);
-        } catch(Exception e) {
+            for (int i = 0; i < jsonResult.length(); i++) {
+                PlaceVO place = new PlaceVO(jsonResult.getJSONObject(i));
+                if(place.getName().contains(keyword) || place.getLocation().contains(keyword)
+                        || place.getDetails().contains(keyword))
+                    results.add(place);
+            }
+        }catch(JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void insertINTO(String table, String[] columns, String[] data) {
-        currentQuery = "INSERT INTO " + table + "(";
-        String columnName = "";
-        String dataStr = "";
-        for(int column = 0; column < columns.length; column++) {
-            columnName += columns[column];
-            dataStr += "\'" + data[column] + "\'";
-
-            if(column != columns.length - 1) {
-                columnName += ",";
-                dataStr += ",";
-            }
-            currentQuery += columnName;
-        }
-        currentQuery += ( columnName + ") VALUES(" + dataStr + ");" );
-    }
-
-    public void selectFrom(String table, String where) {
-        currentQuery = "SELECT * From " + table + " " + where + ";";
-    }
-
-    public void selectFrom(String table, String[] columns, String where) {
-        currentQuery = "SELECT ";
-        String columnName = "";
-        for(int column = 0; column < columns.length; column++) {
-            columnName += columns[column];
-            if(column != columns.length - 1) {
-                columnName += ",";
-            }
-        }
-        currentQuery += columnName + " From " + table + " " + where + ";";
+        return results;
     }
 
     // 서버 연결 시도
-    protected void connectServer(String url) {
+    protected boolean connectServer(String url) {
         try {
-            this.url = new URL(url);
-            conn = (HttpURLConnection) this.url.openConnection();
+            URL urlObject = new URL(url);
+            conn = (HttpURLConnection) urlObject.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Cache-Control", "no-cache");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -92,57 +86,60 @@ public class DAO extends AsyncTask<String, String, String> {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.connect();
+            return true;
         }catch (Exception e) {
+            Log.e("connect", "fail");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 데이터 송신
+    protected void sendData(JSONObject jsonObject) {
+        try {
+            OutputStream outputStream = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+            writer.write(jsonObject.toString());
+            writer.flush();
+            writer.close();
+        }catch (IOException e ) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    protected String doInBackground(String... urls) {
-
-        connectServer(urls[0]);
+    // 데이터 수신
+    protected JSONArray getData() {
+        JSONArray result = null;
         BufferedReader reader = null;
+        try {
+            InputStream stream = conn.getInputStream();
 
-        try{
-            // 서버로 보내기 위해서 스트림 만듬
-            OutputStream outStream = conn.getOutputStream();
+            //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
+            reader = new BufferedReader(new InputStreamReader(stream));
+            StringBuffer buffer = new StringBuffer();
 
-            // 버퍼를 생성하고 쿼리를 넣음
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-            writer.write(currentQuery);
-            writer.flush();
-            writer.close();
+            String line = "";
 
-            // 질의문이 SELECT문인 경우만 결과를 반환한다
-            if(currentQuery.charAt(0) == 'S') {
-                // 서버로부터 데이터를 받음
-                InputStream stream = conn.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                return buffer.toString(); // 서버로부터 받은 값을 리턴해준다.
-            }
+            // 아래 라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
+            while ((line = reader.readLine()) != null)
+                buffer.append(line);
 
-        } catch (MalformedURLException e){
-            e.printStackTrace();
+            result = new JSONArray(buffer.toString());
+
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         } finally {
-            if(conn != null){
-                conn.disconnect();
-            }
             try {
-                if(reader != null){
+                if(reader != null) {
                     reader.close(); //버퍼를 닫아줌
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 }
