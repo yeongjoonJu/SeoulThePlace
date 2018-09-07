@@ -15,6 +15,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dao = new DAO();
-        dao.execute();
     }
 }
