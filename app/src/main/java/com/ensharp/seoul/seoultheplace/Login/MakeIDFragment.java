@@ -148,6 +148,7 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
                 userData.putExtra("sex",isman);
                 userData.putExtra("age",isage);
                 userData.putExtra("type",type);
+
                 SetSharedPreference();
                 startActivity(userData);
                 getActivity().finish();
@@ -155,6 +156,7 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
         }
         AllCheckData();
     }
+
     public void SetSharedPreference(){
         SharedPreferences sf = getActivity().getSharedPreferences("data",0);
         SharedPreferences.Editor editor = sf.edit();

@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -23,16 +24,16 @@ public class DAO {
     // 연결 주소
     final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
 
-    public boolean insertMemberData(String[] information) {
-        String[] memberCategory = new String[]{"email", "password", "name", "age", "sex", "type"};
+    public boolean insertMemberData(Bundle information) {
+        String[] memberCategory = new String[]{"name", "email", "password", "sex", "age", "type"};
         jsonObject = new JSONObject();
         try {
             // 서버 연결
-            if(!connectServer(BASE_URL + "/register"))
+            if(!connectServer(BASE_URL + "/user/register"))
                 return false;
 
             for (int i = 0; i < memberCategory.length; i++)
-                jsonObject.accumulate(memberCategory[i], information[i]);
+                jsonObject.accumulate(memberCategory[i], information.getString(memberCategory[i]));
 
             sendData(jsonObject);
         }catch (JSONException e) {
