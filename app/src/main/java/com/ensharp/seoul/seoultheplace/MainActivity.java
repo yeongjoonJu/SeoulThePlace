@@ -1,20 +1,13 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
-
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
-import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
-import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import android.content.Intent;
+import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
