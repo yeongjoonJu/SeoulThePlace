@@ -38,7 +38,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     private ListView mListView;
 
     public void insertMemberData(String[] information) {
-        String[] memberCategory = new String[]{"email", "password", "name", "age", "sex", "type"};
+        String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
         jsonObject = new JSONObject();
         try {
             for (int i = 0; i < memberCategory.length; i++)
