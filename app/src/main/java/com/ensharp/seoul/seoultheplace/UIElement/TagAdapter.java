@@ -45,7 +45,7 @@ public class TagAdapter extends ArrayAdapter<String> {
                 tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
                 tagButton.setTextColor(Color.WHITE);
 
-                // 이전에 선택되어있던 버튼의 색을 변경
+                //이전에 선택되어있던 버튼의 색을 변경
                 if(preChoicedButton != null) {
                     preChoicedButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_unchoicedtag));
                     preChoicedButton.setTextColor(0xFF777788);

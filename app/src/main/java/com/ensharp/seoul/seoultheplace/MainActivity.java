@@ -4,22 +4,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.support.v4.app.Fragment;
+import com.ensharp.seoul.seoultheplace.Fragments.BookmarkFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import android.content.Intent;
+
+import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
-    private android.support.v4.app.Fragment[] fragments;
+    private Fragment[] fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragments = new android.support.v4.app.Fragment[]{
-                new MainFragment(), new SearchFragment()
+        fragments = new Fragment[]{
+                new MainFragment(), new SearchFragment(), new BookmarkFragment(), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화

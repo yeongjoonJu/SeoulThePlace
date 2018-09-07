@@ -2,7 +2,6 @@ package com.ensharp.seoul.seoultheplace.Login;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,15 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.GlobalApplication;
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.SessionCallback;
 import com.ensharp.seoul.seoultheplace.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -32,10 +32,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.auth.Session;
 import com.kakao.usermgmt.LoginButton;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -191,6 +188,9 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             name = acct.getDisplayName();
             email = acct.getEmail();
             LActivity.onFragmentChanged();
+//            EditText email = (EditText)getActivity().findViewById(R.id.email);
+//            email.setFocusable(false);
+//            email.setClickable(false);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
-import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,16 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.GlobalApplication;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
-import com.facebook.all.All;
-import com.google.android.gms.common.SignInButton;
-import com.kakao.auth.Session;
-import com.kakao.usermgmt.LoginButton;
 
 import java.util.ArrayList;
 
@@ -32,12 +25,17 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
     EditText name;
     EditText passwd;
     Spinner age;
-    String stringAge;
     Button man;
     Button woman;
     Button signUp;
-    boolean ishim = false;
-    boolean checkSex = false;
+    Button type1;
+    Button type2;
+    Button type3;
+    Button type4;
+
+    String isman = null;
+    String isage = null;
+    String type = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,10 +59,18 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
         woman.setOnClickListener(this);
         signUp =(Button)view.findViewById(R.id.SignUp);
         signUp.setOnClickListener(this);
+        type1 = (Button)view.findViewById(R.id.travel1);
+        type1.setOnClickListener(this);
+        type2 = (Button)view.findViewById(R.id.travel2);
+        type2.setOnClickListener(this);
+        type3 = (Button)view.findViewById(R.id.travel3);
+        type3.setOnClickListener(this);
+        type4 = (Button)view.findViewById(R.id.travel4);
+        type4.setOnClickListener(this);
 
         ArrayList<String> list = new ArrayList<>();
         for(int lists = 14;lists<80;lists++)
-        list.add(String.valueOf(lists));
+            list.add(String.valueOf(lists));
 
         ArrayAdapter spinnerAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, list);
         age.setAdapter(spinnerAdapter);
@@ -73,13 +79,14 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
         age.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                stringAge = String.valueOf(age.getItemAtPosition(position));
+                isage = String.valueOf(age.getItemAtPosition(position));
                 AllCheckData();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                isage = "없음";
+                AllCheckData();
             }
         });
 
@@ -96,33 +103,72 @@ public class MakeIDFragment extends android.support.v4.app.Fragment implements V
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.manbtn:
-                ishim = true;
                 man.setEnabled(false);
                 woman.setEnabled(true);
-                checkSex = true;
-                AllCheckData();
+                isman = "man";
                 break;
             case R.id.womanbtn:
-                ishim =false;
                 woman.setEnabled(false);
                 man.setEnabled(true);
-                checkSex = true;
-                AllCheckData();
+                isman = "woman";
+                break;
+            case R.id.travel1:
+                type = "1번여행코스";
+                type1.setEnabled(false);
+                type2.setEnabled(true);
+                type3.setEnabled(true);
+                type4.setEnabled(true);
+                break;
+            case R.id.travel2:
+                type = "2번여행코스";
+                type1.setEnabled(true);
+                type2.setEnabled(false);
+                type3.setEnabled(true);
+                type4.setEnabled(true);
+                break;
+            case R.id.travel3:
+                type = "3번여행코스";
+                type1.setEnabled(true);
+                type2.setEnabled(true);
+                type3.setEnabled(false);
+                type4.setEnabled(true);
+                break;
+            case R.id.travel4:
+                type = "4번여행코스";
+                type1.setEnabled(true);
+                type2.setEnabled(true);
+                type3.setEnabled(true);
+                type4.setEnabled(false);
                 break;
             case R.id.SignUp:
-                Intent userData = new Intent(getActivity(),CheckUserActivity.class);
+                Intent userData = new Intent(getActivity(),MainActivity.class);
                 userData.putExtra("name",String.valueOf(name.getText()));
                 userData.putExtra("email",String.valueOf(email.getText()));
                 userData.putExtra("password",String.valueOf(passwd.getText()));
-                userData.putExtra("sex",checkSex);
+                userData.putExtra("sex",isman);
+                userData.putExtra("age",isage);
+                userData.putExtra("type",type);
+                SetSharedPreference();
                 startActivity(userData);
                 getActivity().finish();
                 break;
         }
+        AllCheckData();
+    }
+    public void SetSharedPreference(){
+        SharedPreferences sf = getActivity().getSharedPreferences("data",0);
+        SharedPreferences.Editor editor = sf.edit();
+        editor.putString("email",String.valueOf(email.getText()));
+        editor.putString("password",String.valueOf(passwd.getText()));
+        editor.putString("name",String.valueOf(name.getText()));
+        editor.putString("age",isage);
+        editor.putString("sex",isman);
+        editor.putString("type",type);
+        editor.commit();
     }
 
     public void AllCheckData(){
-        if(checkSex&&email!=null&&name!=null&&passwd!=null){
+        if(isman!=null&&email!=null&&name!=null&&passwd!=null&&type!=null){
             signUp.setEnabled(true);
         }
         else{

@@ -1,6 +1,5 @@
 package com.ensharp.seoul.seoultheplace.Login;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -9,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.VideoView;
 
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
 public class LoginBackgroundActivity extends AppCompatActivity {
@@ -40,26 +40,17 @@ public class LoginBackgroundActivity extends AppCompatActivity {
 
         loginFragment = new LoginFragment();
         makeIDFragment = new MakeIDFragment();
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame,loginFragment);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,loginFragment).commit();
     }
     public void onFragmentChanged() {
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, makeIDFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit(); //프래그먼트 바꿀때 쓰면됨
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,makeIDFragment).commit();
     }
 
+    //이미 로그인한 적이 있는지 확인.
     public void CheckAlreadyLogin(){
         SharedPreferences sf = getSharedPreferences("data",0);
-        if(sf.getString("id","")!=""){
-            Intent intent = new Intent(this,CheckUserActivity.class);
-            intent.putExtra("email",String.valueOf(sf.getString("id","")));
-            intent.putExtra("name",String.valueOf(sf.getString("name","")));
-            intent.putExtra("password",String.valueOf(sf.getString("password","")));
+        if(sf.getString("email","")!=""){
+            Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
             finish();
         }
