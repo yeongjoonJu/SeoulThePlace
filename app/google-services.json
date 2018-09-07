@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "271382469921",
+    "firebase_url": "https://seoultheplace.firebaseio.com",
+    "project_id": "seoultheplace",
+    "storage_bucket": "seoultheplace.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271382469921:android:b42fcf6e2d20616c",
+        "android_client_info": {
+          "package_name": "com.ensharp.seoul.seoultheplace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271382469921-90242q66gfbpfsp3euubnq493pcd9pun.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ensharp.seoul.seoultheplace",
+            "certificate_hash": "faa76880c2cce0baea07e0b34a2fd1c4549171cd"
+          }
+        },
+        {
+          "client_id": "271382469921-36e0o9tjt8g5rfsqik6h423t6iui9bid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa3oYTqlhkGRLgGqIhNPtYSz-jKVAzX_I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271382469921-36e0o9tjt8g5rfsqik6h423t6iui9bid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
