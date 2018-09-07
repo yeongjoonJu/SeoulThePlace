@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.util.Log;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,6 +17,27 @@ import java.net.URL;
 public class DAO {
     private JSONObject jsonObject;
     private HttpURLConnection conn = null;
+
+    // 연결 주소
+    final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
+
+    public boolean insertMemberData(String[] information) {
+        String[] memberCategory = new String[]{"email", "password", "name", "age", "sex", "type"};
+        jsonObject = new JSONObject();
+        try {
+            // 서버 연결
+            if(!connectServer(BASE_URL + "/register"))
+                return false;
+
+            for (int i = 0; i < memberCategory.length; i++)
+                jsonObject.accumulate(memberCategory[i], information[i]);
+
+            sendData(jsonObject);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
     // 서버 연결 시도
     protected boolean connectServer(String url) {
