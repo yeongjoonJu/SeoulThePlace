@@ -35,8 +35,20 @@ public class DAO {
             sendData(jsonObject);
         }catch (JSONException e) {
             e.printStackTrace();
+        }finally {
+            if(conn != null)
+                conn.disconnect();
         }
         return true;
+    }
+
+    // 태그 목록을 불러온다.
+    public String[] getTagList() {
+        // 서버 연결
+        if(!connectServer(BASE_URL + "/tag"))
+            return null;
+        JSONObject result = getData();
+        return result.toString().split(",");
     }
 
     // 서버 연결 시도
@@ -73,7 +85,8 @@ public class DAO {
     }
 
     // 데이터 수신
-    protected String getData() {
+    protected JSONObject getData() {
+        JSONObject result = null;
         BufferedReader reader = null;
         try {
             InputStream stream = conn.getInputStream();
@@ -88,10 +101,14 @@ public class DAO {
             while ((line = reader.readLine()) != null)
                 buffer.append(line);
 
-            return buffer.toString();
+            result = new JSONObject(buffer.toString());
+
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
             try {
                 if(reader != null) {
                     reader.close(); //버퍼를 닫아줌
