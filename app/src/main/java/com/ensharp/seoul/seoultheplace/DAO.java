@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class DAO {
     private JSONObject jsonObject;
@@ -44,11 +46,32 @@ public class DAO {
 
     // 태그 목록을 불러온다.
     public String[] getTagList() {
+        String[] tags;
         // 서버 연결
         if(!connectServer(BASE_URL + "/tag"))
             return null;
-        JSONObject result = getData();
-        return result.toString().split(",");
+        String result = getData().toString();
+        return result.split(",");
+    }
+
+    // 플레이스 검색
+    public ArrayList<PlaceVO> searchPlace(String keyword) {
+        ArrayList<PlaceVO> results = new ArrayList<PlaceVO>();
+        // 서버 연결
+        if(!connectServer(BASE_URL + "/place"))
+            return null;
+        JSONArray jsonResult = getData();
+        try {
+            for (int i = 0; i < jsonResult.length(); i++) {
+                PlaceVO place = new PlaceVO(jsonResult.getJSONObject(i));
+                if(place.getName().contains(keyword) || place.getLocation().contains(keyword)
+                        || place.getDetails().contains(keyword))
+                    results.add(place);
+            }
+        }catch(JSONException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
     // 서버 연결 시도
@@ -85,8 +108,8 @@ public class DAO {
     }
 
     // 데이터 수신
-    protected JSONObject getData() {
-        JSONObject result = null;
+    protected JSONArray getData() {
+        JSONArray result = null;
         BufferedReader reader = null;
         try {
             InputStream stream = conn.getInputStream();
@@ -101,7 +124,7 @@ public class DAO {
             while ((line = reader.readLine()) != null)
                 buffer.append(line);
 
-            result = new JSONObject(buffer.toString());
+            result = new JSONArray(buffer.toString());
 
             return result;
         } catch (IOException e) {
