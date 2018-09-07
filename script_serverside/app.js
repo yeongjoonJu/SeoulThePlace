@@ -1,49 +1,76 @@
+var express = require('express');
+var bodyParser = require('body-parser');
+var mysql = require('mysql');
+var app = express();
+
+// port setup
+app.set('port', process.env.PORT || 9000);
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 var con = mysql.createConnection({
-	host     : 'seoultheplace.cyhr06cnp2gp.ap-northeast-2.rds.amazonaws.com',
-	user     : 'xxxx',
-	password : 'xxxx',
-	database : 'seoultheplace'
+	host     : '',
+	user     : '',
+	password : '',
+	database : ''
 });
 
-// get 방식의 라우팅
-// app.get('/user', function(req, res){
-// console.log('jooyoungjoon');
-// res.send('jooyoungjoon');
-//
-// 	con.connect();
-// 	var sql = 'SELECT * FROM USER';
-// 	con.query(sql, function(err, rows, fields) {
-// 	if(err) {
-// 		console.log(err);
-// 	} else {
-// 		for(var i =0; i < rows.length; i++) {
-// 			console.log(rows[i].NAME);
-// 			res.send(rows[i].NAME);
-// 			}
-// 		}
-// 	});
-// });
+//회원가입
+app.post('/user/register', function(req, res) {
+	console.log('Request has come.');
+	var id = req.body.Id;
+	var password = req.body.Password;
+	var name = req.body.Name;
+	var age = req.body.Age;
+	var gender = req.body.Gender;
+	var type = req.body.Type;
+	var favorite_course = 'COURSEdefault';
+	var favorite_place = 'default';
+	var editted_course = 'editted';
+	var editted_place = 'editted';
 
-//post방식 라우터
-app.post('/user', function(req, res) {
-console.log(req.body.user_id);
-console.log(req.body.name);
-	con.connect();
-	var sql = 'SELECT * FROM USER';
-	con.query(sql, function(err, rows, fields) {
+	var insertQuery = 'INSERT INTO USER VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+	var params = [id, password, name, age, gender, type, favorite_course,
+	favorite_place, editted_course, editted_place];
+
+	con.query(insertQuery, params, function(err, rows, fields) {
 	if(err) {
-		console.log(err);
+	  res.json({ result: false, msg: err });
+	  console.log(err);
 	} else {
-		for(var i = 0; i < rows.length; i++) {
-			res.send(rows[i].NAME);
-			}
-		}
+	  res.json({ result: true });
+	  console.log('register succeed!');
+	}
 	});
-	con.end();
+});
+
+//중복체크
+app.post('/login/duplicatecheck', function(req, res) {
+	var id = req.body.Id;
+	var password = req.body.Password;
+
+	con.query('SELECT Id, Password FROM USER WHERE Id = ?', id, function(err, result) {
+	if(err) {
+	  console.log('err : ' + err);
+	} else {
+	  if(result.length === 0) {
+		res.json({ success: false, msg: '해당 유저가 존재하지 않습니다.' });
+	  } else {
+		if(password != result[0].password) {
+		res.json({ success: false, msg: '비밀번호가 일치하지 않습니다.' });
+	    } else {
+	      res.json({ success: true });
+	      }
+	  }
+	}
+  });
+});
+
+app.post('/member', function(req, res) {
+	res.send('테스트용');
+	console.log('테스트용');
 });
 
 app.listen(9000, function(){
