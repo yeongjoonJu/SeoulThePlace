@@ -70,6 +70,50 @@ app.post('/login', function(req, res) {
   });
 });
 
+//SNS 로그인시에 이미 있는 이메일이면 거기로 로그인
+app.post('/login/bysns', function(req, res) {
+  var id = req.body.Id;
+
+  con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
+  if(err) {
+    console.log('err: ' + err);
+  } else {
+    if(result.length === 0) {
+      res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
+    } else {
+        res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
+        {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
+        {FavoritePlace: rows[0].FavoritePlace}, {EdittedCourse: rows[0].EdittedCourse},
+        {EdittedPlace: rows[0].EdittedPlace} ]);
+    }
+  }
+  });
+});
+
+//SNS 로그인시에 이메일 권한 안줬을 경우 이름으로 로그인
+app.post('/login/byname', function(req, res) {
+  var name = req.body.Name;
+
+  con.query('SELECT * FROM USER WHERE Name = ?', name, function(err, result) {
+  if(err) {
+    console.log('err: ' + err);
+  } else {
+    if(result.length === 0) {
+      res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
+    } else {
+      if(password != result[0].password) {
+        res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
+      } else {
+        res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
+        {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
+        {FavoritePlace: rows[0].FavoritePlace}, {EdittedCourse: rows[0].EdittedCourse},
+        {EdittedPlace: rows[0].EdittedPlace} ]);
+      }
+    }
+  }
+  });
+});
+
 //id 중복체크
 app.post('user/register/id_duplicatecheck', function(req, res) {
   var id = req.body.Id;
