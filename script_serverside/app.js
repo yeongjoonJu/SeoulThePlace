@@ -60,15 +60,52 @@ app.post('/login', function(req, res) {
       if(password != result[0].password) {
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
-        res.json([ {success: 'true' }]);
+        res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
+        {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
+        {FavoritePlace: rows[0].FavoritePlace}, {EdittedCourse: rows[0].EdittedCourse},
+        {EdittedPlace: rows[0].EdittedPlace} ]);
       }
     }
   }
   });
 });
 
+//id 중복체크
+app.post('user/register/id_duplicatecheck', function(req, res) {
+  var id = req.body.Id;
+
+  con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(result.length === 0) {
+        res.json([ {success: 'true'} ]);
+      } else {
+        res.json([ {success: 'false', msg: '중복'} ]);
+      }
+    }
+  });
+});
+
+//name 중복체크
+app.post('user/register/name_duplicatecheck', function(req, res) {
+  var name = req.body.Name;
+
+  con.query('SELECT * FROM USER WHERE Name = ?', name, function(err, result) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(result.length === 0) {
+        res.json([ {success: 'true'} ]);
+      } else {
+        res.json([ {success: 'false', msg: '중복'}]);
+      }
+    }
+  });
+});
+
 //회원 정보 가져오기
-app.post('/user/info', function(req,res) {
+app.post('/user/info', function(req, res) {
   var id = req.body.Id;
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows, fields) {
     if(err) {
