@@ -45,26 +45,25 @@ app.post('/user/register', function(req, res) {
 	});
 });
 
-//중복체크
-app.post('/login/duplicatecheck', function(req, res) {
-	var id = req.body.Id;
-	var password = req.body.Password;
+//로그인
+app.post('/login', function(req, res) {
+  var id = req.body.Id;
+  var password = req.body.Password;
 
-	con.query('SELECT Id, Password FROM USER WHERE Id = ?', id, function(err, result) {
-	if(err) {
-	  console.log('err : ' + err);
-    res.send(err);
-	} else {
-	  if(result.length === 0) {
-		res.json([ { success: false, msg: '해당 유저가 존재하지 않습니다.' } ]);
-	  } else {
-		if(password != result[0].password) {
-		res.json([ { success: false, msg: '비밀번호가 일치하지 않습니다.' } ]);
-	    } else {
-	      res.json([ { success: true } ]);
-	      }
-	  }
-	}
+  con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
+  if(err) {
+    console.log('err: ' + err);
+  } else {
+    if(result.length === 0) {
+      res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
+    } else {
+      if(password != result[0].password) {
+        res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
+      } else {
+        res.json([ {success: 'true' }]);
+      }
+    }
+  }
   });
 });
 
