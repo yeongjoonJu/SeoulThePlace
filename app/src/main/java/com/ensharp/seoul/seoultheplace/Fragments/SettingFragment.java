@@ -52,13 +52,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             case R.id.logout:
                 SharedPreferences sf = getActivity().getSharedPreferences("data",0);
                 SharedPreferences.Editor editor = sf.edit();
-                editor.remove("email");
-                editor.remove("password");
-                editor.remove("name");
-                editor.remove("age");
-                editor.remove("type");
-                editor.remove("sex");
-                editor.commit();
+                editor.clear();
+                editor.apply();
                 Intent intent = new Intent(getActivity(),LoginBackgroundActivity.class);
                 startActivity(intent);
                 getActivity().finish();

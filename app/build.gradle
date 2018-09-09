@@ -35,7 +35,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:+'//원래 16.0.1
     implementation 'com.google.android.gms:play-services-auth:+'
-    //페북로그인
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    //네이버 로그인
+   implementation ('com.naver.nid:naveridlogin-android-sdk:4.2.0')
+//    implementation files('source/naveridlogin_android_sdk_4.2.0.aar')
+//    compile files('source/naveridlogin_android_sdk_4.x.x.aar')
 }
 apply plugin: 'com.google.gms.google-services'
