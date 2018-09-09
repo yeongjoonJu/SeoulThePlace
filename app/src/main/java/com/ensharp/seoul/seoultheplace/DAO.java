@@ -46,6 +46,62 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         status = WAIT;
     }
 
+    public boolean loginCheck(String email, String password) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("email", email);
+            jsonObject.accumulate("password", password);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/login", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return false;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("result").equals("false"))
+                return false;
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public JSONArray getPlaceAllData() {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("place", "all");
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place", jsonObject);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return resultData;
+    }
+
+    public JSONArray getCourseAllData() {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("course", "all");
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course", jsonObject);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultData;
+    }
+
     public String insertMemberData(String[] information) {
         // 처리 설정
         String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
@@ -64,7 +120,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             else {
                 jsonObject = resultData.getJSONObject(0);
                 if(jsonObject.getString("result").equals("false"))
-                    return jsonObject.getString("error");
+                    return jsonObject.getString("msg");
             }
         }catch (JSONException e) {
             e.printStackTrace();
