@@ -37,10 +37,10 @@ app.post('/user/register', function(req, res) {
 
 	con.query(insertQuery, params, function(err, rows, fields) {
 	if(err) {
-	  res.json({ result: false, msg: err });
+    res.json([{result: 'false', msg: err}]);
 	  console.log(err);
 	} else {
-	  res.json({ result: true });
+	  res.json([{ result: 'true' }]);
 	  console.log('register succeed!');
 	}
 	});
@@ -54,6 +54,7 @@ app.post('/login/duplicatecheck', function(req, res) {
 	con.query('SELECT Id, Password FROM USER WHERE Id = ?', id, function(err, result) {
 	if(err) {
 	  console.log('err : ' + err);
+    res.send(err);
 	} else {
 	  if(result.length === 0) {
 		res.json({ success: false, msg: '해당 유저가 존재하지 않습니다.' });
@@ -65,6 +66,38 @@ app.post('/login/duplicatecheck', function(req, res) {
 	      }
 	  }
 	}
+  });
+});
+
+//회원 정보 가져오기
+app.post('/user/info', function(req,res) {
+  var id = req.body.Id;
+  con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows, fields) {
+    if(err) {
+      console.log('err : ' + err);
+      res.send(err);
+    } else {
+      res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
+      {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
+      {FavoritePlace: rows[0].FavoritePlace}, {EdittedCourse: rows[0].EdittedCourse},
+      {EdittedPlace: rows[0].EdittedPlace}]);
+    }
+  });
+});
+
+//COURSE 검색시 COURSE 정보 가져오기
+app.post('/course/info', function(req, res) {
+  var code = req.body.Code;
+  con.query('SELECT * FROM COURSE WHERE Code = ?', code, function(err, rows, fields) {
+    if(err) {
+      console.log('err : ' + err);
+      res.send(err);
+    } else {
+      res.json([ {Code: rows[0].Code}, {Tag: rows[0].Tag}, {Type: rows[0].Type}, {Likes: rows[0].Likes},
+      {Description: rows[0].Description}, {Details: rows[0].Details}, {PlaceCode1: rows[0].PlaceCode1},
+      {PlaceCode2: rows[0].PlaceCode2}, {PlaceCode3: rows[0].PlaceCode3}, {PlaceCode4: rows[0].PlaceCode4},
+      {PlaceCode5: rows[0].PlaceCode5} ]);
+    }
   });
 });
 
