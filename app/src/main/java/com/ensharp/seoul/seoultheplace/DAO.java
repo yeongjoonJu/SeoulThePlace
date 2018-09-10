@@ -46,29 +46,74 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         status = WAIT;
     }
 
-    public boolean loginCheck(String email, String password) {
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkIDduplicaion(String id) {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.accumulate("email", email);
-            jsonObject.accumulate("password", password);
+            jsonObject.accumulate("Id", id);
 
             // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/user/login", jsonObject);
+            processNetwork(BASE_URL+"/user/register/id_duplicatecheck", jsonObject);
 
             // 결과 처리
             if(resultData == null)
                 return false;
 
             jsonObject = resultData.getJSONObject(0);
-            if(jsonObject.getString("result").equals("false"))
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkNameDuplicaion(String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Name", name);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/register/name_duplicatecheck", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
                 return false;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public MemberVO loginCheck(String id, String password) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("Password", password);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/login", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
 
         }catch (JSONException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return null;
     }
 
     public JSONArray getPlaceAllData() {
