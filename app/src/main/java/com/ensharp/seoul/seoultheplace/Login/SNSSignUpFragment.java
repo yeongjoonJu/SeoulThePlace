@@ -95,10 +95,11 @@ public class SNSSignUpFragment extends Fragment implements View.OnClickListener 
                     break;
                 }
                 if(CheckEmail()&& CheckName()){
-                    prefs.edit().putString("email",String.valueOf(email.getText()));
-                    prefs.edit().putString("name",String.valueOf(name.getText()));
-                    prefs.edit().putString("sex",sex);
-                    prefs.edit().apply();
+                    SharedPreferences.Editor editprefs = prefs.edit();
+                    editprefs.putString("email",String.valueOf(email.getText()));
+                    editprefs.putString("name",String.valueOf(name.getText()));
+                    editprefs.putString("sex",sex);
+                    editprefs.apply();
                     LActivity.SubDataFragmentChanged();
                 }
                 break;

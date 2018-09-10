@@ -28,7 +28,7 @@ public class SubDataFragment extends Fragment implements View.OnClickListener {
     String type = "";
 
     Spinner age;
-    String isage = "";
+    String isage = "2000";
 
     Button signUp;
 
@@ -81,6 +81,7 @@ public class SubDataFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.type1:
                 type = "가족끼리";
+                Log.d("SignUp : ","가족끼리");
                 type1.setEnabled(false);
                 type2.setEnabled(true);
                 type3.setEnabled(true);
@@ -109,6 +110,7 @@ public class SubDataFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.lastsignup:
                 if(CheckAll()) {
+                    Log.d("SignUp : ","Ok");
                     SaveData();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
@@ -125,11 +127,12 @@ public class SubDataFragment extends Fragment implements View.OnClickListener {
         return true;
     }
     public void SaveData(){
-        SharedPreferences signup = getActivity().getSharedPreferences("data",0);
-        signup.edit().putString("age",isage);
-        signup.edit().putString("type",type);
-        signup.edit().apply();
-        SendData(signup);
+        SharedPreferences signupOri = getActivity().getSharedPreferences("data",0);
+        SharedPreferences.Editor signup = signupOri.edit();
+        signup.putString("age",isage);
+        signup.putString("type",type);
+        signup.apply();
+        SendData(signupOri);
     }
 
     public void SendData(SharedPreferences signup){

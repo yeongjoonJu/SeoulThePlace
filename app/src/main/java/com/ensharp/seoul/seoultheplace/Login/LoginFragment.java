@@ -71,7 +71,8 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
         googleLoginBtn.setOnClickListener(this);
 
         editor = LActivity.getSharedPreferences("data",0).edit();
-
+        editor.clear();
+        editor.apply();
         setNaver();
 
         globalApplication = new GlobalApplication();
@@ -116,13 +117,13 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             case R.id.newID:
                 LActivity.onFragmentChanged();
                 break;
-            case R.id.emaillogin:
+            case R.id.EmailLogin:
                 LActivity.EmailLoginChanger();
                 break;
         }
     }
     public static void SNSSignIn(){
-       Log.d("Change","fragment") ;
+        Log.e("KAKAOTALK :: ", "dddd2");
         LActivity.SNSFragmentChanged();
     }
 

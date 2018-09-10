@@ -68,7 +68,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     //이미 로그인한 적이 있는지 확인.
     public void CheckAlreadyLogin(){
         SharedPreferences sf = getSharedPreferences("data",0);
-        if(sf.getString("email","")!=""){
+        if(sf.getString("type","")!=""){
             Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
             finish();

@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace.Login.KakaoLogin;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.kakao.auth.ApprovalType;
 import com.kakao.auth.AuthType;
@@ -25,6 +26,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
                 // KAKAO_ACCOUNT : 웹뷰 다이얼로그를 통한 계정연결 타입
                 // KAKAO_TALK_EXCLUDE_NATIVE_LOGIN : 카카오톡 로그인 타입과 함께 계정생성을 위한 버튼을 함께 제공
                 // KAKAO_LOGIN_ALL : 모든 로그인 방식을 제공
+                Log.e("KAKAOTALK :: ", "dddd1");
                 return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
             }
 

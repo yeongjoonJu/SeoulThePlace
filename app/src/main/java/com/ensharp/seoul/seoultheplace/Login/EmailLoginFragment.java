@@ -25,8 +25,9 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.emaillogin, null); //view를 불러온다.
-        email = (EditText)view.findViewById(R.id.emaillogin);
-        password=(EditText)view.findViewById(R.id.passwdlogin);
+
+        email = (EditText)view.findViewById(R.id.emailloginEditText);
+        password=(EditText)view.findViewById(R.id.passwdloginEditText);
         Login = (Button)view.findViewById(R.id.emailloginbtn);
         Login.setOnClickListener(this);
 
