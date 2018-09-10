@@ -161,6 +161,24 @@ app.post('/course/info', function(req, res) {
   });
 });
 
+//main에서 코스 리스트로 띄울 떄
+app.post('/main/course_info', function(req, res) {
+  var code = req.body.Code; //코스 코드
+  var id = req.body.Id;
+
+  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', code, id, function(err, result) {
+    if(err) {
+      console.log('err : ' + err);
+    } else {
+      if(result.length === 0) {
+        res.json([ {success: 'false'} ]);
+      } else {
+        mainCourseListInfo(code, res);
+      }
+    }
+  });
+});
+
 //PLACE 정보 가져오기
 app.post('/place/info', function(req, res) {
   var code = req.body.Code;
@@ -174,6 +192,20 @@ app.post('/place/info', function(req, res) {
   })
 });
 
+function mainCourseInfo(code, res) { //code는 코스코드
+  var placeCode; //코스에서의 첫 번째 플레이스 코드
+  con.query('SELECT PlaceCode1 FROM COURSE WHERE Code = ?', code, function(err, rows, fields) {
+    if(err) {
+      console.log('err: ' + err);
+    } else {
+      placeCode = rows[0].PlaceCode1;
+      con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?', code, placeCode, function(error, row, field) {
+        res.json([ {success: 'true', Name: row[0].Name, Description: row[0].Description, Likes: row[0].Likes, location: row[0].Location}]);
+      });
+    }
+  });
+}
+
 function sendUserInfo(res, rows) {
   res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
   {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
@@ -182,7 +214,7 @@ function sendUserInfo(res, rows) {
 }
 
 function sendPlaceInfo(res, rows) {
-  res.json([ {Code: rows[0].Code, Name: rows[0].Name, Location: rows[0].Location, Description: rows[0].Description,
+  res.json([ {Code: rows[0].Code, Name: rows[0].Name, location: rows[0].Location, Description: rows[0].Description,
   Details: rows[0].Details, Type: rows[0].Type, Likes: rows[0].Likes, Phone: rows[0].Phone, Image1: rows[0].Image1,
   Image2: rows[0].Image2, Image3: rows[0].Image3, BusinessHours: rows[0].BusinessHours, Fee: rows[0].Fee,
   Tag: rows[0].Tag, Tip: rows[0].Tip} ]);
