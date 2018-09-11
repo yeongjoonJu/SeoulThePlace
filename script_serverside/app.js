@@ -232,6 +232,30 @@ app.post('/place/info', function(req, res) {
   });
 });
 
+//코스 좋아요
+app.post('/course/like', function(req, res) {
+  var courseCode = req.body.Code;
+  var user_ID = req.body.Id;
+  var courseLikes;
+
+  con.query('SELECT Likes FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
+    if(err) {
+      console.log('err : ' + err);
+    } else {
+      courseLikes = rows[0].Likes;
+      if(courseLikes > 0) {
+        courseLikes = courseLikes - 1;
+      }
+      if(isPlaceLiked(courseCode, user_ID) == 'true') {
+        res.json([ {isCourseLiked: 'true', Likes: courseLikes}])
+      } else {
+        res.json([ {isCourseLiked: 'false', Likes: courseLikes}])
+      }
+    }
+  });
+});
+
+//코스 및 플레이스 검색시 json 형태 배열에 데이터 담기.
 function getInfoToArray(rows, table) {
   if(table == 'COURSE') {
     initJsonArray(jsonArray);
@@ -272,7 +296,6 @@ function getInfoToArray(rows, table) {
 }
 
 function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
-
   initJsonArray(jsonArray);
   //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
@@ -298,6 +321,20 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
 //user가 해당 코스 좋아요 눌렀는지 여부
 function isCourseLiked(courseID, userID) {
   con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', courseID, userID, function(err, result) {
+    if(err) {
+      console.log('err: ' + err);
+    } else {
+      if(result.length === 0) {
+        return 'false';
+      } else {
+        return 'true';
+      }
+    }
+  });
+}
+
+function isPlaceLiked(placeID, userID) {
+  con.query('SELECT * FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', placeID, userID, function(err, result) {
     if(err) {
       console.log('err: ' + err);
     } else {
