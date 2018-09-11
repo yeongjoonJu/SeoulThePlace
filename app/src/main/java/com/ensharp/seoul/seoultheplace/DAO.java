@@ -418,15 +418,24 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
+    public void destory() {
+        status = EXIT;
+        try {
+            if(getStatus() == AsyncTask.Status.RUNNING)
+                cancel(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
         while(true) {
             while(status == WAIT);
 
-            if(status == EXIT) {
-                cancel(true);
+            if(status == EXIT || isCancelled())
                 return null;
-            }
 
             // 서버 연결
             if(url == null || !connectServer(url)) {
