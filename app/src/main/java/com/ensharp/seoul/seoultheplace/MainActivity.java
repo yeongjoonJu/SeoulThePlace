@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 import com.ensharp.seoul.seoultheplace.Fragments.BookmarkFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
@@ -23,10 +24,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new BookmarkFragment(), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment(), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화

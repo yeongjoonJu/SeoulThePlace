@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.VideoView;
 
 import com.ensharp.seoul.seoultheplace.MainActivity;
@@ -22,7 +23,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
-        CheckAlreadyLogin();
+        convertToMainActivity();
 
         mVideoview = (VideoView) findViewById(R.id.videoview);
         //play video
@@ -54,5 +55,10 @@ public class LoginBackgroundActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+    public void convertToMainActivity(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
