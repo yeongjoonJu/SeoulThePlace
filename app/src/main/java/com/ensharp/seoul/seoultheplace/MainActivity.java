@@ -1,19 +1,16 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.content.Intent;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
-import com.ensharp.seoul.seoultheplace.Fragments.BookmarkFragment;
+
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
-import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
-import android.util.Log;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -55,5 +52,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
                 .commit();
+    }
+
+    /**
+     * Change value in dp to pixels
+     * @param dp
+     * @param context
+     * @return
+     */
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
     }
 }
