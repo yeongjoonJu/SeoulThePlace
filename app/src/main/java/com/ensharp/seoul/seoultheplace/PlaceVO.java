@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PlaceVO {
+    private String code;
     private String name;
     private String location;
     private String[] imageURL;
@@ -18,9 +19,10 @@ public class PlaceVO {
     private String type;
     private String businessHours;
 
-    public PlaceVO(String name, String location, String[] imageURL, String phone,
+    public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
                    String tip, String parking, String parkFee, int likes, String[] tags,
                    String description, String details, String type, String businessHours) {
+        this.code = code;
         this.name = name;
         this.location = location;
         this.imageURL = imageURL;
@@ -38,6 +40,7 @@ public class PlaceVO {
 
     public PlaceVO(JSONObject jsonObject) {
         try {
+            this.name = jsonObject.getString("code");
             this.name = jsonObject.getString("name");
             this.location = jsonObject.getString("location");
             for(int i=0; i<3; i++)

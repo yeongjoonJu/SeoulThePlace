@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dao = new DAO();
-        dao.insertMemberData(getIntent().getExtras());
+        //dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
                 new MainFragment(), new SearchFragment(), new BookmarkFragment(), new SettingFragment()
         };
@@ -53,5 +53,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
                 .commit();
+        dao.execute();
     }
 }

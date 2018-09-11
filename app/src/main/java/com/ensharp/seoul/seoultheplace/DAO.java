@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,62 +18,336 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DAO {
-    private JSONObject jsonObject;
+public class DAO extends AsyncTask<Void, Void, Void> {
     private HttpURLConnection conn = null;
+    private String url;
+
+    // 상태 상수
+    private final int WAIT = 0;
+    private final int PROCESSING = 1;
+    private final int COMPLETE = 2;
+    private final int EXIT = 3;
+
+    // 비동기를 위한 변수
+    private int status = WAIT;
+    private JSONObject sendingData = null;
+    private JSONArray resultData = null;
 
     // 연결 주소
     final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
 
-    public boolean insertMemberData(Bundle information) {
-        String[] memberCategory = new String[]{"name", "email", "password", "sex", "age", "type"};
-        jsonObject = new JSONObject();
+    protected void processNetwork(String url, JSONObject sending) {
+        this.url = url;
+        sendingData = sending;
+        status = PROCESSING;
+
+        // 네트워크 처리가 완료될 때까지 기다림
+        while(status != COMPLETE);
+
+        status = WAIT;
+    }
+
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkIDduplicaion(String id) {
+        JSONObject jsonObject = new JSONObject();
+
         try {
-            // 서버 연결
-            if(!connectServer(BASE_URL + "/user/register"))
+            jsonObject.accumulate("Id", id);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/register/id_duplicatecheck", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
                 return false;
 
-            for (int i = 0; i < memberCategory.length; i++)
-                jsonObject.accumulate(memberCategory[i], information.getString(memberCategory[i]));
-
-            sendData(jsonObject);
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
         }catch (JSONException e) {
             e.printStackTrace();
-        }finally {
-            if(conn != null)
-                conn.disconnect();
         }
-        return true;
+        return false;
+    }
+
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkNameDuplicaion(String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Name", name);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/register/name_duplicatecheck", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return false;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // SNS Login
+    // key : email or name, value : 이메일 혹은 이름
+    public MemberVO SNSloginCheck(String key, String value) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            if(key.equals("email")) {
+                jsonObject.accumulate("Id", value);
+                // 네트워크 처리 동기화
+                processNetwork(BASE_URL+"/login/bysns", jsonObject);
+            }
+            else {
+                jsonObject.accumulate("Name", value);
+                // 네트워크 처리 동기화
+                processNetwork(BASE_URL+"/login/byname", jsonObject);
+            }
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public MemberVO loginCheck(String id, String password) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("Password", password);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/login", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONArray getUserCourseData(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/main/course_info", jsonObject);
+
+            if(resultData.getJSONObject(0).getString("success").equals("false"))
+                return null;
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultData;
+    }
+
+    public CourseVO getCourseData(String key) {
+        CourseVO courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", key);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course/info", jsonObject);
+
+            if(resultData == null)
+                return null;
+            courseData = new CourseVO(resultData.getJSONObject(0));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
+    public PlaceVO getPlaceData(String key) {
+        PlaceVO placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", key);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/info", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            placeData = new PlaceVO(resultData.getJSONObject(0));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<PlaceVO> searchPlace(String keyword) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Keyword", keyword);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/search", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<CourseVO> searchCourse(String keyword) {
+        ArrayList<CourseVO> courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Keyword", keyword);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course/search", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
+    public String insertMemberData(String[] information) {
+        // 처리 설정
+        String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            for (int i = 0; i < memberCategory.length; i++)
+                jsonObject.accumulate(memberCategory[i], information[i]);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/register", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return "incomplete network";
+            else {
+                jsonObject = resultData.getJSONObject(0);
+                if(jsonObject.getString("result").equals("false"))
+                    return jsonObject.getString("msg");
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return "json error";
+        }
+        return "success";
+    }
+
+    public ArrayList<PlaceVO> searchPlaceByTag(String tag) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Tag", tag);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/tag", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<CourseVO> searchCourseByTag(String tag) {
+        ArrayList<CourseVO> courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Tag", tag);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course/tag", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courseData;
     }
 
     // 태그 목록을 불러온다.
-    public String[] getTagList() {
-        String[] tags;
-        // 서버 연결
-        if(!connectServer(BASE_URL + "/tag"))
-            return null;
-        String result = getData().toString();
-        return result.split(",");
-    }
+    // code "ALL" : 모든 태그 목록을 불러온다.
+    // code "플레이스 or 코스 고유 코드"
+    public ArrayList<String> getTagList(String code) {
+        ArrayList<String> tags = new ArrayList<String>();
+        JSONObject jsonObject = new JSONObject();
 
-    // 플레이스 검색
-    public ArrayList<PlaceVO> searchPlace(String keyword) {
-        ArrayList<PlaceVO> results = new ArrayList<PlaceVO>();
-        // 서버 연결
-        if(!connectServer(BASE_URL + "/place"))
-            return null;
-        JSONArray jsonResult = getData();
         try {
-            for (int i = 0; i < jsonResult.length(); i++) {
-                PlaceVO place = new PlaceVO(jsonResult.getJSONObject(i));
-                if(place.getName().contains(keyword) || place.getLocation().contains(keyword)
-                        || place.getDetails().contains(keyword))
-                    results.add(place);
+            jsonObject.accumulate("code", code);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL + "/tag", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+            else {
+                for(int idx = 0; idx < resultData.length(); idx++)
+                    tags.add(resultData.getJSONObject(idx).getString("tag"));
             }
-        }catch(JSONException e) {
+        }catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-        return results;
+        return tags;
     }
 
     // 서버 연결 시도
@@ -142,5 +417,29 @@ public class DAO {
             }
         }
         return null;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        while(true) {
+            while(status == WAIT);
+
+            if(status == EXIT) {
+                cancel(true);
+                return null;
+            }
+
+            // 서버 연결
+            if(url == null || !connectServer(url)) {
+                resultData = null;
+                status = COMPLETE;
+                continue;
+            }
+
+            // 데이터 송수신
+            sendData(sendingData);
+            resultData = getData();
+            status = COMPLETE;
+        }
     }
 }
