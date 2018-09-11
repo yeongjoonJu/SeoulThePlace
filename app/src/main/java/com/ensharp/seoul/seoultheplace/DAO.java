@@ -37,6 +37,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
 
     protected void processNetwork(String url, JSONObject sending) {
+        Log.v("test", "processNetwork" + url);
         this.url = url;
         sendingData = sending;
         status = PROCESSING;
@@ -45,12 +46,12 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         while(status != COMPLETE);
 
         status = WAIT;
+        Log.v("test", "processNetwork Complete");
     }
 
     // 중복되지 않으면 true, 중복되었으면 false
     public boolean checkIDduplicaion(String id) {
         JSONObject jsonObject = new JSONObject();
-
         try {
             jsonObject.accumulate("Id", id);
 
@@ -70,32 +71,9 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return false;
     }
 
-    // 중복되지 않으면 true, 중복되었으면 false
-    public boolean checkNameDuplicaion(String name) {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.accumulate("Name", name);
-
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/user/register/name_duplicatecheck", jsonObject);
-
-            // 결과 처리
-            if(resultData == null)
-                return false;
-
-            jsonObject = resultData.getJSONObject(0);
-            if(jsonObject.getString("success").equals("true"))
-                return true;
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     // SNS Login
     // key : email or name, value : 이메일 혹은 이름
-    public MemberVO SNSloginCheck(String key, String value) {
+    public JSONObject SNSloginCheck(String key, String value) {
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -104,11 +82,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
                 // 네트워크 처리 동기화
                 processNetwork(BASE_URL+"/login/bysns", jsonObject);
             }
-            else {
-                jsonObject.accumulate("Name", value);
-                // 네트워크 처리 동기화
-                processNetwork(BASE_URL+"/login/byname", jsonObject);
-            }
 
             // 결과 처리
             if(resultData == null)
@@ -116,7 +89,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             jsonObject = resultData.getJSONObject(0);
             if(jsonObject.getString("success").equals("true"))
-                return new MemberVO(jsonObject);
+                return jsonObject;
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -124,7 +97,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public MemberVO loginCheck(String id, String password) {
+    public JSONObject loginCheck(String id, String password) {
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -140,7 +113,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             jsonObject = resultData.getJSONObject(0);
             if(jsonObject.getString("success").equals("true"))
-                return new MemberVO(jsonObject);
+                return jsonObject;
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -253,8 +226,9 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     }
 
     public String insertMemberData(String[] information) {
+        Log.v("test", "insertMemberData");
         // 처리 설정
-        String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
+        String[] memberCategory = new String[]{"Id", "Password", "Name"};
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -272,7 +246,8 @@ public class DAO extends AsyncTask<Void, Void, Void> {
                 if(jsonObject.getString("result").equals("false"))
                     return jsonObject.getString("msg");
             }
-        }catch (JSONException e) {
+            Log.v("test", "insertMemberData Complete");
+        } catch (JSONException e) {
             e.printStackTrace();
             return "json error";
         }
@@ -362,6 +337,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.connect();
+            Log.v("test", "connectServer");
             return true;
         }catch (Exception e) {
             Log.e("connect", "fail");
@@ -423,6 +399,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         while(true) {
             while(status == WAIT);
+            Log.v("test", "백그라운드 실행");
 
             if(status == EXIT) {
                 cancel(true);
@@ -431,15 +408,19 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             // 서버 연결
             if(url == null || !connectServer(url)) {
+                Log.v("test", "서버연결 실패");
                 resultData = null;
                 status = COMPLETE;
                 continue;
             }
 
+            Log.v("test", "데이터 송수신");
             // 데이터 송수신
             sendData(sendingData);
             resultData = getData();
             status = COMPLETE;
+            conn.disconnect();
+            Log.v("test", "완료");
         }
     }
 }

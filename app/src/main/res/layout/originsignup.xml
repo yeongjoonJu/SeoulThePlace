@@ -73,49 +73,18 @@
         app:layout_constraintVertical_bias="0.087" />
 
     <Button
-        android:id="@+id/womanbtn"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="여성"
-        app:layout_constraintBottom_toBottomOf="@+id/manbtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toEndOf="@+id/manbtn"
-        app:layout_constraintTop_toTopOf="@+id/manbtn"
-        app:layout_constraintVertical_bias="0.111" />
-
-    <Button
-        android:id="@+id/manbtn"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="208dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="남성"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.758"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oripasswd1"
-        app:layout_constraintVertical_bias="0.031" />
-
-    <Button
         android:id="@+id/orisignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="128dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="확인"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/womanbtn"
-        app:layout_constraintVertical_bias="0.253" />
+        app:layout_constraintTop_toBottomOf="@+id/oripasswd1" />
 
     <TextView
         android:id="@+id/textView9"

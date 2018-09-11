@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Login.KakaoLogin;
 import android.util.Log;
 
 
+import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 import com.ensharp.seoul.seoultheplace.Login.LoginFragment;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.network.ErrorResult;
@@ -47,7 +48,8 @@ public class SessionCallback implements ISessionCallback {
             public void onSuccess(UserProfile userProfile) {
                 if(!alreadyCheck) {
                     Log.e("KAKAOTALK :: ", "get email,name");
-                    LoginFragment.editor.putString("email", userProfile.getEmail());
+                    LoginFragment.editor.putString("email", String.valueOf(userProfile.getId()));
+                    LoginFragment.editor.putString("password","kakaotalk");
                     LoginFragment.editor.putString("name", userProfile.getNickname());
                     LoginFragment.editor.apply();
                     LoginFragment.SNSSignIn();

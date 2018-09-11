@@ -123,8 +123,10 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
         }
     }
     public static void SNSSignIn(){
-        Log.e("KAKAOTALK :: ", "dddd2");
-        LActivity.SNSFragmentChanged();
+        if(!LActivity.CheckEmail(LActivity.getSharedPreferences("data",0))) {
+            LActivity.SendData(LActivity.getSharedPreferences("data", 0));
+        }
+        LActivity.NextActivity();
     }
 
     private void googleSignIn(){
@@ -150,9 +152,13 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             editor.clear();
             editor.apply();
             editor.putString("email", acct.getEmail());
+            editor.putString("password","google"); //비밀번호로 패스워드 저장
             editor.putString("name", acct.getDisplayName());
             editor.apply();
-            LActivity.SNSFragmentChanged();
+            if(!LActivity.CheckEmail(LActivity.getSharedPreferences("data",0))) {
+                LActivity.SendData(LActivity.getSharedPreferences("data", 0));
+            }
+            LActivity.NextActivity();
         }
     }
 

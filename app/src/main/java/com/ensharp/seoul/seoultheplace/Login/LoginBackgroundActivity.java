@@ -7,27 +7,38 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginBackgroundActivity extends AppCompatActivity {
     private String TAG = "VideoActivity";
     public VideoView mVideoview;
 
     LoginFragment loginFragment;
+    public DAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
         CheckAlreadyLogin();
+        dao = new DAO();
+        dao.execute();
 
         loginFragment = new LoginFragment();
 
         setVideo();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,loginFragment).commit();
+    }
+    public DAO getDAO(){
+        return this.dao;
     }
 
     @Override
@@ -43,20 +54,6 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void SNSFragmentChanged(){
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left);
-        fragmentTransaction.replace(R.id.main_frame,new SNSSignUpFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-    public void SubDataFragmentChanged(){
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left);
-        fragmentTransaction.replace(R.id.main_frame,new SubDataFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
     public void EmailLoginChanger(){
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left);
@@ -64,11 +61,16 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+    public void NextActivity(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     //이미 로그인한 적이 있는지 확인.
     public void CheckAlreadyLogin(){
         SharedPreferences sf = getSharedPreferences("data",0);
-        if(sf.getString("type","")!=""){
+        if(sf.getString("email","")!=""){
             Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
             finish();
@@ -91,5 +93,51 @@ public class LoginBackgroundActivity extends AppCompatActivity {
                 mp.setLooping(true);
             }
         }); //루프돌림
+    }
+    public void SendData(SharedPreferences signup){
+        String[] memberCategory = new String[]{ signup.getString("email",null),
+                signup.getString("password",null),
+                signup.getString("name",null)};
+        Log.d("SignUp : ",memberCategory[0]);
+        Log.d("SignUp : ",memberCategory[1]);
+        Log.d("SignUp : ",memberCategory[2]);
+        Log.d("SignUp final : ",dao.insertMemberData(memberCategory));
+    }
+
+       public boolean CheckEmail(SharedPreferences data){
+        JSONObject jsonObject = dao.SNSloginCheck("email",data.getString("email",null));
+        if(jsonObject.equals(null)){
+            Log.d("Login : ","new ID");
+            Toast.makeText(this,"회원가입 성공",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else{
+            Log.d("Login : ","old ID");
+            Toast.makeText(this,"로그인 성공",Toast.LENGTH_LONG).show();
+            return true;
+        }
+    }
+    public boolean CheckDoubleEmail(String email){
+        if(dao.checkIDduplicaion(email)){
+            return true;
+        }
+        return false;
+    }
+    public boolean LoginEmail(String id,String passwd){
+        JSONObject jsonObject = dao.loginCheck(id,passwd);
+        if(jsonObject.equals(null)){
+            return false;
+        }
+        else{
+            SharedPreferences.Editor editor = getSharedPreferences("data",0).edit();
+            try {
+                editor.putString("email", jsonObject.getString("email"));
+                editor.putString("name", jsonObject.getString("name"));
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 }

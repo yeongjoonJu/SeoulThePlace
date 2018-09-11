@@ -3,6 +3,7 @@ package com.ensharp.seoul.seoultheplace.Login.NaverLogin;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
@@ -91,18 +92,13 @@ public class NaverHandler extends OAuthLoginHandler {
                 JSONObject object = new JSONObject(result);
                 if(object.getString("resultcode").equals("00")) {
                     JSONObject jsonObject = new JSONObject(object.getString("response"));
-                    //Log.d(TAG, jsonObject.toString());
+                    Log.d(TAG, jsonObject.toString());
                     SharedPreferences.Editor editor = activity.getSharedPreferences("data",0).edit();
                     editor.clear();
                     editor.apply();
                     editor.putString("email", jsonObject.getString("email"));
+                    editor.putString("password","naver");
                     editor.putString("name", jsonObject.getString("name"));
-                    if(jsonObject.getString("gender").equals("M")){
-                        editor.putString("sex","man");
-                    }
-                    else if(!jsonObject.getString("gender").equals("")){
-                        editor.putString("sex","woman");
-                    }
                     editor.apply();
                     LoginFragment.SNSSignIn();
                 }

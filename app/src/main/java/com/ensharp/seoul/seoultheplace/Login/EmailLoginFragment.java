@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -16,6 +17,7 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
     EditText email;
     EditText password;
     Button Login;
+    private LoginBackgroundActivity LActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.emaillogin, null); //view를 불러온다.
+        LActivity = (LoginBackgroundActivity)getActivity();
 
         email = (EditText)view.findViewById(R.id.emailloginEditText);
         password=(EditText)view.findViewById(R.id.passwdloginEditText);
@@ -36,12 +39,16 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        CheckEmail();
-
+        if(CheckEmail()){
+            LActivity.NextActivity();
+        }
     }
     public boolean CheckEmail(){
-        email.getText();
-        password.getText();
+        if(LActivity.LoginEmail(String.valueOf(email.getText()),String.valueOf(password.getText()))){
+            Toast.makeText(getActivity(),"로그인 성공.",Toast.LENGTH_LONG).show();
+            return true;
+        }
+        Toast.makeText(getActivity(),"이메일이나 비밀번호가 틀렸습니다.",Toast.LENGTH_LONG).show();
         return false;
     }
 }

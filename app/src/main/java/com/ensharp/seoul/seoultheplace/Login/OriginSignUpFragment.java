@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -27,11 +28,7 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
     EditText name;
     EditText passwd;
     EditText passwd1;
-    Button man;
-    Button woman;
     Button signUp;
-
-    String isman = null;
 
     LoginBackgroundActivity LActivity;
 
@@ -50,10 +47,6 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
         name =(EditText)view.findViewById(R.id.oriname);
         passwd=(EditText)view.findViewById(R.id.oripasswd);
         passwd1=(EditText)view.findViewById(R.id.oripasswd1);
-        man = (Button)view.findViewById(R.id.manbtn);
-        man.setOnClickListener(this);
-        woman =(Button)view.findViewById(R.id.womanbtn);
-        woman.setOnClickListener(this);
         signUp =(Button)view.findViewById(R.id.orisignup);
         signUp.setOnClickListener(this);
 
@@ -66,20 +59,10 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.manbtn:
-                man.setEnabled(false);
-                woman.setEnabled(true);
-                isman = "man";
-                break;
-            case R.id.womanbtn:
-                woman.setEnabled(false);
-                man.setEnabled(true);
-                isman = "woman";
-                break;
             case R.id.orisignup:
                 if(AllCheckData()) {
                     SetSharedPreference();
-                    LActivity.SubDataFragmentChanged();
+                    LActivity.NextActivity();
                 }
                 break;
         }
@@ -91,15 +74,11 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
         editor.putString("email",String.valueOf(email.getText()));
         editor.putString("password",String.valueOf(passwd.getText()));
         editor.putString("name",String.valueOf(name.getText()));
-        editor.putString("sex",isman);
         editor.commit();
+        LActivity.SendData(sf);
     }
 
     public boolean AllCheckData(){
-        if(isman==null){
-            Toast.makeText(getActivity(),"성별을 눌러주세요.",Toast.LENGTH_LONG).show();
-            return false;
-        }
         if(CheckName()&&CheckEmail()&&CheckPasswd()){
             Toast.makeText(getActivity(),"회원가입 성공",Toast.LENGTH_LONG).show();
             return true;
@@ -111,6 +90,11 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
         String mEmail = String.valueOf(email.getText());
         if(!mEmail.matches(emailPattren) && mEmail.length() > 0){
             Toast.makeText(getActivity(),"적절한 이메일이 아닙니다.",Toast.LENGTH_LONG).show();
+            email.setFocusable(true);
+            return false;
+        }
+        if(LActivity.CheckDoubleEmail(String.valueOf(email.getText()))){
+            Toast.makeText(getActivity(),"이미 가입된 이메일 입니다. SNS로그인이나 이메일로그인을 이용해주세요.",Toast.LENGTH_LONG).show();
             email.setFocusable(true);
             return false;
         }
