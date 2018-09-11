@@ -14,7 +14,8 @@ var con = mysql.createConnection({
 	host     : '',
 	user     : '',
 	password : '',
-	database : ''
+	database : '',
+  multipleStatements: true
 });
 
 //회원가입
@@ -22,17 +23,13 @@ app.post('/user/register', function(req, res) {
 	var id = req.body.Id;
 	var password = req.body.Password;
 	var name = req.body.Name;
-	var age = req.body.Age;
-	var gender = req.body.Gender;
-	var type = req.body.Type;
 	var favorite_course = 'COURSEdefault';
 	var favorite_place = 'default';
 	var editted_course = 'editted';
 	var editted_place = 'editted';
 
-	var insertQuery = 'INSERT INTO USER VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-	var params = [id, password, name, age, gender, type, favorite_course,
-	favorite_place, editted_course, editted_place];
+	var insertQuery = 'INSERT INTO USER VALUES(?, ?, ?, ?, ?, ?, ?)'
+	var params = [id, password, name, favorite_course, favorite_place, editted_course, editted_place];
 
 	con.query(insertQuery, params, function(err, rows, fields) {
 	if(err) {
@@ -163,17 +160,17 @@ app.post('/course/info', function(req, res) {
 
 //main에서 코스 리스트로 띄울 떄
 app.post('/main/course_info', function(req, res) {
-  var code = req.body.Code; //코스 코드
-  var id = req.body.Id;
-
-  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', code, id, function(err, result) {
+  var courseType = req.body.Type; //코스 타입
+  var userID = req.body.Id; //로그인한 아이디
+  //해당 타입에 맞는 코스 가져옴
+  con.query('SELECT * FROM COURSE WHERE Type = ?', courseType, function(err, rows, fields) {
     if(err) {
-      console.log('err : ' + err);
+      console.log('err: ' + err);
     } else {
-      if(result.length === 0) {
-        res.json([ {success: 'false'} ]);
+      if(rows.length === 0) {
+        res.json([ {User_Likes: 'false', Name: null, Description: null, Likes: null, location: null} ]);
       } else {
-        mainCourseListInfo(code, res);
+        mainCourseListInfo(res, rows, userID);
       }
     }
   });
@@ -192,25 +189,50 @@ app.post('/place/info', function(req, res) {
   })
 });
 
-function mainCourseInfo(code, res) { //code는 코스코드
-  var placeCode; //코스에서의 첫 번째 플레이스 코드
-  con.query('SELECT PlaceCode1 FROM COURSE WHERE Code = ?', code, function(err, rows, fields) {
+function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
+  //json 오브젝트 타입의 결과값들
+  var jsonResult = new Object();
+  //json 오브젝트 타입의 배열 형태
+  var jsonArray = new Array();
+
+  //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
+  for(var i = 0; i < rows.length; i++) {
+    con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
+               rows[i].Code, rows[i].PlaceCode1, function(err, row, fields) {
+                 if(err) {
+                   console.log('err: ' + err);
+                   return;
+                 } else {
+                   jsonResult.Name = row[0].Name;
+                   jsonResult.Description = row[0].Description;
+                   jsonResult.Likes = row[0].Likes;
+                   jsonResult.Location = row[0].Location;
+                   jsonResult.User_Likes = isCourseLiked(rows[i].Code, userID);
+                   jsonArray.push(jsonResult);
+                 }
+               });
+  }
+  res.json(jsonArray);
+}
+
+//user가 해당 코스 좋아요 눌렀는지 여부
+function isCourseLiked(courseID, userID) {
+  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', courseID, userID, function(err, result) {
     if(err) {
       console.log('err: ' + err);
     } else {
-      placeCode = rows[0].PlaceCode1;
-      con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?', code, placeCode, function(error, row, field) {
-        res.json([ {success: 'true', Name: row[0].Name, Description: row[0].Description, Likes: row[0].Likes, location: row[0].Location}]);
-      });
+      if(result.length === 0) {
+        return 'false';
+      } else {
+        return 'true';
+      }
     }
   });
 }
 
 function sendUserInfo(res, rows) {
-  res.json([ {Id: rows[0].Id}, {Name: rows[0].Name}, {Age: rows[0].Age},
-  {Gender: rows[0].Gender}, {Type: rows[0].Type}, {FavoriteCourse: rows[0].FavoriteCourse},
-  {FavoritePlace: rows[0].FavoritePlace}, {EdittedCourse: rows[0].EdittedCourse},
-  {EdittedPlace: rows[0].EdittedPlace} ]);
+  res.json([ {Id: rows[0].Id, Name: rows[0].Name, FavoriteCourse: rows[0].FavoriteCourse,
+  FavoritePlace: rows[0].FavoritePlace, EdittedCourse: rows[0].EdittedCourse, EdittedPlace: rows[0].EdittedPlace} ]);
 }
 
 function sendPlaceInfo(res, rows) {
