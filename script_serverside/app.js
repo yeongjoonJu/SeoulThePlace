@@ -18,6 +18,11 @@ var con = mysql.createConnection({
 	multipleStatements: true
 });
 
+//json 오브젝트 타입의 결과값들
+var jsonResult = new Object();
+//json 오브젝트 타입의 배열 형태
+var jsonArray = new Array();
+
 //회원가입
 app.post('/user/register', function(req, res) {
 	console.log('request has come!');
@@ -183,35 +188,15 @@ app.post('/main/course_info', function(req, res) {
 //플레이스 검색
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
-   //json 오브젝트 타입의 결과값들
-   var jsonResult = new Object();
-   //json 오브젝트 타입의 배열 형태
-   var jsonArray = new Array();
 
    con.query('SELECT * FROM PLACE WHERE Name = %?% OR Location = %?% OR Type = %?%', keyword, keyword, keyword, function(err, rows, fields) {
      if(err) {
        console.log('err : ' + err);
      } else {
        if(rows.length === 0) {
-         res.send(null);
+         res.json(null);
        } else {
-         for(var i = 0; i < rows.length; i++) {
-           jsonResult.Code = rows[i].Code;
-           jsonResult.Name = rows[i].Name;
-           jsonResult.location = rows[i].Location;
-           jsonResult.Deatils = rows[i].Details;
-           jsonResult.Type = rows[i].Type;
-           jsonResult.Likes = rows[i].Likes;
-           jsonResult.Phone = rows[i].Phone;
-           jsonResult.Parking = rows[i].Parking;
-           jsonResult.Image1 = rows[i].Image1;
-           jsonResult.Image2 = rows[i].Image2;
-           jsonResult.Image3 = rows[i].Image3;
-           jsonResult.BusinessHours = rows[i].BusinessHours;
-           jsonResult.Fee = rows[i].Tip;
-           jsonArray.push(jsonResult);
-         }
-         res.json(jsonArray);
+         res.json(getInfoToArray(rows, 'PLACE'));
        }
      }
    });
@@ -220,33 +205,15 @@ app.post('/search/place', function(req, res) {
 //코스 검색
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
-  //json 오브젝트 타입의 결과값들
-  var jsonResult = new Object();
-  //json 오브젝트 타입의 배열 형태
-  var jsonArray = new Array();
 
   con.query('SELECT * FROM COURSE WHERE Name = %?% OR Type = %?%', keyword, keyword, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
       if(rows.length === 0) {
-        res.send(null);
+        res.json(null);
       } else {
-        for(var i = 0; i < rows.length; i++) {
-          jsonResult.Code = rows[i].Code;
-          jsonResult.Name = rows[i].Name;
-          jsonResult.Type = rows[i].Type;
-          jsonResult.Likes = rows[i].Likes;
-          jsonResult.Description = rows[i].Description;
-          jsonResult.Details = rows[i].Details;
-          jsonResult.PlaceCode1 = rows[i].PlaceCode1;
-          jsonResult.PlaceCode2 = rows[i].PlaceCode2;
-          jsonResult.PlaceCode3 = rows[i].PlaceCode3;
-          jsonResult.PlaceCode4 = rows[i].PlaceCode4;
-          jsonResult.PlaceCode5 = rows[i].PlaceCode5;
-          jsonArray.push(jsonResult);
-        }
-        res.json(jsonArray);
+        res.json(getInfoToArray(rows, 'COURSE'));
       }
     }
   });
@@ -262,15 +229,51 @@ app.post('/place/info', function(req, res) {
     } else {
       sendPlaceInfo(res, rows);
     }
-  })
+  });
 });
 
-function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
-  //json 오브젝트 타입의 결과값들
-  var jsonResult = new Object();
-  //json 오브젝트 타입의 배열 형태
-  var jsonArray = new Array();
+function getInfoToArray(rows, table) {
+  if(table == 'COURSE') {
+    initJsonArray(jsonArray);
+    for(var i = 0; i < rows.length; i++) {
+      jsonResult.Code = rows[i].Code;
+      jsonResult.Name = rows[i].Name;
+      jsonResult.Type = rows[i].Type;
+      jsonResult.Likes = rows[i].Likes;
+      jsonResult.Details = rows[i].Details;
+      jsonResult.PlaceCode1 = rows[i].PlaceCode1;
+      jsonResult.PlaceCode2 = rows[i].PlaceCode2;
+      jsonResult.PlaceCode3 = rows[i].PlaceCode3;
+      jsonResult.PlaceCode4 = rows[i].PlaceCode4;
+      jsonResult.PlaceCode5 = rows[i].PlaceCode5;
+      jsonArray.push(jsonResult);
+    }
+  } else {
+    initJsonArray(jsonArray);
+    for(var i = 0; i < rows.length; i++) {
+      jsonResult.Code = rows[i].Code;
+      jsonResult.Name = rows[i].Name;
+      jsonResult.location = rows[i].Location;
+      jsonResult.Deatils = rows[i].Details;
+      jsonResult.Type = rows[i].Type;
+      jsonResult.Likes = rows[i].Likes;
+      jsonResult.Phone = rows[i].Phone;
+      jsonResult.Parking = rows[i].Parking;
+      jsonResult.Image1 = rows[i].Image1;
+      jsonResult.Image2 = rows[i].Image2;
+      jsonResult.Image3 = rows[i].Image3;
+      jsonResult.BusinessHours = rows[i].BusinessHours;
+      jsonResult.Fee = rows[i].Fee;
+      jsonResult.Tip = rows[i].Tip;
+      jsonArray.push(jsonResult);
+    }
+  }
+  return jsonArray;
+}
 
+function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
+
+  initJsonArray(jsonArray);
   //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
     con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
@@ -305,6 +308,13 @@ function isCourseLiked(courseID, userID) {
       }
     }
   });
+}
+
+function initJsonArray(jsonArr) {
+  if(jsonArr.length > 0) {
+    jsonArr.length = 0;
+  }
+  return jsonArr;
 }
 
 function sendUserInfo(res, rows) {
