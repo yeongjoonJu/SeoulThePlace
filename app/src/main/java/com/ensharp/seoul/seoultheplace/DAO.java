@@ -92,6 +92,37 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return false;
     }
 
+    // SNS Login
+    // key : email or name, value : 이메일 혹은 이름
+    public MemberVO SNSloginCheck(String key, String value) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            if(key.equals("email")) {
+                jsonObject.accumulate("Id", value);
+                // 네트워크 처리 동기화
+                processNetwork(BASE_URL+"/login/bysns", jsonObject);
+            }
+            else {
+                jsonObject.accumulate("Name", value);
+                // 네트워크 처리 동기화
+                processNetwork(BASE_URL+"/login/byname", jsonObject);
+            }
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public MemberVO loginCheck(String id, String password) {
         JSONObject jsonObject = new JSONObject();
 
@@ -116,35 +147,108 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public JSONArray getPlaceAllData() {
+    public JSONArray getUserCourseData(String code, String id) {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.accumulate("place", "all");
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
 
             // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/place", jsonObject);
+            processNetwork(BASE_URL+"/main/course_info", jsonObject);
+
+            if(resultData.getJSONObject(0).getString("success").equals("false"))
+                return null;
 
         }catch (JSONException e) {
             e.printStackTrace();
-            return null;
         }
         return resultData;
     }
 
-    public JSONArray getCourseAllData() {
+    public CourseVO getCourseData(String key) {
+        CourseVO courseData = null;
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.accumulate("course", "all");
+            jsonObject.accumulate("Code", key);
 
             // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/course", jsonObject);
+            processNetwork(BASE_URL+"/course/info", jsonObject);
+
+            if(resultData == null)
+                return null;
+            courseData = new CourseVO(resultData.getJSONObject(0));
 
         }catch (JSONException e) {
             e.printStackTrace();
         }
-        return resultData;
+        return courseData;
+    }
+
+    public PlaceVO getPlaceData(String key) {
+        PlaceVO placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", key);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/info", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            placeData = new PlaceVO(resultData.getJSONObject(0));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<PlaceVO> searchPlace(String keyword) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Keyword", keyword);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/search", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<CourseVO> searchCourse(String keyword) {
+        ArrayList<CourseVO> courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Keyword", keyword);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course/search", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courseData;
     }
 
     public String insertMemberData(String[] information) {
@@ -174,6 +278,50 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return "success";
     }
 
+    public ArrayList<PlaceVO> searchPlaceByTag(String tag) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Tag", tag);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/place/tag", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<CourseVO> searchCourseByTag(String tag) {
+        ArrayList<CourseVO> courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Tag", tag);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/course/tag", jsonObject);
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
     // 태그 목록을 불러온다.
     // code "ALL" : 모든 태그 목록을 불러온다.
     // code "플레이스 or 코스 고유 코드"
@@ -199,26 +347,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             return null;
         }
         return tags;
-    }
-
-    // 플레이스 검색
-    public ArrayList<PlaceVO> searchPlace(String keyword) {
-        ArrayList<PlaceVO> results = new ArrayList<PlaceVO>();
-        // 서버 연결
-        if(!connectServer(BASE_URL + "/place"))
-            return null;
-        JSONArray jsonResult = getData();
-        try {
-            for (int i = 0; i < jsonResult.length(); i++) {
-                PlaceVO place = new PlaceVO(jsonResult.getJSONObject(i));
-                if(place.getName().contains(keyword) || place.getLocation().contains(keyword)
-                        || place.getDetails().contains(keyword))
-                    results.add(place);
-            }
-        }catch(JSONException e) {
-            e.printStackTrace();
-        }
-        return results;
     }
 
     // 서버 연결 시도
