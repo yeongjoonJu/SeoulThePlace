@@ -11,15 +11,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 var con = mysql.createConnection({
-	host     : '',
-	user     : '',
-	password : '',
-	database : '',
-  multipleStatements: true
+	host              : '',
+	user              : '',
+	password          : '',
+	database          : '',
+	multipleStatements: true
 });
 
 //회원가입
 app.post('/user/register', function(req, res) {
+	console.log('request has come!');
 	var id = req.body.Id;
 	var password = req.body.Password;
 	var name = req.body.Name;
@@ -29,7 +30,8 @@ app.post('/user/register', function(req, res) {
 	var editted_place = 'editted';
 
 	var insertQuery = 'INSERT INTO USER VALUES(?, ?, ?, ?, ?, ?, ?)'
-	var params = [id, password, name, favorite_course, favorite_place, editted_course, editted_place];
+	var params = [id, password, name, favorite_course, favorite_place,
+	             editted_course, editted_place];
 
 	con.query(insertQuery, params, function(err, rows, fields) {
 	if(err) {
@@ -46,6 +48,7 @@ app.post('/user/register', function(req, res) {
 app.post('/login', function(req, res) {
   var id = req.body.Id;
   var password = req.body.Password;
+  console.log('Request has come!');
 
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
@@ -58,6 +61,7 @@ app.post('/login', function(req, res) {
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
         sendUserInfo(res, rows);
+        console.log('Login Success!');
       }
     }
   }
@@ -197,7 +201,7 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
 
   //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
-    con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
+    con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
                rows[i].Code, rows[i].PlaceCode1, function(err, row, fields) {
                  if(err) {
                    console.log('err: ' + err);
@@ -206,8 +210,9 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                    jsonResult.Name = row[0].Name;
                    jsonResult.Description = row[0].Description;
                    jsonResult.Likes = row[0].Likes;
-                   jsonResult.Location = row[0].Location;
+                   jsonResult.location = row[0].Location;
                    jsonResult.User_Likes = isCourseLiked(rows[i].Code, userID);
+                   jsonResult.Image = row[0].Image1;
                    jsonArray.push(jsonResult);
                  }
                });
