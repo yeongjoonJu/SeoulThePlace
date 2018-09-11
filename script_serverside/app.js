@@ -180,6 +180,43 @@ app.post('/main/course_info', function(req, res) {
   });
 });
 
+//플레이스 검색
+app.poast('/search/place', function(req, res) {
+   var keyword = req.body.keyword;
+   //json 오브젝트 타입의 결과값들
+   var jsonResult = new Object();
+   //json 오브젝트 타입의 배열 형태
+   var jsonArray = new Array();
+
+   con.query('SELECT * FROM PLACE WHERE Name = %?% OR Location = %?% OR Type = %?%', keyword, keyword, keyword, function(err, rows, fields) {
+     if(err) {
+       console.log('err : ' + err);
+     } else {
+       if(rows.length === 0) {
+         res.send(null);
+       } else {
+         for(var i = 0; i < rows.length; i++) {
+           jsonResult.Code = rows[i].Code;
+           jsonResult.Name = rows[i].Name;
+           jsonResult.location = rows[i].Location;
+           jsonResult.Deatils = rows[i].Details;
+           jsonResult.Type = rows[i].Type;
+           jsonResult.Likes = rows[i].Likes;
+           jsonResult.Phone = rows[i].Phone;
+           jsonResult.Parking = rows[i].Parking;
+           jsonResult.Image1 = rows[i].Image1;
+           jsonResult.Image2 = rows[i].Image2;
+           jsonResult.Image3 = rows[i].Image3;
+           jsonResult.BusinessHours = rows[i].BusinessHours;
+           jsonResult.Fee = rows[i].Tip;
+         }
+         jsonArray.push(jsonResult);
+         res.json(jsonArray);
+       }
+     }
+   });
+});
+
 //PLACE 정보 가져오기
 app.post('/place/info', function(req, res) {
   var code = req.body.Code;
