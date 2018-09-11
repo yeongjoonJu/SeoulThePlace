@@ -37,5 +37,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:+'
     //페북로그인
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    // For Naver API
+    implementation 'com.naver.maps.open:naver-map-api:2.1.2@aar'
 }
 apply plugin: 'com.google.gms.google-services'
