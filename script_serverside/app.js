@@ -243,12 +243,13 @@ app.post('/course/like', function(req, res) {
       console.log('err : ' + err);
     } else {
       courseLikes = rows[0].Likes;
-      if(courseLikes > 0) {
-        courseLikes = courseLikes - 1;
-      }
       if(isPlaceLiked(courseCode, user_ID) == 'true') {
+        if(courseLikes > 0) {
+          courseLikes = courseLikes - 1;
+        }
         res.json([ {isCourseLiked: 'true', Likes: courseLikes}])
       } else {
+        courseLikes = courseLikes + 1;
         res.json([ {isCourseLiked: 'false', Likes: courseLikes}])
       }
     }
@@ -266,12 +267,13 @@ app.post('/place/like', function(req, res) {
       console.log('err : ' + err);
     } else {
       placeLikes = rows[0].Likes;
-      if(placeLikes > 0) {
-        placeLikes = placeLikes - 1;
-      }
       if(isPlaceLiked(placeCode, user_ID) == 'true') {
+        if(placeLikes > 0) {
+          placeLikes = placeLikes - 1;
+        }
         res.json([ {isPlaceLiked: 'true', Likes: placeLikes}])
       } else {
+        placeLikes = placeLikes + 1;
         res.json([ {isPlaceLiked: 'false', Likes: placeLikes}])
       }
     }
@@ -356,6 +358,7 @@ function isCourseLiked(courseID, userID) {
   });
 }
 
+//user가 해당 플레이스 좋아요 눌렀는지 여
 function isPlaceLiked(placeID, userID) {
   con.query('SELECT * FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', placeID, userID, function(err, result) {
     if(err) {
