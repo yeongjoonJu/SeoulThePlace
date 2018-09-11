@@ -11,6 +11,8 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
 public class SessionCallback implements ISessionCallback {
+
+    public static boolean alreadyCheck = false;
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
@@ -43,11 +45,14 @@ public class SessionCallback implements ISessionCallback {
             // 사용자정보 요청에 성공한 경우,
             @Override
             public void onSuccess(UserProfile userProfile) {
-                LoginFragment.editor.putString("email", userProfile.getEmail());
-                LoginFragment.editor.putString("name", userProfile.getNickname());
-                Log.e("KAKAOTALK :: ", "dddd");
-                LoginFragment.editor.apply();
-                LoginFragment.SNSSignIn();
+                if(!alreadyCheck) {
+                    Log.e("KAKAOTALK :: ", "get email,name");
+                    LoginFragment.editor.putString("email", userProfile.getEmail());
+                    LoginFragment.editor.putString("name", userProfile.getNickname());
+                    LoginFragment.editor.apply();
+                    LoginFragment.SNSSignIn();
+                    alreadyCheck = true;
+                }
             }
 
             // 사용자 정보 요청 실패
