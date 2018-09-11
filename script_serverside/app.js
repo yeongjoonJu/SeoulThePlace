@@ -255,6 +255,29 @@ app.post('/course/like', function(req, res) {
   });
 });
 
+//플레이스 좋아요
+app.post('/place/like', function(req, res) {
+  var placeCode = req.body.Code;
+  var user_ID = req.body.Id;
+  var placeLikes;
+
+  con.query('SELECT Likes FROM PLACE WHERE Code = ?', placeCode, function(err, rows, fields) {
+    if(err) {
+      console.log('err : ' + err);
+    } else {
+      placeLikes = rows[0].Likes;
+      if(placeLikes > 0) {
+        placeLikes = placeLikes - 1;
+      }
+      if(isPlaceLiked(placeCode, user_ID) == 'true') {
+        res.json([ {isPlaceLiked: 'true', Likes: placeLikes}])
+      } else {
+        res.json([ {isPlaceLiked: 'false', Likes: placeLikes}])
+      }
+    }
+  });
+});
+
 //코스 및 플레이스 검색시 json 형태 배열에 데이터 담기.
 function getInfoToArray(rows, table) {
   if(table == 'COURSE') {
