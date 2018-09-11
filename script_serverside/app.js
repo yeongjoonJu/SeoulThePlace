@@ -247,10 +247,12 @@ app.post('/course/like', function(req, res) {
         if(courseLikes > 0) {
           courseLikes = courseLikes - 1;
         }
-        res.json([ {isCourseLiked: 'true', Likes: courseLikes}])
+        res.json([ {isCourseLiked: 'true', Likes: courseLikes}]);
+        con.query("DELETE FROM COURSELIKE WHERE CourseCode = '?' AND Person = '?'", courseCode, user_ID);
       } else {
         courseLikes = courseLikes + 1;
-        res.json([ {isCourseLiked: 'false', Likes: courseLikes}])
+        res.json([ {isCourseLiked: 'false', Likes: courseLikes}]);
+        con.query("INSERT INTO COURSELIKE VALUES('?', '?')", courseCode, user_ID);
       }
     }
   });
@@ -271,10 +273,12 @@ app.post('/place/like', function(req, res) {
         if(placeLikes > 0) {
           placeLikes = placeLikes - 1;
         }
-        res.json([ {isPlaceLiked: 'true', Likes: placeLikes}])
+        res.json([ {isPlaceLiked: 'true', Likes: placeLikes}]);
+        con.query("DELETE FROM PLACELIKE WHERE PlaceCode = '?' AND Person = '?'", placeCode, user_ID);
       } else {
         placeLikes = placeLikes + 1;
-        res.json([ {isPlaceLiked: 'false', Likes: placeLikes}])
+        res.json([ {isPlaceLiked: 'false', Likes: placeLikes}]);
+        con.query("INSERT INTO COURSELIKE VALUES('?', '?')", placeCode, user_ID);
       }
     }
   });
