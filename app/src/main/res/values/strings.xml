@@ -2,7 +2,6 @@
     <string name="app_name">서울 더 플레이스</string>
     <string name="str_done">완료</string>
     <string name="naver_client_id">pGzToR98qOhD0UYuOZZx</string>
-    <string name="card_padding">65dp</string>
 
     <string name="title">경복궁</string>
     <string name="address">경기도 남양주시 내집</string>

@@ -3,14 +3,20 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
 import com.ensharp.seoul.seoultheplace.R;
 
 import java.util.List;
+
+import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class CourseFragment extends Fragment {
 
@@ -33,6 +39,16 @@ public class CourseFragment extends Fragment {
         getChildFragmentManager().beginTransaction()
                 .add(R.id.fragment, new MapFragment())
                 .commit();
+
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+
+        CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
+        ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
+        fragmentCardShadowTransformer.enableScaling(true);
+
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        viewPager.setOffscreenPageLimit(3);
 
         return rootView;
     }

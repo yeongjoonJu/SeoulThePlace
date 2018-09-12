@@ -36,7 +36,8 @@
                 android:layout_weight="1.6"
                 android:orientation="vertical"
                 android:gravity="center|top"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:background="@color/white">
 
                 <TextView
                     android:id="@+id/title"
@@ -66,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
+                    android:background="@null"
                     android:src="@drawable/item_angle"/>
 
             </LinearLayout>
