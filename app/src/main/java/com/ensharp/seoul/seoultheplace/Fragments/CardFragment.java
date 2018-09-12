@@ -81,6 +81,16 @@ public class CardFragment extends Fragment {
         index.setTextColor(Color.rgb(255,255,255));
         index.setText(String.format("%d", getArguments().getInt("position")));
 
+        final MainActivity activity = (MainActivity)getActivity();
+
+        place = (ImageButton) view.findViewById(R.id.place);
+        place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.changeFragment();
+            }
+        });
+
         return view;
     }
 

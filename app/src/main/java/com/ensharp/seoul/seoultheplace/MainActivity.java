@@ -11,6 +11,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
+import com.ensharp.seoul.seoultheplace.Place.PlaceFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -52,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
                 .commit();
+    }
+
+    public void changeFragment() {
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, new PlaceFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /**
