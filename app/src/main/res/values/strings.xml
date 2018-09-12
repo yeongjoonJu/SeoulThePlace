@@ -11,6 +11,16 @@
     <string name="course_guide">옆으로 넘겨서 보기</string>
     <string name="course_description">시대가 어느 땐데 아직도 취할 곳이 \'술\'밖에 없다고 생각하는가? 브랜드 별로 구비된 매끈한 유리잔, 힙 터지는 네온사인, 출처가 궁금해지는 플레이리스트가 있는 곳. 연남동에 가보지 않은 자, 트렌드를 논하지 말라!</string>
 
+    <string name="place_time">동계 09:00~17:00\n하계 09:00~18:00</string>
+    <string name="place_parking">소형 2시간 3000원\n초과 10분 800원</string>
+    <string name="place_fee">대인 3000원 나머지 무료</string>
+
+    <string name="place_title">경복궁</string>
+    <string name="place_address">경기도 남양주시 내집</string>
+    <string name="place_phone">010-5110-1996</string>
+    <string name="place_description">국내에 단 두 곳, ONE for ONE 기부가 기능한 카페</string>
+    <string name="place_detail">형편에 여유가 있어야 기부할 수 있다는 구시대적인 생각은 그만! 탐스에서는 신발만 판다는 편견도 이제는 그만! 내자동에 생긴 탐스 로스팅코에서는 커피 한 잔을 마실 때마다 도움이 필요한 사람들에게 깨끗한 물을 기부할 수 있다.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">717351961937108</string>

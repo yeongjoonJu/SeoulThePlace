@@ -9,9 +9,10 @@ import android.support.v4.app.Fragment;
 
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.PlaceDetailFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
-import com.ensharp.seoul.seoultheplace.Place.PlaceFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment(), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment()
         };
 
         // 하단 버튼 객체 초기화
