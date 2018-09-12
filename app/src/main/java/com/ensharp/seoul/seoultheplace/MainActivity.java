@@ -9,9 +9,7 @@ import android.support.v4.app.Fragment;
 
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.PlaceDetailFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 
 public class MainActivity extends AppCompatActivity {
