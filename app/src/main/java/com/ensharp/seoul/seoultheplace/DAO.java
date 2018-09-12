@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;

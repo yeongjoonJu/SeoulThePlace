@@ -76,6 +76,7 @@ obj/
 .idea/scopes/scope_settings.xml
 .idea/dictionaries
 .idea/vcs.xml
+.idea/codeStyles/Project.xml
 .idea/jsLibraryMappings.xml
 .idea/datasources.xml
 .idea/dataSources.ids
