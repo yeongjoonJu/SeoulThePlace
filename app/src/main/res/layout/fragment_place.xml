@@ -17,13 +17,11 @@
             android:id="@+id/images"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginTop="40dp"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="30dp"
-            android:paddingEnd="@dimen/card_padding"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
-            android:paddingStart="@dimen/card_padding"/>
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
 
         <LinearLayout
             android:id="@+id/sliderDots"
@@ -38,6 +36,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:src="@drawable/item_circle"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
             android:scaleType="fitXY"/>
 

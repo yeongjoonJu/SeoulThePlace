@@ -21,6 +21,11 @@
     <string name="place_description">국내에 단 두 곳, ONE for ONE 기부가 기능한 카페</string>
     <string name="place_detail">형편에 여유가 있어야 기부할 수 있다는 구시대적인 생각은 그만! 탐스에서는 신발만 판다는 편견도 이제는 그만! 내자동에 생긴 탐스 로스팅코에서는 커피 한 잔을 마실 때마다 도움이 필요한 사람들에게 깨끗한 물을 기부할 수 있다.</string>
 
+    <string name="image_01">https://theblemish.com/images/2018/07/jongkook-bts.jpg</string>
+    <string name="image_02">https://cdn3.i-scmp.com/sites/default/files/images/methode/2018/06/11/900a503e-6a0a-11e8-8f2e-7970b9e180c8_1320x770_095825.jpg</string>
+    <string name="image_03">https://0.soompi.io/wp-content/uploads/2017/02/05180426/jungkook.jpg?s=900x600&amp;e=t</string>
+    <string name="image_04">http://image.en.yibada.com/data/images/full/145837/bts-member-jungkook-released-a-cover-of-charlie-puths-we-dont-talk-anymore-on-twitter-on-jan-6.png</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">717351961937108</string>

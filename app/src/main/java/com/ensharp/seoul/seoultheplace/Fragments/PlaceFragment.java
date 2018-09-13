@@ -56,59 +56,10 @@ public class PlaceFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_place, container, false);
 
-        Integer[] images = {R.drawable.item_place_info_1, R.drawable.item_place_info_2,
-                R.drawable.item_place_info_3, R.drawable.item_place_info_4};
+        String[] images = { getString(R.string.image_01), getString(R.string.image_02),
+                getString(R.string.image_03), getString(R.string.image_04)};
 
-        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.images);
-
-        LinearLayout sliderDotsPanel = (LinearLayout) rootView.findViewById(R.id.sliderDots);
-
-        PlaceViewPagerAdapter placeViewPagerAdapter = new PlaceViewPagerAdapter(getContext(), images);
-
-        viewPager.setAdapter(placeViewPagerAdapter);
-
-        dotCount = placeViewPagerAdapter.getCount();
-        dots = new ImageView[dotCount];
-
-        Log.e("abcdefg", String.format("dot count : %d", dotCount));
-
-        for (int i = 0; i < dotCount; i++) {
-            dots[i] = new ImageView(rootView.getContext());
-            dots[i].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_non_active_dot));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(8,0,8,0);
-
-            sliderDotsPanel.addView(dots[i], params);
-            Log.e("abcdefg", String.format("dot%d added", i));
-        }
-
-        dots[0].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_active_dot));
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                Log.e("abcdefg", String.format("page%d selected", position));
-
-                for (int i = 0; i < dotCount; i++) {
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_non_active_dot));
-                }
-
-                dots[position].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_active_dot));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        setPlaceImages(images);
 
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView address = (TextView) rootView.findViewById(R.id.address);
@@ -135,5 +86,49 @@ public class PlaceFragment extends Fragment {
         information.setAdapter(adapter);
 
         return rootView;
+    }
+
+    public void setPlaceImages(String[] images) {
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.images);
+        LinearLayout sliderDotsPanel = (LinearLayout) rootView.findViewById(R.id.sliderDots);
+        PlaceViewPagerAdapter placeViewPagerAdapter = new PlaceViewPagerAdapter(getContext(), images);
+
+        viewPager.setAdapter(placeViewPagerAdapter);
+
+        dotCount = placeViewPagerAdapter.getCount();
+        dots = new ImageView[dotCount];
+
+        for (int i = 0; i < dotCount; i++) {
+            dots[i] = new ImageView(rootView.getContext());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_non_active_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(8,0,8,0);
+
+            sliderDotsPanel.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_active_dot));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < dotCount; i++)
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_non_active_dot));
+
+                dots[position].setImageDrawable(ContextCompat.getDrawable(rootView.getContext(), R.drawable.item_active_dot));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }

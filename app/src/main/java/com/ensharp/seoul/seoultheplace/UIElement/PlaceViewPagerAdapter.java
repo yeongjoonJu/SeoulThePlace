@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.UIElement;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -9,15 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.R;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class PlaceViewPagerAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private Integer[] images;
+    private String[] images;
+    private URL imageURL;
+    private Bitmap bitmap;
 
-    public PlaceViewPagerAdapter(Context context, Integer[] images) {
+    public PlaceViewPagerAdapter(Context context, String[] images) {
         this.context = context;
         this.images = images;
     }
@@ -37,8 +46,8 @@ public class PlaceViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.item_place_image, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-        imageView.setImageResource(images[position]);
+
+        new DownloadImageTask((ImageView) view.findViewById(R.id.imageView)).execute(images[position]);
 
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view, 0);
