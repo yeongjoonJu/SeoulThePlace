@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +29,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
@@ -48,6 +50,8 @@ public class PlaceFragment extends Fragment {
     private ImageView[] dots;
     private int dotCount;
 
+    private PullRefreshLayout layout;
+
     public PlaceFragment() {
 
     }
@@ -64,6 +68,9 @@ public class PlaceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_place, container, false);
+
+        layout = (PullRefreshLayout) rootView.findViewById(R.id.pullToDestroy);
+        setEvents();
 
         // needed information.
         String[] images = { getString(R.string.image_01), getString(R.string.image_02),
@@ -143,6 +150,15 @@ public class PlaceFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+    }
+
+    private void setEvents() {
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getActivity().onBackPressed();
             }
         });
     }
