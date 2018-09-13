@@ -2,7 +2,9 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="35dp"
+    android:paddingRight="35dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -33,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/place_information"
-            android:gravity="right"/>
+            android:gravity="right"
+            android:lineSpacingExtra="5dp" />
 
     </LinearLayout>
 

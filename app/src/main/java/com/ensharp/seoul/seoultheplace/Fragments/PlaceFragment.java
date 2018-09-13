@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +35,8 @@ import org.w3c.dom.Text;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class PlaceFragment extends Fragment {
 
@@ -56,10 +61,13 @@ public class PlaceFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_place, container, false);
 
+        // needed information.
         String[] images = { getString(R.string.image_01), getString(R.string.image_02),
                 getString(R.string.image_03), getString(R.string.image_04)};
+        int placeCount = 3;
 
         setPlaceImages(images);
+        setPlaceCountImage(placeCount);
 
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView address = (TextView) rootView.findViewById(R.id.address);
@@ -85,10 +93,12 @@ public class PlaceFragment extends Fragment {
         adapter = new DetailInformationAdapter(getContext(), detailInformation);
         information.setAdapter(adapter);
 
+        getTotalHeightOfListView(information);
+
         return rootView;
     }
 
-    public void setPlaceImages(String[] images) {
+    private void setPlaceImages(String[] images) {
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.images);
         LinearLayout sliderDotsPanel = (LinearLayout) rootView.findViewById(R.id.sliderDots);
         PlaceViewPagerAdapter placeViewPagerAdapter = new PlaceViewPagerAdapter(getContext(), images);
@@ -130,5 +140,38 @@ public class PlaceFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setPlaceCountImage(int index) {
+        FrameLayout numberIndicator = (FrameLayout) rootView.findViewById(R.id.numberIndicator);
+
+        getLayoutInflater().inflate(R.layout.item_place_index, numberIndicator);
+        TextView indexInImage = (TextView) numberIndicator.findViewById(R.id.index);
+        indexInImage.setText(Integer.toString(index));
+
+        if (index != 0)
+            numberIndicator.setVisibility(View.VISIBLE);
+        else
+            numberIndicator.setVisibility(View.GONE);
+    }
+
+    public void getTotalHeightOfListView(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+        int totalHeight = 0;
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View view = adapter.getView(i, null, listView);
+
+            view.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+            totalHeight += view.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }
