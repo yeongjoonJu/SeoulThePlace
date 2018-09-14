@@ -10,5 +10,6 @@
     <dimen name="place_phone_size">15sp</dimen>
     <dimen name="place_description_size">15sp</dimen>
     <dimen name="place_detail_size">15sp</dimen>
+    <dimen name="place_change_size">13sp</dimen>
 
 </resources>

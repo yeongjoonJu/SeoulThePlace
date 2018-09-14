@@ -14,6 +14,7 @@
     <color name="place_detail">#868686</color>
     <color name="place_category">#000000</color>
     <color name="place_information">#A8A8A8</color>
+    <color name="place_changing">#A8A8A8</color>
 
     <color name="active_dot">#4A4A4A</color>
     <color name="non_active_dot">#D9D9D9</color>

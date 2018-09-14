@@ -23,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -33,6 +35,7 @@ import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
@@ -99,6 +102,7 @@ public class PlaceFragment extends Fragment {
 
         setPlaceImages(place.getImageURL());
         setPlaceCountImage(index);
+        setButtons();
 
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView address = (TextView) rootView.findViewById(R.id.address);
@@ -189,6 +193,56 @@ public class PlaceFragment extends Fragment {
             numberIndicator.setVisibility(View.VISIBLE);
         else
             numberIndicator.setVisibility(View.GONE);
+    }
+
+    private void setButtons() {
+        if (index == 0) return;
+
+        FrameLayout layout = (FrameLayout) rootView.findViewById(R.id.buttons);
+        ImageButton previousImage = (ImageButton) rootView.findViewById(R.id.previous_page_image_button);
+        Button previous = (Button) rootView.findViewById(R.id.previous_page_text_button);
+        ImageButton nextImage = (ImageButton) rootView.findViewById(R.id.next_page_image_button);
+        Button next = (Button) rootView.findViewById(R.id.next_page_text_button);
+
+        if (index == 1) {
+            previousImage.setVisibility(View.INVISIBLE);
+            previous.setVisibility(View.INVISIBLE);
+        } else if (index == Constant.getCourse().getPlaceCount()) {
+            nextImage.setVisibility(View.INVISIBLE);
+            next.setVisibility(View.INVISIBLE);
+        }
+
+        final MainActivity activity = (MainActivity)getActivity();
+
+        previousImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.changeFragment(courseCode, index - 1);
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.changeFragment(courseCode, index - 1);
+            }
+        });
+
+        nextImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.changeFragment(courseCode, index + 1);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.changeFragment(courseCode, index + 1);
+            }
+        });
+
+        layout.setVisibility(View.VISIBLE);
     }
 
     public void getTotalHeightOfListView(ListView listView) {

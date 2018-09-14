@@ -21,12 +21,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // course, place 초기화
+        Constant.initCourse();
+        Constant.initPlaces();
+
         setContentView(R.layout.activity_main);
 
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new PlaceFragment("a333")
         };
 
         // 하단 버튼 객체 초기화
@@ -53,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
                 .commit();
-
-        // course, place 초기화
-        Constant.initCourse();
-        Constant.initPlaces();
     }
 
     public void changeFragment(String courseCode, int index) {

@@ -119,6 +119,54 @@
                 android:overScrollMode="never">
             </ListView>
 
+            <FrameLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:layout_marginTop="25dp"
+                android:visibility="gone" >
+
+                <ImageButton
+                    android:id="@+id/previous_page_image_button"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center|left"
+                    android:background="@null"
+                    android:src="@drawable/item_previous_page" />
+
+                <Button
+                    android:id="@+id/previous_page_text_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:textColor="@color/place_changing"
+                    android:textSize="@dimen/place_change_size"
+                    android:text="이전 페이지"/>
+
+                <Button
+                    android:id="@+id/next_page_text_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@null"
+                    android:textColor="@color/place_changing"
+                    android:textSize="@dimen/place_change_size"
+                    android:text="다음 페이지"/>
+
+                <ImageButton
+                    android:id="@+id/next_page_image_button"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center|right"
+                    android:background="@null"
+                    android:src="@drawable/item_next_page"/>
+
+            </FrameLayout>
+
         </LinearLayout>
 
     </ScrollView>
