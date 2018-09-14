@@ -2,18 +2,24 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 
+import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
@@ -21,19 +27,20 @@ import com.ensharp.seoul.seoultheplace.R;
 @SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
 
-    private String courseTitle;
-    private String courseDetail;
+    private String courseCode;
+    private CourseVO course;
     private int index;
     private PlaceVO place;
     private CardView cardView;
     private ImageButton placeButton;
 
     @SuppressLint("ValidFragment")
-    public CardFragment(String courseTitle, String courseDetail, int index, PlaceVO place) {
-        this.courseTitle = courseTitle;
-        this.courseDetail = courseDetail;
+    public CardFragment(String courseCode, int index, PlaceVO place) {
+        this.courseCode = courseCode;
         this.index = index;
         this.place = place;
+
+        course = Constant.getCourse();
     }
 
     @SuppressLint("DefaultLocale")
@@ -57,8 +64,8 @@ public class CardFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView description = (TextView) view.findViewById(R.id.description);
 
-        title.setText(courseTitle);
-        description.setText(courseDetail);;
+        title.setText(course.getName());
+        description.setText(course.getDetails());
 
         return view;
     }
@@ -69,11 +76,13 @@ public class CardFragment extends Fragment {
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
+        ImageView image = (ImageView) view.findViewById(R.id.placeImage);
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView description = (TextView) view.findViewById(R.id.description);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
+        new DownloadImageTask(image).execute(place.getImageURL()[0]);
         title.setText(place.getName());
         address.setText(place.getLocation());
         description.setText("");
@@ -85,7 +94,7 @@ public class CardFragment extends Fragment {
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment();
+                activity.changeFragment(courseCode, index);
             }
         });
 

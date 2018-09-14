@@ -31,7 +31,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.PlaceViewPagerAdapter;
@@ -41,8 +43,12 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressLint("ValidFragment")
 public class PlaceFragment extends Fragment {
 
+    private String courseCode;
+    private int index;
+    private PlaceVO place;
     private View rootView;
     private DetailInformationAdapter adapter;
     private ImageView[] dots;
@@ -50,8 +56,19 @@ public class PlaceFragment extends Fragment {
 
     private PullToRefreshView destroyView;
 
-    public PlaceFragment() {
+    @SuppressLint("ValidFragment")
+    public PlaceFragment(String placeCode) {
+        courseCode = "";
+        index = 0;
+        place = Constant.getPlace(placeCode);
+    }
 
+    @SuppressLint("ValidFragment")
+    public PlaceFragment(String courseCode, int index) {
+        this.courseCode = courseCode;
+        this.index = index;
+
+        place = Constant.getPlace(Constant.getCourse().getPlaceCode(index - 1));
     }
 
     @Override
@@ -80,13 +97,8 @@ public class PlaceFragment extends Fragment {
             }
         });
 
-        // needed information.
-        String[] images = { getString(R.string.image_01), getString(R.string.image_02),
-                getString(R.string.image_03), getString(R.string.image_04)};
-        int placeCount = 3;
-
-        setPlaceImages(images);
-        setPlaceCountImage(placeCount);
+        setPlaceImages(place.getImageURL());
+        setPlaceCountImage(index);
 
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView address = (TextView) rootView.findViewById(R.id.address);
@@ -94,20 +106,24 @@ public class PlaceFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.description);
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
 
-        title.setText(getString(R.string.place_title));
-        address.setText(getString(R.string.place_address));
-        phone.setText(getString(R.string.place_phone));
-        description.setText(getString(R.string.place_description));
-        detail.setText(getString(R.string.place_detail));
+        String parking = place.getParking();
+        if(!parking.equals("없음")) parking = place.getParkFee();
+
+        title.setText(place.getName());
+        address.setText(place.getLocation());
+        phone.setText(place.getPhone());
+        description.setText("");
+        detail.setText(place.getDetails());
         detail.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
 
         ListView information = (ListView) rootView.findViewById(R.id.information);
 
         ArrayList<DetailInformationVO> detailInformation = new ArrayList<DetailInformationVO>(
                 Arrays.asList(new DetailInformationVO[] {
-                    new DetailInformationVO("item_time", "운영시간", getString(R.string.place_time)),
-                    new DetailInformationVO("item_parking", "주차", getString(R.string.place_parking)),
-                    new DetailInformationVO("item_fee", "이용 요금", getString(R.string.place_fee))
+                    new DetailInformationVO("item_time", "운영시간", place.getBusinessHours()),
+                    new DetailInformationVO("item_parking", "주차", parking),
+                    new DetailInformationVO("item_tip", "팁", place.getTip()),
+                    new DetailInformationVO("item_tag", "tag", place.getType()),
                 }));
 
         adapter = new DetailInformationAdapter(getContext(), detailInformation);

@@ -11,6 +11,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new PlaceFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
         Constant.initPlaces();
     }
 
-    public void changeFragment() {
+    public void changeFragment(String courseCode, int index) {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, new PlaceFragment());
+        fragmentTransaction.replace(R.id.fragment, new PlaceFragment(courseCode, index));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

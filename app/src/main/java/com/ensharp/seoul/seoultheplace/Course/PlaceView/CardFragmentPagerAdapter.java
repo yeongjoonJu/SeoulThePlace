@@ -28,6 +28,8 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         this.baseElevation = baseElevation;
         courseCode = code;
 
+        course = Constant.getCourse();
+
         generateCardFragment();
     }
 
@@ -35,13 +37,11 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         String placeCode;
         PlaceVO place;
 
-        course = Constant.getCourse();
-
-        fragments.add(new CardFragment(course.getName(), course.getDetails(), 0, null));
+        fragments.add(new CardFragment(courseCode, 0, null));
         for (int i = 1; i <= course.getPlaceCount(); i++) {
             placeCode = course.getPlaceCode(i - 1);
             place = Constant.getPlace(placeCode);
-            fragments.add(new CardFragment(course.getName(), course.getDetails(), i, place));
+            fragments.add(new CardFragment(courseCode, i, place));
         }
     }
 
