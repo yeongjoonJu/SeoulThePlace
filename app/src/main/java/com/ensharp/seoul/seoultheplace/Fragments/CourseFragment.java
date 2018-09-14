@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,15 +20,16 @@ import java.util.List;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
+@SuppressLint("ValidFragment")
 public class CourseFragment extends Fragment {
 
-    private List<ImageButton> imageButtons;
+    private String code;
+    private ViewPager viewPager;
+    private CardFragmentPagerAdapter pagerAdapter;
 
-    ViewPager viewPager;
-    CardFragmentPagerAdapter pagerAdapter;
-
-    public CourseFragment() {
-
+    @SuppressLint("ValidFragment")
+    public CourseFragment(String code) {
+        this.code = code;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class CourseFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
+        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(true);
 
@@ -55,8 +57,6 @@ public class CourseFragment extends Fragment {
 
         return rootView;
     }
-
-    public List<ImageButton> getImageButtons() { return imageButtons; }
 
     @Override
     public void onActivityResult(int requestCode , int resultCode , Intent data){

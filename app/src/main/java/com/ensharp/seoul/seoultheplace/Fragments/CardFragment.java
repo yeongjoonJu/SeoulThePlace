@@ -15,20 +15,25 @@ import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 
 import com.ensharp.seoul.seoultheplace.MainActivity;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
+@SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
 
+    private String courseTitle;
+    private String courseDetail;
+    private int index;
+    private PlaceVO place;
     private CardView cardView;
-    private ImageButton place;
+    private ImageButton placeButton;
 
-    public static Fragment getInstance(int position) {
-        CardFragment f = new CardFragment();
-        Bundle args = new Bundle();
-        args.putInt("position", position);
-        f.setArguments(args);
-
-        return f;
+    @SuppressLint("ValidFragment")
+    public CardFragment(String courseTitle, String courseDetail, int index, PlaceVO place) {
+        this.courseTitle = courseTitle;
+        this.courseDetail = courseDetail;
+        this.index = index;
+        this.place = place;
     }
 
     @SuppressLint("DefaultLocale")
@@ -36,8 +41,7 @@ public class CardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        if (getArguments().getInt("position") == 0)
+        if (index == 0)
             return createIntroduceFragment(inflater, container);
         else
             return createCardFragment(inflater, container);
@@ -53,10 +57,8 @@ public class CardFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView description = (TextView) view.findViewById(R.id.description);
 
-        title.setText(getString(R.string.course_title));
-        title.setTextColor(Color.rgb(255,255,255));
-        description.setText(getString(R.string.course_description));
-        description.setTextColor(Color.rgb(255,255,255));
+        title.setText(courseTitle);
+        description.setText(courseDetail);;
 
         return view;
     }
@@ -70,21 +72,17 @@ public class CardFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView description = (TextView) view.findViewById(R.id.description);
-        TextView index = (TextView) view.findViewById(R.id.index);
+        TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        title.setText(getString(R.string.title));
-        title.setTextColor(Color.rgb(0,0,0));
-        address.setText(getString(R.string.address));
-        address.setTextColor(Color.rgb(0,0,0));
-        description.setText(getString(R.string.description));
-        description.setTextColor(Color.rgb(0,0,0));
-        index.setTextColor(Color.rgb(255,255,255));
-        index.setText(String.format("%d", getArguments().getInt("position")));
+        title.setText(place.getName());
+        address.setText(place.getLocation());
+        description.setText("");
+        placeIndex.setText(Integer.toString(index));
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        place = (ImageButton) view.findViewById(R.id.place);
-        place.setOnClickListener(new View.OnClickListener() {
+        placeButton = (ImageButton) view.findViewById(R.id.place);
+        placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activity.changeFragment();
@@ -93,8 +91,6 @@ public class CardFragment extends Fragment {
 
         return view;
     }
-
-    public ImageButton getPlace() { return place;}
 
     public CardView getCardView() {
         return cardView;

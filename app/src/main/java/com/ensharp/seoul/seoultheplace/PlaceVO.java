@@ -4,36 +4,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PlaceVO {
+    private String code;
     private String name;
     private String location;
-    private String[] imageURL;
-    private String phone;
-    private String tip;
-    private String parking;
-    private String parkFee;
-    private int likes;
-    private String[] tags;
-    private String description;
     private String details;
     private String type;
+    private int likes;
+    private String phone;
+    private String parking;
+    private String[] imageURL;
     private String businessHours;
+    private String parkFee;
+    private String tip;
 
-    public PlaceVO(String name, String location, String[] imageURL, String phone,
-                   String tip, String parking, String parkFee, int likes, String[] tags,
-                   String description, String details, String type, String businessHours) {
+    public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
+                   String tip, String parking, String parkFee, int likes, String details,
+                   String type, String businessHours) {
         this.name = name;
         this.location = location;
         this.imageURL = imageURL;
         this.phone = phone;
-        this.tip = tip;
         this.parking = parking;
         this.parkFee = parkFee;
         this.likes = likes;
-        this.tags = tags;
-        this.description = description;
         this.details = details;
         this.type = type;
         this.businessHours = businessHours;
+        this.tip = tip;
     }
 
     public PlaceVO(JSONObject jsonObject) {
@@ -47,8 +44,6 @@ public class PlaceVO {
             this.parking = jsonObject.getString("parking");
             this.parkFee = jsonObject.getString("fee");
             this.likes = jsonObject.getInt("likes");
-            this.tags = jsonObject.getString("tag").split(",");
-            this.description = jsonObject.getString("description");
             this.details = jsonObject.getString("details");
             this.type = jsonObject.getString("type");
             this.businessHours = jsonObject.getString("businesshours");
@@ -56,6 +51,8 @@ public class PlaceVO {
             e.printStackTrace();
         }
     }
+
+    public String getCode() { return code; }
 
     public String getName() {
         return name;
@@ -87,14 +84,6 @@ public class PlaceVO {
 
     public int getLikes() {
         return likes;
-    }
-
-    public String[] getTags() {
-        return tags;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getDetails() {

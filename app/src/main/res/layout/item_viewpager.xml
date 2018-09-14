@@ -44,14 +44,16 @@
                     style="@style/TextAppearance.AppCompat.Title"
                     android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/address"
                     style="@style/TextAppearance.AppCompat.Body2"
                     android:layout_margin="0dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/description"
@@ -59,7 +61,8 @@
                     android:layout_margin="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp" />
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/black"/>
 
                 <ImageButton
                     android:id="@+id/place"
@@ -87,7 +90,8 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"/>
 
     </FrameLayout>
 

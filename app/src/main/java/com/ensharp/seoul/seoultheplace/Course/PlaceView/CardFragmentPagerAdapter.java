@@ -4,10 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
+import com.ensharp.seoul.seoultheplace.Constant;
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.Fragments.CardFragment;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,19 +19,29 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
 
     private List<CardFragment> fragments;
     private float baseElevation;
-    private List<ImageButton> imageButtons;
+    private String courseCode;
+    private CourseVO course;
 
-    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation) {
+    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation, String code) {
         super(fm);
         fragments = new ArrayList<>();
         this.baseElevation = baseElevation;
+        courseCode = code;
 
-        imageButtons = new ArrayList<>();
+        generateCardFragment();
+    }
 
-        for(int i = 0; i< 8; i++){
-            CardFragment card = new CardFragment();
-            addCardFragment(card);
-            if (i != 0) imageButtons.add(card.getPlace());
+    public void generateCardFragment() {
+        String placeCode;
+        PlaceVO place;
+
+        course = Constant.getCourse();
+
+        fragments.add(new CardFragment(course.getName(), course.getDetails(), 0, null));
+        for (int i = 1; i <= course.getPlaceCount(); i++) {
+            placeCode = course.getPlaceCode(i - 1);
+            place = Constant.getPlace(placeCode);
+            fragments.add(new CardFragment(course.getName(), course.getDetails(), i, place));
         }
     }
 
@@ -49,7 +62,7 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
 
     @Override
     public Fragment getItem(int position) {
-        return CardFragment.getInstance(position);
+        return fragments.get(position);
     }
 
     @Override
@@ -58,11 +71,4 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         fragments.set(position, (CardFragment) fragment);
         return fragment;
     }
-
-    public List<ImageButton> getImageButtons() {return imageButtons;}
-
-    public void addCardFragment(CardFragment fragment) {
-        fragments.add(fragment);
-    }
-
 }

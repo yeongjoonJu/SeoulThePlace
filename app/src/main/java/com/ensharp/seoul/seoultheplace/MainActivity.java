@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new PlaceFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
                 .commit();
+
+        // course, place 초기화
+        Constant.initCourse();
+        Constant.initPlaces();
     }
 
     public void changeFragment() {
