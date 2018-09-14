@@ -22,13 +22,15 @@ import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class SearchFragment extends Fragment {
-    static final String KEY_ADAPTER = "KEY_ADAPTER";
-    static final String KEY_PAGER = "KEY_PAGER";
+    static final String KEY_COURSE = "KEY_COURSE";
+    static final String KEY_PLACE = "KEY_PLACE";
 
     InputMethodManager inputMethodManager;
     TextView courceText;
@@ -40,10 +42,37 @@ public class SearchFragment extends Fragment {
     CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
 
-    ArrayList<PlaceVO> searchResult = null;
+    ArrayList<PlaceVO> searchPlaceResult = null;
+    ArrayList<CourseVO> searchCourseResult = null;
+    int currentPlacePosition = 0;
+    int currentCoursePosition = 0;
 
     public SearchFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(searchPlaceResult != null) {
+            placeText.setVisibility(View.VISIBLE);
+            showPlaceCardView(searchPlaceResult);
+            placeViewPager.setCurrentItem(currentPlacePosition);
+        }
+        if(searchCourseResult != null) {
+            courceText.setVisibility(View.VISIBLE);
+            showCourseCardView(searchCourseResult);
+            courseViewPager.setCurrentItem(currentCoursePosition);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(placeViewPager != null)
+            currentPlacePosition = placeViewPager.getCurrentItem();
+        if(courseViewPager != null)
+            currentCoursePosition = courseViewPager.getCurrentItem();
     }
 
     @Override
@@ -89,15 +118,16 @@ public class SearchFragment extends Fragment {
                     tempData.add(placeData[i]);
                 }
 
-                searchResult = tempData;
-                showPlaceCardView(searchResult);
+                searchPlaceResult = tempData;
+                showPlaceCardView(searchPlaceResult);
 
                 CourseVO[] courseData = new CourseVO[] { new CourseVO(), new CourseVO(), new CourseVO(), new CourseVO()};
-
                 ArrayList<CourseVO> courses = new ArrayList<>();
                 for(int i=0; i<courseData.length; i++)
                     courses.add(courseData[i]);
-                showCourseCardView(courses);
+
+                searchCourseResult = courses;
+                showCourseCardView(searchCourseResult);
 
                 // 키보드 숨김
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);

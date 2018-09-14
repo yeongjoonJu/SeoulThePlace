@@ -1,9 +1,12 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CourseVO {
+public class CourseVO implements Parcelable {
     private String code;
     private String name;
     private String type;
@@ -64,5 +67,15 @@ public class CourseVO {
 
     public String[] getPlaceCode() {
         return placeCode;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }
