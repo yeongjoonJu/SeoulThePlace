@@ -6,27 +6,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
-
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -41,7 +37,7 @@ public class SearchFragment extends Fragment {
 
     ViewPager courseViewPager;
     ViewPager placeViewPager;
-    CardFragmentPagerAdapter courseViewAdapter;
+    CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
 
     ArrayList<PlaceVO> searchResult = null;
@@ -50,27 +46,10 @@ public class SearchFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /*
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putSerializable(KEY_ADAPTER, (Serializable)placeViewAdapter);
-        outState.putSerializable(KEY_PAGER, (Serializable)placeViewPager);
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        /*
-        if(savedInstanceState != null) {
-            placeViewAdapter = (PlaceFragmentPagerAdapter) savedInstanceState.getSerializable(KEY_ADAPTER);
-            placeViewPager = (ViewPager) savedInstanceState.getSerializable(KEY_PAGER);
-            courceText.setVisibility(View.VISIBLE);
-            placeText.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override
@@ -85,6 +64,8 @@ public class SearchFragment extends Fragment {
 
         // 플레이스 카드 뷰
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
+        // 코스 카드 뷰
+        courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +92,13 @@ public class SearchFragment extends Fragment {
                 searchResult = tempData;
                 showPlaceCardView(searchResult);
 
+                CourseVO[] courseData = new CourseVO[] { new CourseVO(), new CourseVO(), new CourseVO(), new CourseVO()};
+
+                ArrayList<CourseVO> courses = new ArrayList<>();
+                for(int i=0; i<courseData.length; i++)
+                    courses.add(courseData[i]);
+                showCourseCardView(courses);
+
                 // 키보드 숨김
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
             }
@@ -133,5 +121,21 @@ public class SearchFragment extends Fragment {
         }
         placeViewPager.setOffscreenPageLimit(3);
         placeCardShadowTransformer.enableScaling(true);
+    }
+
+    protected void showCourseCardView(ArrayList<CourseVO> courses) {
+        courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
+        courseViewAdapter.setCourseData(courses);
+        ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
+        courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
+        try {
+            courseViewPager.setAdapter(courseViewAdapter);
+        }catch(Exception e) {
+            e.printStackTrace();
+            courseViewAdapter = new CourseFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
+            courseViewAdapter.setCourseData(courses);
+        }
+        courseViewPager.setOffscreenPageLimit(3);
+        courseCardShadowTransformer.enableScaling(true);
     }
 }

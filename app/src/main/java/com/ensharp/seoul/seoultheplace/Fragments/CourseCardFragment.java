@@ -10,14 +10,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.R;
 
 public class CourseCardFragment extends Fragment implements CardFragment {
     private CardView cardView;
+    private CourseVO course;
+    private int position;
 
     public CourseCardFragment() {
         // Required empty public constructor
     }
+
+    public void setData(CourseVO course) { this.course = course; }
+
+    public void setPosition(int position) { this.position = position; }
 
     public CardView getCardView() {
         return cardView;
