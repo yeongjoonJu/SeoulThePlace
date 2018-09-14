@@ -31,6 +31,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -1,20 +1,21 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
@@ -23,7 +24,6 @@ import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
@@ -33,7 +33,7 @@ public class SearchFragment extends Fragment {
     static final String KEY_PLACE = "KEY_PLACE";
 
     InputMethodManager inputMethodManager;
-    TextView courceText;
+    TextView courseText;
     TextView placeText;
     EditText searchEditText;
 
@@ -60,9 +60,31 @@ public class SearchFragment extends Fragment {
             placeViewPager.setCurrentItem(currentPlacePosition);
         }
         if(searchCourseResult != null) {
-            courceText.setVisibility(View.VISIBLE);
+            courseText.setVisibility(View.VISIBLE);
             showCourseCardView(searchCourseResult);
             courseViewPager.setCurrentItem(currentCoursePosition);
+        }
+    }
+
+    public void viewVisible() {
+        if(searchPlaceResult != null) {
+            placeText.setVisibility(View.VISIBLE);
+            placeViewPager.setVisibility(View.VISIBLE);
+        }
+        if(searchCourseResult != null) {
+            courseText.setVisibility(View.VISIBLE);
+            courseViewPager.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void viewInvisible() {
+        if(searchPlaceResult != null) {
+            placeText.setVisibility(View.INVISIBLE);
+            placeViewPager.setVisibility(View.INVISIBLE);
+        }
+        if(searchCourseResult != null) {
+            courseText.setVisibility(View.INVISIBLE);
+            courseViewPager.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -85,9 +107,10 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+
         // 화면 구성 요소
         ImageButton searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
-        courceText = (TextView) rootView.findViewById(R.id.cource_text);
+        courseText = (TextView) rootView.findViewById(R.id.cource_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
 
@@ -99,7 +122,7 @@ public class SearchFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                courceText.setVisibility(View.VISIBLE);
+                courseText.setVisibility(View.VISIBLE);
                 placeText.setVisibility(View.VISIBLE);
 
                 // 플레이스 임시 데이터
