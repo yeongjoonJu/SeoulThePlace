@@ -45,7 +45,7 @@ public class CourseFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pagerAdapter = new CardFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
+        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(true);
 

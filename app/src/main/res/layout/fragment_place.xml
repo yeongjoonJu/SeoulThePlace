@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.baoyz.widget.PullRefreshLayout
+<com.yalantis.phoenix.PullToRefreshView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pullToDestroy"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pull_to_destroy"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Fragments.PlaceFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    app:anim_type_view="custom">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -123,4 +123,4 @@
 
     </ScrollView>
 
-</com.baoyz.widget.PullRefreshLayout>
+</com.yalantis.phoenix.PullToRefreshView>

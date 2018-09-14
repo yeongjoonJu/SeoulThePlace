@@ -3,6 +3,7 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.util.Log;
@@ -29,19 +31,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.PlaceViewPagerAdapter;
-
-import org.w3c.dom.Text;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class PlaceFragment extends Fragment {
 
@@ -50,7 +48,7 @@ public class PlaceFragment extends Fragment {
     private ImageView[] dots;
     private int dotCount;
 
-    private PullRefreshLayout layout;
+    private PullToRefreshView destroyView;
 
     public PlaceFragment() {
 
@@ -68,9 +66,19 @@ public class PlaceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_place, container, false);
+        destroyView = (PullToRefreshView) rootView.findViewById(R.id.pull_to_destroy);
 
-        layout = (PullRefreshLayout) rootView.findViewById(R.id.pullToDestroy);
-        setEvents();
+        destroyView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                destroyView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().onBackPressed();
+                    }
+                }, 1000);
+            }
+        });
 
         // needed information.
         String[] images = { getString(R.string.image_01), getString(R.string.image_02),
@@ -150,15 +158,6 @@ public class PlaceFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int state) {
 
-            }
-        });
-    }
-
-    private void setEvents() {
-        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getActivity().onBackPressed();
             }
         });
     }
