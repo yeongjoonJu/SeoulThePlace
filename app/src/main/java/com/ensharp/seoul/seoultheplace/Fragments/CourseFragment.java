@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
@@ -74,4 +77,16 @@ public class CourseFragment extends Fragment {
     public void onActivityResult(int requestCode , int resultCode , Intent data){
 
     }
+
+    public List<PlaceVO> getPlaces() {
+        List<PlaceVO> places = new ArrayList<PlaceVO>();
+        List<String> placeCodes = Constant.getCourse().getPlaceCode();
+
+        for (int i=0; i<placeCodes.size(); i++) {
+            places.add(Constant.getPlace(placeCodes.get(i)));
+        }
+
+        return places;
+    }
+
 }
