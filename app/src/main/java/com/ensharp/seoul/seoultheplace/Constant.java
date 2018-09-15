@@ -8,7 +8,7 @@ import java.util.List;
 import javax.security.auth.login.LoginException;
 
 public class Constant {
-    static CourseVO course;
+    static CourseVO course = null;
     static PlaceVO place1;
     static PlaceVO place2;
     static PlaceVO place3;
@@ -25,7 +25,7 @@ public class Constant {
     static String detail2;
     static String detail3;
 
-    static ArrayList<PlaceVO> places;
+    static ArrayList<PlaceVO> places = null;
 
     public static void initCourse() {
         detail = "간선버스 273번은 대학로와 신촌을 가로지르는 노선으로 이 버스를 타면 서울 시내 대학교 투어를 할 수 있다. 고려대부터 성균관대, 이화여대, 연세대, 홍익대 등 9개 이상의 대학교를 거친다. 그만큼 젊은 층의 수요도 높은 버스로 대학마크가 박힌 점퍼를 입은 학생들도 쉽게 마주칠 수 있다. 273버스 노선 중 대표적인 학교 3곳을 소개한다.";
@@ -84,9 +84,11 @@ public class Constant {
                 "친구끼리, 연인끼리", "연중무휴");
 
         places = new ArrayList<PlaceVO>();
-        places.add(place1);
-        places.add(place2);
-        places.add(place3);;
+        if(places.size()<2) {
+            places.add(place1);
+            places.add(place2);
+            places.add(place3);
+        }
     }
 
     public static CourseVO getCourse() { return course; }

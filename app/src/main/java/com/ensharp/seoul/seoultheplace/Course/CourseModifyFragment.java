@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Course;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressLint("ValidFragment")
 public class CourseModifyFragment extends Fragment {
 
     View view;
@@ -32,6 +34,10 @@ public class CourseModifyFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView itemview;
 
+    @SuppressLint("ValidFragment")
+    public CourseModifyFragment(List<PlaceVO> list){
+        this.datas = list;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class CourseModifyFragment extends Fragment {
                     adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                     Log.d("Move : ", "onSwiped, ITEM_SIZE : " + ITEM_SIZE);
                     if (ITEM_SIZE == 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
-                        datas.add(new PlaceVO(null,"+++",null,null,null,null,null,null,0,null,null,null));
+                        AddPlusBox();
                     }
                     //}
                     if (adapter.choosedMember == viewHolder.getAdapterPosition()) {
@@ -158,26 +164,20 @@ public class CourseModifyFragment extends Fragment {
     }
 
     private void setData() {
-         datas = new ArrayList<>();
-        // ITEM_SIZE =
-//        Item[] item = new Item[ITEM_SIZE];
-//        for(int i = 0; i<ITEM_SIZE;i++){
-//            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
-//            datas.add(item[i]);
-//        }
-//        Log.d("data : ", String.valueOf(datas.size()));
-//        if(datas.size() < 5){
-//            datas.add(new Item(R.drawable.kakao_default_profile_image,"+++"));
-//        }
+        Log.d("data : ", String.valueOf(datas.size()));
+        ITEM_SIZE = datas.size();
+        Log.d("data : ", String.valueOf(ITEM_SIZE));
+        if(datas.size() < 5) {
+            AddPlusBox();
+        }
+    }
+    private void AddPlusBox(){
+        String[] imageURL= {"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAA1BMVEX///+nxBvIAAAASElEQVR4nO3BgQAAAADDoPlTX+AIVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDcaiAAFXD1ujAAAAAElFTkSuQmCC",null,null};
+        datas.add(new PlaceVO(null,"+",null,imageURL,null,null,null,null,0,null,null,null));
     }
 
     private void setItemData(){
-        items = new ArrayList<>();
-        Item[] item = new Item[10];
-//        for(int i = 0; i<10;i++){
-//            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
-//            items.add(item[i]);
-//        }
+        items = datas;
     }
 
     private void initView(){

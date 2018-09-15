@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.DownloadImageTask;
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     CourseModifyFragment courseModifyFragment;
+    MainActivity mActivity;
     List<PlaceVO> items;
     int item_layout;
     RecyclerView recyclerView;
@@ -32,6 +34,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         this.items = items;
         this.item_layout = item_layout;
         this.recyclerView = recyclerView;
+        this.mActivity = (MainActivity)courseModifyFragment.getActivity();
     }
 
     @Override
@@ -50,7 +53,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 courseModifyFragment.ChangeData(item);
-                Toast.makeText(courseModifyFragment.getActivity(), item.getName(), Toast.LENGTH_SHORT).show();
+                mActivity.changeFragment("j111",1);
             }
         });
     }

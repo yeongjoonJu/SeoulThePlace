@@ -88,13 +88,15 @@ public class PlaceFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_place, container, false);
         destroyView = (PullToRefreshView) rootView.findViewById(R.id.pull_to_destroy);
 
+        final MainActivity activity = (MainActivity)getActivity();
+
         destroyView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 destroyView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getActivity().onBackPressed();
+                        activity.chagneToCourseFragment(index);
                     }
                 }, 1000);
             }

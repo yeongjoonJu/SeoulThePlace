@@ -14,6 +14,8 @@ import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
     private Fragment[] fragments;
@@ -60,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public void chagneToCourseFragment(int index) {
+        final Fragment fragment = new CourseFragment(index);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .commit();
+    }
+
     public void changeFragment(String courseCode, int index) {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
@@ -67,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void changeModifyFragment(){
+    public void changeModifyFragment(List<PlaceVO> list){
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
-        fragmentTransaction.replace(R.id.fragment, new CourseModifyFragment());
+        fragmentTransaction.replace(R.id.fragment, new CourseModifyFragment(list));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
