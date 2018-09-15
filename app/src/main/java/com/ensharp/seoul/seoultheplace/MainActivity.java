@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new PlaceFragment("a333")
+                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment("a333")
         };
 
         // 하단 버튼 객체 초기화
@@ -57,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
         // 메인 fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new MainFragment())
+                .commit();
+    }
+
+    public void chagneToCourseFragment(int index) {
+        final Fragment fragment = new CourseFragment(index);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
                 .commit();
     }
 

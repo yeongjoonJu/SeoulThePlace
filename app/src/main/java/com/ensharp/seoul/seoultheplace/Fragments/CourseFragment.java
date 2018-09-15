@@ -24,12 +24,23 @@ import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 public class CourseFragment extends Fragment {
 
     private String code;
+    private int index;
     private ViewPager viewPager;
     private CardFragmentPagerAdapter pagerAdapter;
+
+    public CourseFragment() {
+        code = "j111";
+        index = 0;
+    }
+
+    public CourseFragment(int index) {
+        this.index = index;
+    }
 
     @SuppressLint("ValidFragment")
     public CourseFragment(String code) {
         this.code = code;
+        index = 0;
     }
 
     @Override
@@ -52,6 +63,7 @@ public class CourseFragment extends Fragment {
         fragmentCardShadowTransformer.enableScaling(true);
 
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(index);
         viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(3);
 
