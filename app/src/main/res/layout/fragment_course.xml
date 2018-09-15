@@ -8,6 +8,7 @@
     tools:context=".Fragments.CourseFragment">
 
     <Button
+        android:id="@+id/modifycoursebtn"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="코스 수정"

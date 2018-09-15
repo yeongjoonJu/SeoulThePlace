@@ -1,24 +1,32 @@
 package com.ensharp.seoul.seoultheplace.Course;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CourseModify extends AppCompatActivity {
+public class CourseModifyFragment extends Fragment {
 
-    public int ITEM_SIZE = 3;
-    List<Item> datas;
-    List<Item> items;
+    View view;
+    public int ITEM_SIZE = 0;
+    List<PlaceVO> datas;
+    List<PlaceVO> items;
     private RecyclerAdapter adapter;
     private ItemAdapter iadapter;
     RecyclerView recyclerView;
@@ -26,9 +34,12 @@ public class CourseModify extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.modify_course);
+    }
+
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.modify_course, container, false);
         setData();
         setItemData();
         initView();
@@ -39,7 +50,7 @@ public class CourseModify extends AppCompatActivity {
                 int swipeFlags = 0;
                 int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN ;
                 if(ITEM_SIZE > 0 ) { //+++밖에 안남았을때
-                   swipeFlags = ItemTouchHelper.LEFT;
+                    swipeFlags = ItemTouchHelper.LEFT;
                 }
                 Log.d("Move Ready: ","getMovementFlags" + dragFlags);
                 return makeMovementFlags(dragFlags, swipeFlags);
@@ -47,11 +58,11 @@ public class CourseModify extends AppCompatActivity {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                    Log.d("Move : ", "onMove");
-                    Collections.swap(datas, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    Log.d("Move : ", String.valueOf(viewHolder.getAdapterPosition()) + "   " + String.valueOf(target.getAdapterPosition()));
-                    adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    adapter.choosedMember = target.getAdapterPosition();
+                Log.d("Move : ", "onMove");
+                Collections.swap(datas, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                Log.d("Move : ", String.valueOf(viewHolder.getAdapterPosition()) + "   " + String.valueOf(target.getAdapterPosition()));
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                adapter.choosedMember = target.getAdapterPosition();
                 return false;
             }
 
@@ -63,7 +74,7 @@ public class CourseModify extends AppCompatActivity {
                     adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                     Log.d("Move : ", "onSwiped, ITEM_SIZE : " + ITEM_SIZE);
                     if (ITEM_SIZE == 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
-                        datas.add(new Item(R.drawable.kakao_default_profile_image, "+++"));
+                        datas.add(new PlaceVO(null,"+++",null,null,null,null,null,null,0,null,null,null));
                     }
                     //}
                     if (adapter.choosedMember == viewHolder.getAdapterPosition()) {
@@ -92,7 +103,7 @@ public class CourseModify extends AppCompatActivity {
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int dragFlags = 0;
                 int swipeFlags = 0;
-                Toast.makeText(CourseModify.this,"여기다가 넣으면 플레이스정보가 뾰오옹~", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"여기다가 넣으면 플레이스정보가 뾰오옹~", Toast.LENGTH_LONG).show();
                 Log.d("Move Ready: ","getMovementFlags" + dragFlags);
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
@@ -114,10 +125,11 @@ public class CourseModify extends AppCompatActivity {
             }
         });
         helpers.attachToRecyclerView(itemview);
+        return  view;
     }
 
 
-    public void ChangeData(Item item){
+        public void ChangeData(PlaceVO item){
         if(adapter.choosedMember == datas.size()-1&&datas.size()<5){ //5개가 아직 아닐경우 위치에다가 추가만함.
             Log.d("ChangeData : ","5개 adapter : "+adapter.choosedMember+"  datas Size : "+datas.size());
             adapter.choosedMember+=1; //새로추가하면서 +++로 가게하기 위해
@@ -135,7 +147,7 @@ public class CourseModify extends AppCompatActivity {
         }
     }
 
-    public void addData(Item item){
+    public void addData(PlaceVO item){
         datas.add(ITEM_SIZE,item);
         adapter.notifyItemInserted(ITEM_SIZE);
         ITEM_SIZE += 1;
@@ -147,36 +159,37 @@ public class CourseModify extends AppCompatActivity {
 
     private void setData() {
          datas = new ArrayList<>();
-        Item[] item = new Item[ITEM_SIZE];
-        for(int i = 0; i<ITEM_SIZE;i++){
-            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
-            datas.add(item[i]);
-        }
-        Log.d("data : ", String.valueOf(datas.size()));
-        if(datas.size() < 5){
-            datas.add(new Item(R.drawable.kakao_default_profile_image,"+++"));
-        }
+        // ITEM_SIZE =
+//        Item[] item = new Item[ITEM_SIZE];
+//        for(int i = 0; i<ITEM_SIZE;i++){
+//            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
+//            datas.add(item[i]);
+//        }
+//        Log.d("data : ", String.valueOf(datas.size()));
+//        if(datas.size() < 5){
+//            datas.add(new Item(R.drawable.kakao_default_profile_image,"+++"));
+//        }
     }
 
     private void setItemData(){
         items = new ArrayList<>();
         Item[] item = new Item[10];
-        for(int i = 0; i<10;i++){
-            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
-            items.add(item[i]);
-        }
+//        for(int i = 0; i<10;i++){
+//            item[i] = new Item(R.drawable.kakao_default_profile_image,"#"+i);
+//            items.add(item[i]);
+//        }
     }
 
     private void initView(){
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        adapter = new RecyclerAdapter(getApplicationContext(), datas,R.layout.modify_course);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview);
+        adapter = new RecyclerAdapter(getActivity(), datas,R.layout.modify_course);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        itemview = (RecyclerView)findViewById(R.id.Itemview);
+        itemview = (RecyclerView)view.findViewById(R.id.Itemview);
         iadapter = new ItemAdapter(this,items,R.layout.modify_course,recyclerView);
-        LinearLayoutManager layoutManagers = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager layoutManagers = new LinearLayoutManager(getActivity());
         itemview.setLayoutManager(layoutManagers);
         itemview.setAdapter(iadapter);
     }

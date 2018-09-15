@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 
+import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         //dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new PlaceFragment("a333")
+                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -63,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
         fragmentTransaction.replace(R.id.fragment, new PlaceFragment(courseCode, index));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+    public void changeModifyFragment(){
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
+        fragmentTransaction.replace(R.id.fragment, new CourseModifyFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
