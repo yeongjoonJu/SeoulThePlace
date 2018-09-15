@@ -9,6 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/non_active_dot"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:layout_marginHorizontal="8dp"

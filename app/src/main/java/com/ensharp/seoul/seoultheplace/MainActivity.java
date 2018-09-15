@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeFragment(String courseCode, int index) {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
         fragmentTransaction.replace(R.id.fragment, new PlaceFragment(courseCode, index));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
