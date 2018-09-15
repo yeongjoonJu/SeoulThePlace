@@ -189,7 +189,7 @@ app.post('/main/course_info', function(req, res) {
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
 
-   con.query('SELECT * FROM PLACE WHERE Name = %?% OR Location = %?% OR Type = %?%', keyword, keyword, keyword, function(err, rows, fields) {
+   con.query('SELECT * FROM PLACE WHERE Name Like %?% OR Location Like %?% OR Type Like %?%', keyword, keyword, keyword, function(err, rows, fields) {
      if(err) {
        console.log('err : ' + err);
      } else {
@@ -206,7 +206,7 @@ app.post('/search/place', function(req, res) {
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
 
-  con.query('SELECT * FROM COURSE WHERE Name = %?% OR Type = %?%', keyword, keyword, function(err, rows, fields) {
+  con.query('SELECT * FROM COURSE WHERE Name Like %?% OR Type Like %?%', keyword, keyword, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
