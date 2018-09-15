@@ -68,13 +68,11 @@ public class SearchFragment extends Fragment {
         super.onStart();
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.VISIBLE);
-            showPlaceCardView(searchPlaceResult);
-            placeViewPager.setCurrentItem(currentPlacePosition);
+            showPlaceCardView(searchPlaceResult, currentPlacePosition);
         }
         if(searchCourseResult != null) {
             courseText.setVisibility(View.VISIBLE);
-            showCourseCardView(searchCourseResult);
-            courseViewPager.setCurrentItem(currentCoursePosition);
+            showCourseCardView(searchCourseResult, currentCoursePosition);
         }
     }
 
@@ -184,7 +182,7 @@ public class SearchFragment extends Fragment {
                 }
 
                 searchPlaceResult = tempData;
-                showPlaceCardView(searchPlaceResult);
+                showPlaceCardView(searchPlaceResult, 0);
 
                 CourseVO[] courseData = new CourseVO[] { new CourseVO(), new CourseVO(), new CourseVO(), new CourseVO()};
                 ArrayList<CourseVO> courses = new ArrayList<>();
@@ -192,7 +190,7 @@ public class SearchFragment extends Fragment {
                     courses.add(courseData[i]);
 
                 searchCourseResult = courses;
-                showCourseCardView(searchCourseResult);
+                showCourseCardView(searchCourseResult, 0);
 
                 // 키보드 숨김
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
@@ -202,7 +200,7 @@ public class SearchFragment extends Fragment {
     }
 
     // 플레이스 카드 뷰
-    protected void showPlaceCardView(ArrayList<PlaceVO> places) {
+    protected void showPlaceCardView(ArrayList<PlaceVO> places, int currentPosition) {
         placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         placeViewAdapter.setPlaceData(places);
         ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
@@ -215,10 +213,11 @@ public class SearchFragment extends Fragment {
             placeViewAdapter.setPlaceData(places);
         }
         placeViewPager.setOffscreenPageLimit(3);
+        placeViewPager.setCurrentItem(currentPosition);
         placeCardShadowTransformer.enableScaling(true);
     }
 
-    protected void showCourseCardView(ArrayList<CourseVO> courses) {
+    protected void showCourseCardView(ArrayList<CourseVO> courses, int currentPosition) {
         courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         courseViewAdapter.setCourseData(courses);
         ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
@@ -231,6 +230,7 @@ public class SearchFragment extends Fragment {
             courseViewAdapter.setCourseData(courses);
         }
         courseViewPager.setOffscreenPageLimit(3);
+        courseViewPager.setCurrentItem(currentPosition);
         courseCardShadowTransformer.enableScaling(true);
     }
 }
