@@ -30,6 +30,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:hint="검색"
+                    android:maxLength="16"
                     android:textSize="24sp" />
 
                 <ImageButton

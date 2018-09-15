@@ -13,6 +13,7 @@
         android:padding="6dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:singleLine="true"
         android:textSize="18sp"/>
 
     <View

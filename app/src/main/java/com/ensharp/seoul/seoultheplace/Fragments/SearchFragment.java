@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,8 @@ import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -108,15 +111,31 @@ public class SearchFragment extends Fragment {
             currentPlacePosition = placeViewPager.getCurrentItem();
         if(courseViewPager != null)
             currentCoursePosition = courseViewPager.getCurrentItem();
+
         // 최근 검색어 SharedPreference에 저장
+        SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor =  preferences.edit();
+        for(int i = 0; i < 6; i++) {
+            if(listAdapter.getItem(i) != null)
+                editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+        }
+        editor.commit();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(recentSearchList == null)
+            recentSearchList = new ArrayList<>();
+
         // 최근 검색어 SharedPreference에서 가져온다
-        recentSearchList = new ArrayList<String>(Arrays.asList(new String[]{"경복궁", "우정당", "상 타자", "장학금", "성실"}));
+        SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+        for(int i=0; i < 6; i++) {
+            String word = preferences.getString("RecentSearch" + i, null);
+            if(word != null)
+                recentSearchList.add(word);
+        }
         listAdapter = new RecentSearchAdapter(getActivity(), recentSearchList);
     }
 
@@ -145,6 +164,8 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 courseText.setVisibility(View.VISIBLE);
                 placeText.setVisibility(View.VISIBLE);
+
+                listAdapter.insert(String.valueOf(searchEditText.getText()), 0);
 
                 // 플레이스 임시 데이터
                 PlaceVO[] placeData = new PlaceVO[]{
