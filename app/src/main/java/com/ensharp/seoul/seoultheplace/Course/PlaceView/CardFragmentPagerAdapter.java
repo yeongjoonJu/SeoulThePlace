@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -15,7 +16,7 @@ import com.ensharp.seoul.seoultheplace.PlaceVO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implements CardAdapter {
+public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements CardAdapter {
 
     private List<CardFragment> fragments;
     private float baseElevation;
