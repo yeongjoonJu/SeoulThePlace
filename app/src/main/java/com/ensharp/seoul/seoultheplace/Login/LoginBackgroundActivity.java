@@ -49,7 +49,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     public void onFragmentChanged() {
         mVideoview.pause();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left);
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
         fragmentTransaction.replace(R.id.main_frame, new OriginSignUpFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -106,7 +106,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
 
        public boolean CheckEmail(SharedPreferences data){
         JSONObject jsonObject = dao.SNSloginCheck("email",data.getString("email",null));
-        if(jsonObject.equals(null)){
+        if(jsonObject==null){
             Log.d("Login : ","new ID");
             Toast.makeText(this,"회원가입 성공",Toast.LENGTH_LONG).show();
             return false;

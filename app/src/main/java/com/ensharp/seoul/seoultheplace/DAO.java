@@ -423,4 +423,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             Log.v("test", "완료");
         }
     }
+    public void destroy(){
+
+    }
 }
