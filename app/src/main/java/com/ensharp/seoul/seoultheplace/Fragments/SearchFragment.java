@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
@@ -23,8 +25,10 @@ import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -36,11 +40,16 @@ public class SearchFragment extends Fragment {
     TextView courseText;
     TextView placeText;
     EditText searchEditText;
+    LinearLayout recentList;
+    ListView recentListView;
 
     ViewPager courseViewPager;
     ViewPager placeViewPager;
     CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
+
+    RecentSearchAdapter listAdapter = null;
+    ArrayList<String> recentSearchList = null;
 
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
@@ -67,6 +76,8 @@ public class SearchFragment extends Fragment {
     }
 
     public void viewVisible() {
+        if(recentList != null)
+            recentList.setVisibility(View.GONE);
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.VISIBLE);
             placeViewPager.setVisibility(View.VISIBLE);
@@ -78,6 +89,8 @@ public class SearchFragment extends Fragment {
     }
 
     public void viewInvisible() {
+        if(recentList != null)
+            recentList.setVisibility(View.VISIBLE);
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
@@ -95,12 +108,16 @@ public class SearchFragment extends Fragment {
             currentPlacePosition = placeViewPager.getCurrentItem();
         if(courseViewPager != null)
             currentCoursePosition = courseViewPager.getCurrentItem();
+        // 최근 검색어 SharedPreference에 저장
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 최근 검색어 SharedPreference에서 가져온다
+        recentSearchList = new ArrayList<String>(Arrays.asList(new String[]{"경복궁", "우정당", "상 타자", "장학금", "성실"}));
+        listAdapter = new RecentSearchAdapter(getActivity(), recentSearchList);
     }
 
     @Override
@@ -113,6 +130,10 @@ public class SearchFragment extends Fragment {
         courseText = (TextView) rootView.findViewById(R.id.cource_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
+        listAdapter.setEditText(searchEditText);
+        recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
+        recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
+        recentListView.setAdapter(listAdapter);
 
         // 플레이스 카드 뷰
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);

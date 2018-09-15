@@ -11,7 +11,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#ACC8CB"
             android:orientation="vertical">
 
@@ -42,6 +42,29 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/search_icon_white" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:padding="12dp"
+                android:id="@+id/recent_search"
+                android:visibility="gone"
+                android:background="#BDD3D5">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:textSize = "20sp"
+                    android:text="최근 검색"/>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:id="@+id/recent_listview"/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
