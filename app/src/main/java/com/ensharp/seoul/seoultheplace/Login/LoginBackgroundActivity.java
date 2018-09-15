@@ -71,9 +71,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     public void CheckAlreadyLogin(){
         SharedPreferences sf = getSharedPreferences("data",0);
         if(sf.getString("email","")!=""){
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
-            finish();
+            convertToMainActivity();
         }
     }
 
@@ -139,5 +137,10 @@ public class LoginBackgroundActivity extends AppCompatActivity {
                 return false;
             }
         }
+    }
+    public void convertToMainActivity(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

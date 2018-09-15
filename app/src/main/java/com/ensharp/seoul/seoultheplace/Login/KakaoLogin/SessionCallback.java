@@ -2,7 +2,6 @@ package com.ensharp.seoul.seoultheplace.Login.KakaoLogin;
 import android.util.Log;
 
 
-import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 import com.ensharp.seoul.seoultheplace.Login.LoginFragment;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.network.ErrorResult;

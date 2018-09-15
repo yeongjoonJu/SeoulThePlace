@@ -3,4 +3,19 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="black">#000000</color>
+    <color name="black_opacity">#C4000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="place_title">#434343</color>
+    <color name="place_address">#868686</color>
+    <color name="place_phone">#868686</color>
+    <color name="place_description">#000000</color>
+    <color name="place_detail">#868686</color>
+    <color name="place_category">#000000</color>
+    <color name="place_information">#A8A8A8</color>
+    <color name="place_changing">#A8A8A8</color>
+
+    <color name="active_dot">#4A4A4A</color>
+    <color name="non_active_dot">#D9D9D9</color>
 </resources>
