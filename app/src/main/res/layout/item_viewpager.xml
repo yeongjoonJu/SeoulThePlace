@@ -54,6 +54,7 @@
                     android:layout_margin="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:textColor="@color/black"/>
 
                 <TextView
@@ -62,7 +63,6 @@
                     android:layout_margin="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:textColor="@color/black"/>
 
                 <ImageButton
@@ -70,7 +70,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
                     android:background="@null"
                     android:src="@drawable/item_angle"/>
 

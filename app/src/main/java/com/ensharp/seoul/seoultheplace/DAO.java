@@ -1,7 +1,8 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.os.Bundle;
+
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -57,6 +58,29 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             // 네트워크 처리 동기화
             processNetwork(BASE_URL+"/user/register/id_duplicatecheck", jsonObject);
+
+            // 결과 처리
+            if(resultData == null)
+                return false;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkNameDuplicaion(String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Name", name);
+
+            // 네트워크 처리 동기화
+            processNetwork(BASE_URL+"/user/register/name_duplicatecheck", jsonObject);
 
             // 결과 처리
             if(resultData == null)
@@ -395,16 +419,25 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
+    public void destory() {
+        status = EXIT;
+        try {
+            if(getStatus() == AsyncTask.Status.RUNNING)
+                cancel(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
         while(true) {
             while(status == WAIT);
             Log.v("test", "백그라운드 실행");
 
-            if(status == EXIT) {
-                cancel(true);
+            if(status == EXIT || isCancelled())
                 return null;
-            }
 
             // 서버 연결
             if(url == null || !connectServer(url)) {

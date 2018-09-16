@@ -1,4 +1,5 @@
 package com.ensharp.seoul.seoultheplace;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,35 +29,47 @@ public class CourseVO {
             type = jsonObject.getString("Type");
             likes = jsonObject.getInt("Likes");
             details = jsonObject.getString("Details");
-//            for(int i = 1; i<=5; i++) {
-//                placeCode[i-1] = jsonObject.getString("PlaceCode" + i);
-//            }
+
+            for(int i = 1; i<=5; i++) {
+                placeCode.add(jsonObject.getString("PlaceCode" + i));
+            }
         }catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    public CourseVO() {
+
+    }
+
     public String getCode() {
         return code;
     }
+
     public String getName() {
         return name;
     }
+
     public String getType() {
         return type;
     }
+
     public int getLikes() {
         return likes;
     }
+
     public String getDetails() {
         return details;
     }
+
     public List<String> getPlaceCode() {
         return placeCode;
     }
+
     public String getPlaceCode(int index) {
         return placeCode.get(index);
     }
+
     public int getPlaceCount() {
         return placeCode.size();
     }

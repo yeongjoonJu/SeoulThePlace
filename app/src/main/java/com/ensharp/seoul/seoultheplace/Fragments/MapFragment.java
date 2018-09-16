@@ -107,8 +107,8 @@ public class MapFragment extends Fragment {
         NMapPOIdata poIData = new NMapPOIdata(2, mapViewerResourceProvider);
         poIData.beginPOIdata(2);
 
-        NMapPOIitem item1 = poIData.addPOIitem(126.872772, 37.546848, "", markedID, 0);
-        NMapPOIitem item2 = poIData.addPOIitem(126.914925, 37.528728, "", markedID, 0);
+        NMapPOIitem item1 = poIData.addPOIitem(126.992064, 37.5884693, "", markedID, 0);
+//        NMapPOIitem item2 = poIData.addPOIitem(126.914925, 37.528728, "", markedID, 0);
 
         poIData.endPOIdata();
 
@@ -151,7 +151,7 @@ public class MapFragment extends Fragment {
     // 지도 초기화가 완료될 때 호출되는 콜백 인터페이스
     public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
         if (errorInfo == null) // success
-            mapController.setMapCenter(new NGeoPoint(126.978371, 37.5666091), 11);
+            mapController.setMapCenter(new NGeoPoint(126.992064, 37.5884693), 11);
         else // fail
             Log.e("MAP_ERROR", "onMapInitHandler: error=" + errorInfo.toString());
     }

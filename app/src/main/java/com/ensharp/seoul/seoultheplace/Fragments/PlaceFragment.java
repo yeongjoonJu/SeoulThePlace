@@ -1,28 +1,20 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -30,10 +22,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Constant;
+import com.ensharp.seoul.seoultheplace.Course.Map.GeoCodeManager;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -42,7 +34,6 @@ import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.PlaceViewPagerAdapter;
 import com.yalantis.phoenix.PullToRefreshView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -111,6 +102,11 @@ public class PlaceFragment extends Fragment {
         TextView phone = (TextView) rootView.findViewById(R.id.phone);
         TextView description = (TextView) rootView.findViewById(R.id.description);
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
+
+//        FrameLayout miniMap = (FrameLayout) rootView.findViewById(R.id.map);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.map, new MapFragment());
+        transaction.commit();
 
         String parking = place.getParking();
         if(!parking.equals("없음")) parking = place.getParkFee();

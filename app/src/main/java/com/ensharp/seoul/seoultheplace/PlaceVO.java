@@ -1,5 +1,8 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +23,8 @@ public class PlaceVO {
     public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
                    String tip, String parking, String parkFee, int likes, String details,
                    String type, String businessHours) {
+
+        this.code = code;
         this.name = name;
         this.location = location;
         this.imageURL = imageURL;
@@ -98,4 +103,5 @@ public class PlaceVO {
     public String getBusinessHours() {
         return businessHours;
     }
+
 }
