@@ -53,7 +53,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 courseModifyFragment.ChangeData(item);
-                mActivity.changeFragment("j111",1);
             }
         });
     }

@@ -28,7 +28,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int choosedMember = 0;
     RelativeLayout.LayoutParams params1;
     RelativeLayout.LayoutParams params2;
-    RelativeLayout.LayoutParams params3;
 
     public RecyclerAdapter(Context context, List<PlaceVO> items, int item_layout) {
         this.context = context;
@@ -62,7 +61,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
                 choosedMember = position;
                 NotifyDataSetChanged(position);
-                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, item.getName()+"  "+choosedMember, Toast.LENGTH_SHORT).show();
+
             }
         });
     }

@@ -29,7 +29,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
                 // KAKAO_TALK_EXCLUDE_NATIVE_LOGIN : 카카오톡 로그인 타입과 함께 계정생성을 위한 버튼을 함께 제공
                 // KAKAO_LOGIN_ALL : 모든 로그인 방식을 제공
                 Log.e("KAKAOTALK :: ", "start");
-                return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
+                return new AuthType[]{AuthType.KAKAO_TALK};
             }
 
             // 로그인 웹뷰에서 pause와 resume시에 타이머를 설정하여, CPU의 소모를 절약 할 지의 여부를 지정합니다.
