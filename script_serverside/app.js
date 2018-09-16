@@ -177,7 +177,7 @@ app.post('/main/course_info', function(req, res) {
       console.log('err: ' + err);
     } else {
       if(rows.length === 0) {
-        res.json([ {User_Likes: 'false', Name: null, Description: null, Likes: null, location: null} ]);
+        res.json([ {User_Likes: 'false', Code: null, Name: null, Likes: null, location: null, Image: null} ]);
       } else {
         mainCourseListInfo(res, rows, userID);
       }
@@ -328,9 +328,9 @@ function getInfoToArray(rows, table) {
 
 function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
   initJsonArray(jsonArray);
-  //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
+  //COURSE 마다의 코드, 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
-    con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
+    con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
                rows[i].Code, rows[i].PlaceCode1, function(err, row, fields) {
                  if(err) {
                    console.log('err: ' + err);
@@ -338,7 +338,6 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                  } else {
 		   jsonResult.Code = row[0].Code;
                    jsonResult.Name = row[0].Name;
-                   jsonResult.Description = row[0].Description;
                    jsonResult.Likes = row[0].Likes;
                    jsonResult.location = row[0].Location;
                    jsonResult.User_Likes = isCourseLiked(rows[i].Code, userID);
