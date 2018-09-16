@@ -22,6 +22,8 @@ var con = mysql.createConnection({
 var jsonResult = new Object();
 //json 오브젝트 타입의 배열 형태
 var jsonArray = new Array();
+//플레이스 코드 배열
+var place_code = new Array();
 
 //회원가입
 app.post('/user/register', function(req, res) {
@@ -183,6 +185,20 @@ app.post('/main/course_info', function(req, res) {
       }
     }
   });
+});
+
+//main에서 해당 코스 눌렀을 때
+app.post('/main/course_pushed', function(req, res) {
+	var courseCode = req.body.Code;
+
+	con.query('SELECT * FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
+		if(err) {
+			console.log('main에서 해당 코스눌렀을 때 err: ' + err)
+		} else {
+			pushedCourseListInfo(res, rows);
+			res.json([ {CourseDetails: rows[0].Details}, {jsonArray}]);
+		}
+	});
 });
 
 //플레이스 검색
@@ -347,6 +363,33 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                });
   }
   res.json(jsonArray);
+}
+
+function pushedCourseListInfo(res, rows) {
+	//rows는 해당 코스 하나
+	place_code = initArray(place_code);
+	place_code[0] = rows[0].PlaceCode1;
+	place_code[1] = rows[0].PlaceCode2;
+	place_code[2] = rows[0].PlaceCode3;
+	place_code[3] = rows[0].PlaceCode4;
+	place_code[4] = rows[0].PlaceCode5;
+
+	jsonArray = initArray(jsonArray);
+	for(var i = 0; i < 5; i++) {
+		if(place_code[i] == null) {
+			return;
+		}
+
+		con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', place_code[i], function(err, row, fields) {
+			jsonResult.Image1 = row[0].Image1;
+			jsonResult.Name = row[0].Name;
+			jsonResult.Location = row[0].Location;
+			jsonResult.Details = row[0].Details;
+			jsonResult.Coordinate_X = row[0].Coordinate_X;
+			jsonResult.Coordinate_Y = row[0].Coordinate_Y;
+			jsonArray.push(jsonResult);
+		});
+	}
 }
 
 //user가 해당 코스 좋아요 눌렀는지 여부
