@@ -46,5 +46,7 @@ dependencies {
     // For Card View
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
+    // For Refresh List View
+    implementation 'com.yalantis:phoenix:1.2.3'
 }
 apply plugin: 'com.google.gms.google-services'

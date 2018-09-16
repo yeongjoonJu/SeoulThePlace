@@ -16,6 +16,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -27,10 +28,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // course, place 초기화
+        Constant.initCourse();
+        Constant.initPlaces();
+
         setContentView(R.layout.activity_main);
 
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment("a333")
         };
 
         // 하단 버튼 객체 초기화
@@ -84,9 +90,18 @@ public class MainActivity extends AppCompatActivity {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 
-    public void changeFragment() {
+    public void chagneToCourseFragment(int index) {
+        final Fragment fragment = new CourseFragment(index);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .commit();
+    }
+
+    public void changeFragment(String courseCode, int index) {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, new PlaceFragment());
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
+        fragmentTransaction.replace(R.id.fragment, new PlaceFragment(courseCode, index));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

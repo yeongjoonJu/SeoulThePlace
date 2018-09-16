@@ -25,7 +25,8 @@
                 android:id="@+id/title"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"/>
 
         </FrameLayout>
 
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="5dp"
+                android:textColor="@color/white"
                 style="@style/TextAppearance.AppCompat.Body1"/>
 
         </FrameLayout>

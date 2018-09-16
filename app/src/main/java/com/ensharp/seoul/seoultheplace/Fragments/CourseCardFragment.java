@@ -18,7 +18,7 @@ import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.R;
 
-public class CourseCardFragment extends Fragment implements CardFragment {
+public class CourseCardFragment extends Fragment {
     private CardView cardView;
     private ImageButton heartButton;
     private CourseVO course;
@@ -64,10 +64,10 @@ public class CourseCardFragment extends Fragment implements CardFragment {
 
             @Override
             public void onClick(View v) {
-                if(heartButton.getDrawable().equals(unchoicedHeart))
-                    heartButton.setImageDrawable(choicedHeart);
-                else
+                if(heartButton.getDrawable().equals(choicedHeart))
                     heartButton.setImageDrawable(unchoicedHeart);
+                else
+                    heartButton.setImageDrawable(choicedHeart);
             }
         });
 

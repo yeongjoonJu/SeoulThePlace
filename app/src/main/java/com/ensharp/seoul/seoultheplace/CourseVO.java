@@ -1,10 +1,9 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class CourseVO {
     private String code;
@@ -12,7 +11,16 @@ public class CourseVO {
     private String type;
     private int likes;
     private String details;
-    private String[] placeCode;
+    private List<String> placeCode;
+
+    public CourseVO(String code, String name, String type, int likes, String details, List<String> placeCode) {
+        this.code = code;
+        this.name = name;
+        this.type = type;
+        this.likes = likes;
+        this.details = details;
+        this.placeCode = placeCode;
+    }
 
     public CourseVO(JSONObject jsonObject) {
         try {
@@ -21,8 +29,9 @@ public class CourseVO {
             type = jsonObject.getString("Type");
             likes = jsonObject.getInt("Likes");
             details = jsonObject.getString("Details");
+
             for(int i = 1; i<=5; i++) {
-                placeCode[i-1] = jsonObject.getString("PlaceCode" + i);
+                placeCode.add(jsonObject.getString("PlaceCode" + i));
             }
         }catch (JSONException e) {
             e.printStackTrace();
@@ -53,7 +62,15 @@ public class CourseVO {
         return details;
     }
 
-    public String[] getPlaceCode() {
+    public List<String> getPlaceCode() {
         return placeCode;
+    }
+
+    public String getPlaceCode(int index) {
+        return placeCode.get(index);
+    }
+
+    public int getPlaceCount() {
+        return placeCode.size();
     }
 }

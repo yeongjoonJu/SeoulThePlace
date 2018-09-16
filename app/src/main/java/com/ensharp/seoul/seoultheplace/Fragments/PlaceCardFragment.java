@@ -8,14 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
+import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
-public class PlaceCardFragment extends Fragment implements CardFragment {
+public class PlaceCardFragment extends Fragment {
 
     private CardView cardView;
     private ImageButton placeButton;
@@ -52,6 +54,8 @@ public class PlaceCardFragment extends Fragment implements CardFragment {
         TextView description = (TextView) view.findViewById(R.id.description);
         TextView index = (TextView) view.findViewById(R.id.index);
 
+        ImageView image = (ImageView) view.findViewById(R.id.placeImage);
+        new DownloadImageTask(image).execute(place.getImageURL()[0]);
         title.setText(place.getName());
         title.setTextColor(Color.rgb(0,0,0));
         address.setText(place.getLocation());
@@ -67,7 +71,7 @@ public class PlaceCardFragment extends Fragment implements CardFragment {
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment();
+                activity.changeFragment(place.getCode(), position);
             }
         });
 

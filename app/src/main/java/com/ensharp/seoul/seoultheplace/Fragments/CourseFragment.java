@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,23 +12,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
+@SuppressLint("ValidFragment")
 public class CourseFragment extends Fragment {
 
-    private List<ImageButton> imageButtons;
-
-    ViewPager viewPager;
-    CardFragmentPagerAdapter pagerAdapter;
+    private String code;
+    private int index;
+    private ViewPager viewPager;
+    private CardFragmentPagerAdapter pagerAdapter;
 
     public CourseFragment() {
+        code = "j111";
+        index = 0;
+    }
 
+    public CourseFragment(int index) {
+        this.index = index;
+    }
+
+    @SuppressLint("ValidFragment")
+    public CourseFragment(String code) {
+        this.code = code;
+        index = 0;
     }
 
     @Override
@@ -45,21 +61,32 @@ public class CourseFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pagerAdapter = new CardFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
+        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(true);
 
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(index);
         viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(3);
 
         return rootView;
     }
 
-    public List<ImageButton> getImageButtons() { return imageButtons; }
-
     @Override
     public void onActivityResult(int requestCode , int resultCode , Intent data){
 
     }
+
+    public List<PlaceVO> getPlaces() {
+        List<PlaceVO> places = new ArrayList<PlaceVO>();
+        List<String> placeCodes = Constant.getCourse().getPlaceCode();
+
+        for (int i=0; i<placeCodes.size(); i++) {
+            places.add(Constant.getPlace(placeCodes.get(i)));
+        }
+
+        return places;
+    }
+
 }

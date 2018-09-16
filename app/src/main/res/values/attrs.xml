@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RefreshView">
+        <attr name="anim_type_view" format="enum">
+            <enum name="sun" value="0" />
+            <enum name="frame" value="1" />
+            <enum name="custom" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

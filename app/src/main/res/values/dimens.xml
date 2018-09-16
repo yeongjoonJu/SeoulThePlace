@@ -4,4 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="card_padding">65dp</dimen>
+
+    <dimen name="place_title_size">23sp</dimen>
+    <dimen name="place_address_size">16sp</dimen>
+    <dimen name="place_phone_size">15sp</dimen>
+    <dimen name="place_description_size">15sp</dimen>
+    <dimen name="place_detail_size">15sp</dimen>
+    <dimen name="place_change_size">13sp</dimen>
+
 </resources>
