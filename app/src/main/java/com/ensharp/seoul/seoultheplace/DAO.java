@@ -24,7 +24,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     // 상태 상수
     private final int WAIT = 0;
     private final int PROCESSING = 1;
-    private final int COMPLETE = 2;
     private final int EXIT = 3;
 
     // 비동기를 위한 변수
@@ -41,9 +40,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         status = PROCESSING;
 
         // 네트워크 처리가 완료될 때까지 기다림
-        while(status != COMPLETE);
-
-        status = WAIT;
+        while(status != WAIT);
     }
 
     // 중복되지 않으면 true, 중복되었으면 false
@@ -55,29 +52,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             // 네트워크 처리 동기화
             processNetwork(BASE_URL+"/user/register/id_duplicatecheck", jsonObject);
-
-            // 결과 처리
-            if(resultData == null)
-                return false;
-
-            jsonObject = resultData.getJSONObject(0);
-            if(jsonObject.getString("success").equals("true"))
-                return true;
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // 중복되지 않으면 true, 중복되었으면 false
-    public boolean checkNameDuplicaion(String name) {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.accumulate("Name", name);
-
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/user/register/name_duplicatecheck", jsonObject);
 
             // 결과 처리
             if(resultData == null)
@@ -147,11 +121,11 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public JSONArray getUserCourseData(String code, String id) {
+    public JSONArray getUserCourseData(String type, String id) {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Type", type);
             jsonObject.accumulate("Id", id);
 
             // 네트워크 처리 동기화
@@ -212,16 +186,21 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.accumulate("Keyword", keyword);
+            jsonObject.accumulate("keyword", keyword);
 
+            Log.i("network", "기다리는 중");
             // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/place/search", jsonObject);
+            processNetwork(BASE_URL+"/search/place", jsonObject);
+            Log.i("network", "완료");
 
             if(resultData == null)
                 return null;
 
-            for(int i=0; i<resultData.length(); i++)
+            placeData = new ArrayList<>();
+            for(int i=0; i<resultData.length(); i++) {
+                Log.i("place", i+"");
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+            }
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -234,14 +213,15 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.accumulate("Keyword", keyword);
+            jsonObject.accumulate("keyword", keyword);
 
             // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/course/search", jsonObject);
+            processNetwork(BASE_URL+"/search/course", jsonObject);
 
             if(resultData == null)
                 return null;
 
+            courseData = new ArrayList<>();
             for(int i=0; i<resultData.length(); i++)
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
 
@@ -251,18 +231,23 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         return courseData;
     }
 
+    // 회원가입
     public String insertMemberData(String[] information) {
         // 처리 설정
         String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
         JSONObject jsonObject = new JSONObject();
 
+        Log.i("yeongjoon", "회원가입");
+
         try {
             for (int i = 0; i < memberCategory.length; i++)
                 jsonObject.accumulate(memberCategory[i], information[i]);
 
+            Log.i("yeongjoon", "네트워크 처리 동기화");
             // 네트워크 처리 동기화
             processNetwork(BASE_URL+"/user/register", jsonObject);
 
+            Log.i("yeongjoon", "결과 처리");
             // 결과 처리
             if(resultData == null)
                 return "incomplete network";
@@ -298,28 +283,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
         return placeData;
-    }
-
-    public ArrayList<CourseVO> searchCourseByTag(String tag) {
-        ArrayList<CourseVO> courseData = null;
-        // 처리 설정
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.accumulate("Tag", tag);
-
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/course/tag", jsonObject);
-
-            if(resultData == null)
-                return null;
-
-            for(int i=0; i<resultData.length(); i++)
-                courseData.add(new CourseVO(resultData.getJSONObject(i)));
-
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return courseData;
     }
 
     // 태그 목록을 불러온다.
@@ -434,20 +397,22 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         while(true) {
             while(status == WAIT);
 
+            Log.i("network", status+"");
+
             if(status == EXIT || isCancelled())
                 return null;
 
             // 서버 연결
             if(url == null || !connectServer(url)) {
                 resultData = null;
-                status = COMPLETE;
+                status = WAIT;
                 continue;
             }
 
             // 데이터 송수신
             sendData(sendingData);
             resultData = getData();
-            status = COMPLETE;
+            status = WAIT;
         }
     }
 }
