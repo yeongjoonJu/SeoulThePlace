@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
+@SuppressLint("ValidFragment")
 public class MapFragment extends Fragment {
 
     private NMapContext mapContext;
@@ -30,6 +32,19 @@ public class MapFragment extends Fragment {
     private NMapViewerResourceProvider mapViewerResourceProvider = null;
     private NMapOverlayManager overlayManager;
     private NMapPOIdataOverlay.OnStateChangeListener onPOIDataStateChangeListener = null;
+    private double x;
+    private double y;
+
+    public MapFragment() {
+        x = 126.973034;
+        y = 37.5825288;
+    }
+
+    @SuppressLint("ValidFragment")
+    public MapFragment(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
 
     private NMapView.OnMapViewTouchEventListener onMapViewTouchEventListener = new NMapView.OnMapViewTouchEventListener() {
         @Override
@@ -107,7 +122,7 @@ public class MapFragment extends Fragment {
         NMapPOIdata poIData = new NMapPOIdata(2, mapViewerResourceProvider);
         poIData.beginPOIdata(2);
 
-        NMapPOIitem item1 = poIData.addPOIitem(126.992064, 37.5884693, "", markedID, 0);
+        NMapPOIitem item1 = poIData.addPOIitem(x, y, "", markedID, 0);
 //        NMapPOIitem item2 = poIData.addPOIitem(126.914925, 37.528728, "", markedID, 0);
 
         poIData.endPOIdata();
@@ -151,7 +166,7 @@ public class MapFragment extends Fragment {
     // 지도 초기화가 완료될 때 호출되는 콜백 인터페이스
     public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
         if (errorInfo == null) // success
-            mapController.setMapCenter(new NGeoPoint(126.992064, 37.5884693), 11);
+            mapController.setMapCenter(new NGeoPoint(x, y), 11);
         else // fail
             Log.e("MAP_ERROR", "onMapInitHandler: error=" + errorInfo.toString());
     }

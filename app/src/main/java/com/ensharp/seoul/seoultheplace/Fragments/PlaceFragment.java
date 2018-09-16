@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -103,9 +105,8 @@ public class PlaceFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.description);
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
 
-//        FrameLayout miniMap = (FrameLayout) rootView.findViewById(R.id.map);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.map, new MapFragment());
+        transaction.add(R.id.map, new MapFragment(place.getGeoX(), place.getGeoY()));
         transaction.commit();
 
         String parking = place.getParking();
@@ -117,6 +118,16 @@ public class PlaceFragment extends Fragment {
         description.setText("");
         detail.setText(place.getDetails());
         detail.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+
+                intent.setData(Uri.parse("tel" + place.getPhone()));
+                getContext().startActivity(intent);
+            }
+        });
 
         ListView information = (ListView) rootView.findViewById(R.id.information);
 

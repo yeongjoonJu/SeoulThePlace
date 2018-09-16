@@ -16,10 +16,12 @@ public class PlaceVO {
     private String businessHours;
     private String parkFee;
     private String tip;
+    private double x;
+    private double y;
 
     public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
                    String tip, String parking, String parkFee, int likes, String details,
-                   String type, String businessHours) {
+                   String type, String businessHours, double x, double y) {
         this.name = name;
         this.location = location;
         this.imageURL = imageURL;
@@ -31,6 +33,8 @@ public class PlaceVO {
         this.type = type;
         this.businessHours = businessHours;
         this.tip = tip;
+        this.x = x;
+        this.y = y;
     }
 
     public PlaceVO(JSONObject jsonObject) {
@@ -97,4 +101,8 @@ public class PlaceVO {
     public String getBusinessHours() {
         return businessHours;
     }
+
+    public double getGeoX() { return x; }
+
+    public double getGeoY() { return y; }
 }

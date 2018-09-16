@@ -12,14 +12,18 @@ public class CourseVO {
     private int likes;
     private String details;
     private List<String> placeCode;
+    private double x;
+    private double y;
 
-    public CourseVO(String code, String name, String type, int likes, String details, List<String> placeCode) {
+    public CourseVO(String code, String name, String type, int likes, String details, List<String> placeCode, double x, double y) {
         this.code = code;
         this.name = name;
         this.type = type;
         this.likes = likes;
         this.details = details;
         this.placeCode = placeCode;
+        this.x = x;
+        this.y = y;
     }
 
     public CourseVO(JSONObject jsonObject) {
@@ -61,4 +65,6 @@ public class CourseVO {
     public int getPlaceCount() {
         return placeCode.size();
     }
+    public double getGeoX() { return x; }
+    public double getGeoY() { return y; }
 }

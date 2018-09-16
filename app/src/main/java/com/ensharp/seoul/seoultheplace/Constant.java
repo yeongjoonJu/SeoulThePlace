@@ -35,7 +35,7 @@ public class Constant {
         placeCode.add("a333");
 
         course = new CourseVO("j111", "서울시내 대학 경유 273번 버스로 떠나는 청춘과 낭만의 대학 투어", "친구끼리, 연인끼리",
-                5, detail, placeCode);
+                5, detail, placeCode, 126.937546, 37.5637563);
     }
 
     public static void initPlaces() {
@@ -52,7 +52,7 @@ public class Constant {
 
         place1 = new PlaceVO("a111", "연세대학교 신촌캠퍼스", "서울특별시 서대문구 연세로 50", imageURL1, "02-1599-1885",
                 "신촌역 나가보기", "있음", parkingFee1, 3, detail1,
-                "친구끼리, 연인끼리", "연중무휴");
+                "친구끼리, 연인끼리", "연중무휴", 126.937546, 37.5637563);
 
         // place2
         imageURL2[0] = "http://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=13216&fileTy=MEDIA&fileNo=1";
@@ -66,7 +66,7 @@ public class Constant {
 
         place2 = new PlaceVO("a222", "고려대학교 안암캠퍼스", "서울특별시 성북구 안암로 145", imageURL2, "02-3290-1114",
                 "안암역 나가보기", "있음", parkingFee2, 2, detail2,
-                "친구끼리, 연인끼리", "연중무휴");
+                "친구끼리, 연인끼리", "연중무휴", 127.032519, 37.5886007);
 
         // place3
         imageURL3[0] = "http://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=13226&fileTy=MEDIA&fileNo=1";
@@ -81,7 +81,7 @@ public class Constant {
 
         place3 = new PlaceVO("a333", "성균관대학교 인문사회과학캠퍼스", "서울특별시 종로구 성균관로 25-2", imageURL3, "02-760-0114",
                 "혜화역 나가보기", "있음", parkingFee3, 2, detail3,
-                "친구끼리, 연인끼리", "연중무휴");
+                "친구끼리, 연인끼리", "연중무휴", 126.992064, 37.5884693);
 
         places = new ArrayList<PlaceVO>();
         places.add(place1);
