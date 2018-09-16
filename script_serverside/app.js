@@ -18,12 +18,14 @@ var con = mysql.createConnection({
 	multipleStatements: true
 });
 
-//json 오브젝트 타입의 결과값들
+//결과값 담을 json 타입 객체
 var jsonResult = new Object();
 //json 오브젝트 타입의 배열 형태
 var jsonArray = new Array();
 //플레이스 코드 배열
 var place_code = new Array();
+//코스 코드 배열
+var course_code = new Array();
 
 //회원가입
 app.post('/user/register', function(req, res) {
@@ -42,11 +44,10 @@ app.post('/user/register', function(req, res) {
 
 	con.query(insertQuery, params, function(err, rows, fields) {
 	if(err) {
-    res.json([{result: 'false', msg: err}]);
+    	  res.json([{result: 'false', msg: err}]);
 	  console.log(err);
 	} else {
 	  res.json([{ result: 'true' }]);
-	  console.log('register succeed!');
 	}
 	});
 });
@@ -55,20 +56,19 @@ app.post('/user/register', function(req, res) {
 app.post('/login', function(req, res) {
   var id = req.body.Id;
   var password = req.body.Password;
-  console.log('Request has come!');
-
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
   } else {
     if(rows.length === 0) {
+      console.log('첫번째 이프문');
       res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
     } else {
-      if(password != rows[0].password) {
+      console.log('두번째 이프문 앞에');
+      if(password != rows[0].Password) {
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
         sendUserInfo(res, rows);
-        console.log('Login Success!');
       }
     }
   }
@@ -110,9 +110,8 @@ app.post('/login/byname', function(req, res) {
 });
 
 //id 중복체크
-app.post('user/register/id_duplicatecheck', function(req, res) {
+app.post('/user/register/id_duplicatecheck', function(req, res) {
   var id = req.body.Id;
-
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
     if(err) {
       console.log(err);
@@ -127,7 +126,7 @@ app.post('user/register/id_duplicatecheck', function(req, res) {
 });
 
 //name 중복체크
-app.post('user/register/name_duplicatecheck', function(req, res) {
+app.post('/user/register/name_duplicatecheck', function(req, res) {
   var name = req.body.Name;
 
   con.query('SELECT * FROM USER WHERE Name = ?', name, function(err, result) {
@@ -176,7 +175,7 @@ app.post('/main/course_info', function(req, res) {
   //해당 타입에 맞는 코스 가져옴
   con.query('SELECT * FROM COURSE WHERE Type = ?', courseType, function(err, rows, fields) {
     if(err) {
-      console.log('err: ' + err);
+      console.log('메인에서 코스 리스트err: ' + err);
     } else {
       if(rows.length === 0) {
         res.json([ {User_Likes: 'false', Code: null, Name: null, Likes: null, location: null, Image: null} ]);
@@ -204,10 +203,11 @@ app.post('/main/course_pushed', function(req, res) {
 //플레이스 검색
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
-
-   con.query('SELECT * FROM PLACE WHERE Name LIKE %?% OR Location LIKE %?% OR Type LIKE %?%', keyword, keyword, keyword, function(err, rows, fields) {
+   console.log('place search!');
+   con.query('SELECT * FROM PLACE WHERE Name LIKE ? OR Location LIKE ? OR Type LIKE ?',
+ ["%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
      if(err) {
-       console.log('err : ' + err);
+       console.log('라우터err : ' + err);
      } else {
        if(rows.length === 0) {
          res.json(null);
@@ -222,7 +222,8 @@ app.post('/search/place', function(req, res) {
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
 
-  con.query('SELECT * FROM COURSE WHERE Name LIKE %?% OR Type LIKE %?%', keyword, keyword, function(err, rows, fields) {
+  con.query('SELECT * FROM COURSE WHERE Name LIKE ? OR Type LIKE ?',
+["%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
@@ -264,11 +265,11 @@ app.post('/course/like', function(req, res) {
           courseLikes = courseLikes - 1;
         }
         res.json([ {isCourseLiked: 'true', Likes: courseLikes}]);
-	con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', courseCode, user_ID);
+	con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseCode, user_ID]);
       } else {
         courseLikes = courseLikes + 1;
         res.json([ {isCourseLiked: 'false', Likes: courseLikes}]);
-	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', courseCode, user_ID);
+	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
       }
     }
   });
@@ -290,11 +291,11 @@ app.post('/place/like', function(req, res) {
           placeLikes = placeLikes - 1;
         }
         res.json([ {isPlaceLiked: 'true', Likes: placeLikes}]);
-	con.query('DELETE FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', placeCode, user_ID);
+	con.query('DELETE FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', [placeCode, user_ID]);
       } else {
         placeLikes = placeLikes + 1;
         res.json([ {isPlaceLiked: 'false', Likes: placeLikes}]);
-	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', placeCode, user_ID);
+	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [placeCode, user_ID]);
       }
     }
   });
@@ -323,7 +324,7 @@ function getInfoToArray(rows, table) {
       jsonResult.Code = rows[i].Code;
       jsonResult.Name = rows[i].Name;
       jsonResult.location = rows[i].Location;
-      jsonResult.Deatils = rows[i].Details;
+      jsonResult.Details = rows[i].Details;
       jsonResult.Type = rows[i].Type;
       jsonResult.Likes = rows[i].Likes;
       jsonResult.Phone = rows[i].Phone;
@@ -344,19 +345,25 @@ function getInfoToArray(rows, table) {
 
 function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스들
   initJsonArray(jsonArray);
+
+  //코스들의 Code 값들
+  for(var i = 0; i < rows.length; i++) {
+    course_code[i] = rows[i].Code;
+  }
+
   //COURSE 마다의 코드, 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
     con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
-               rows[i].Code, rows[i].PlaceCode1, function(err, row, fields) {
+               [rows[i].Code, rows[i].PlaceCode1], function(err, row, fields) {
                  if(err) {
-                   console.log('err: ' + err);
+                   console.log('mainCourseListInfo 에러 err: ' + err);
                    return;
                  } else {
 		   jsonResult.Code = row[0].Code;
                    jsonResult.Name = row[0].Name;
                    jsonResult.Likes = row[0].Likes;
                    jsonResult.location = row[0].Location;
-                   jsonResult.User_Likes = isCourseLiked(rows[i].Code, userID);
+                   jsonResult.User_Likes = isCourseLiked(course_code[i], userID);
                    jsonResult.Image = row[0].Image1;
                    jsonArray.push(jsonResult);
                  }
@@ -394,9 +401,9 @@ function pushedCourseListInfo(res, rows) {
 
 //user가 해당 코스 좋아요 눌렀는지 여부
 function isCourseLiked(courseID, userID) {
-  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', courseID, userID, function(err, result) {
+  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseID, userID], function(err, result) {
     if(err) {
-      console.log('err: ' + err);
+      console.log('isCourseLiked 에러 err: ' + err);
     } else {
       if(result.length === 0) {
         return 'false';
@@ -415,7 +422,7 @@ function initJsonArray(jsonArr) {
 }
 
 function sendUserInfo(res, rows) {
-  res.json([ {Id: rows[0].Id, Name: rows[0].Name, FavoriteCourse: rows[0].FavoriteCourse,
+  res.json([ {success: 'true', Id: rows[0].Id, Name: rows[0].Name, FavoriteCourse: rows[0].FavoriteCourse,
   FavoritePlace: rows[0].FavoritePlace, EdittedCourse: rows[0].EdittedCourse, EdittedPlace: rows[0].EdittedPlace} ]);
 }
 
@@ -424,7 +431,7 @@ function sendPlaceInfo(res, rows) {
   Details: rows[0].Details, Type: rows[0].Type, Likes: rows[0].Likes, Phone: rows[0].Phone, Image1: rows[0].Image1,
   Image2: rows[0].Image2, Image3: rows[0].Image3, BusinessHours: rows[0].BusinessHours, Fee: rows[0].Fee,
   Tag: rows[0].Tag, Tip: rows[0].Tip, Coordinate_X: rows[0].Coordinate_X,
-  Coordinate_Y: rows[0].Coordinate_Y} ]);
+  Coordinate_Y: rows[0].Coordinate_Y}  ]);
 }
 
 function sendCourseInfo(res, rows) {
