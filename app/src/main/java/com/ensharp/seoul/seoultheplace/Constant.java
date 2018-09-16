@@ -91,7 +91,7 @@ public class Constant {
 
     public static CourseVO getCourse() { return course; }
 
-    public static ArrayList<PlaceVO> getPlaces(String placeCode) { return places; }
+    public static ArrayList<PlaceVO> getPlaces(String courseCode) { return places; }
 
     public static PlaceVO getPlace(String code) {
         if (code.equals("a111")) return places.get(0);

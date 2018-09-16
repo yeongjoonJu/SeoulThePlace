@@ -30,19 +30,24 @@ public class CourseFragment extends Fragment {
     private int index;
     private ViewPager viewPager;
     private CardFragmentPagerAdapter pagerAdapter;
+    private List<PlaceVO> places;
 
     public CourseFragment() {
         code = "j111";
         index = 0;
+        places = Constant.getPlaces(code);
     }
 
     public CourseFragment(int index) {
+        code = "j111";
         this.index = index;
+        places = Constant.getPlaces(code);
     }
 
     @SuppressLint("ValidFragment")
     public CourseFragment(String code) {
         this.code = code;
+        places = Constant.getPlaces(code);
         index = 0;
     }
 
@@ -61,7 +66,7 @@ public class CourseFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code);
+        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code, places);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(true);
 

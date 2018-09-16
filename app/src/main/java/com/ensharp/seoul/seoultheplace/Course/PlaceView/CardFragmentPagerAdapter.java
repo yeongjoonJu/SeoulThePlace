@@ -22,12 +22,14 @@ public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements Ca
     private float baseElevation;
     private String courseCode;
     private CourseVO course;
+    private List<PlaceVO> places;
 
-    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation, String code) {
+    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation, String code, List<PlaceVO> places) {
         super(fm);
         fragments = new ArrayList<>();
         this.baseElevation = baseElevation;
         courseCode = code;
+        this.places = places;
 
         course = Constant.getCourse();
 
@@ -40,9 +42,7 @@ public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements Ca
 
         fragments.add(new CardFragment(courseCode, 0, null));
         for (int i = 1; i <= course.getPlaceCount(); i++) {
-            placeCode = course.getPlaceCode(i - 1);
-            place = Constant.getPlace(placeCode);
-            fragments.add(new CardFragment(courseCode, i, place));
+            fragments.add(new CardFragment(courseCode, i, places.get(i - 1)));
         }
     }
 
