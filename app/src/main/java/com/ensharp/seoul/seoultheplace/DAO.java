@@ -188,17 +188,14 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         try {
             jsonObject.accumulate("keyword", keyword);
 
-            Log.i("network", "기다리는 중");
             // 네트워크 처리 동기화
             processNetwork(BASE_URL+"/search/place", jsonObject);
-            Log.i("network", "완료");
 
             if(resultData == null)
                 return null;
 
             placeData = new ArrayList<>();
             for(int i=0; i<resultData.length(); i++) {
-                Log.i("place", i+"");
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
             }
 
@@ -237,17 +234,13 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         String[] memberCategory = new String[]{"Id", "Password", "Name", "Age", "Gender", "Type"};
         JSONObject jsonObject = new JSONObject();
 
-        Log.i("yeongjoon", "회원가입");
-
         try {
             for (int i = 0; i < memberCategory.length; i++)
                 jsonObject.accumulate(memberCategory[i], information[i]);
 
-            Log.i("yeongjoon", "네트워크 처리 동기화");
             // 네트워크 처리 동기화
             processNetwork(BASE_URL+"/user/register", jsonObject);
 
-            Log.i("yeongjoon", "결과 처리");
             // 결과 처리
             if(resultData == null)
                 return "incomplete network";
@@ -396,8 +389,6 @@ public class DAO extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         while(true) {
             while(status == WAIT);
-
-            Log.i("network", status+"");
 
             if(status == EXIT || isCancelled())
                 return null;
