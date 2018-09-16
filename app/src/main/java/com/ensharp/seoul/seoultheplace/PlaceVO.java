@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PlaceVO implements Parcelable {
+public class PlaceVO {
     private String code;
     private String name;
     private String location;
@@ -101,13 +101,4 @@ public class PlaceVO implements Parcelable {
         return businessHours;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
 }

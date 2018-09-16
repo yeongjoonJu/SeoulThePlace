@@ -113,7 +113,9 @@ public class SearchFragment extends Fragment {
         // 최근 검색어 SharedPreference에 저장
         SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor =  preferences.edit();
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < listAdapter.getCount(); i++) {
+            if(i >= 6)
+                break;
             if(listAdapter.getItem(i) != null)
                 editor.putString("RecentSearch" + i, listAdapter.getItem(i));
         }
