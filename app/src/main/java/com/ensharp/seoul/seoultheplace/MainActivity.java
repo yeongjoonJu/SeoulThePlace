@@ -18,6 +18,11 @@ import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
     private Fragment[] fragments;

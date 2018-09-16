@@ -19,6 +19,8 @@ public class PlaceVO {
     private String businessHours;
     private String parkFee;
     private String tip;
+    private String coordinate_x;
+    private String coordinate_y;
 
     public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
                    String tip, String parking, String parkFee, int likes, String details,
@@ -39,19 +41,23 @@ public class PlaceVO {
 
     public PlaceVO(JSONObject jsonObject) {
         try {
-            this.name = jsonObject.getString("code");
-            this.name = jsonObject.getString("name");
+            this.code = jsonObject.getString("Code");
+            this.name = jsonObject.getString("Name");
             this.location = jsonObject.getString("location");
-            for(int i=0; i<3; i++)
-                this.imageURL[i] = jsonObject.getString("image"+ (i+1));
-            this.phone = jsonObject.getString("phone");
-            this.tip = jsonObject.getString("tip");
-            this.parking = jsonObject.getString("parking");
-            this.parkFee = jsonObject.getString("fee");
-            this.likes = jsonObject.getInt("likes");
-            this.details = jsonObject.getString("details");
-            this.type = jsonObject.getString("type");
-            this.businessHours = jsonObject.getString("businesshours");
+            this.imageURL = new String[3];
+            for(int i=0; i<3; i++) {
+                this.imageURL[i] = jsonObject.getString("Image" + (i + 1));
+            }
+            this.phone = jsonObject.getString("Phone");
+            this.tip = jsonObject.getString("Tip");
+            this.parking = jsonObject.getString("Parking");
+            this.parkFee = jsonObject.getString("Fee");
+            this.likes = jsonObject.getInt("Likes");
+            this.details = jsonObject.getString("Details");
+            this.type = jsonObject.getString("Type");
+            this.businessHours = jsonObject.getString("BusinessHours");
+            this.coordinate_x = jsonObject.getString("Coordinate_X");
+            this.coordinate_y = jsonObject.getString("Coordinate_Y");
         }catch (JSONException e) {
             e.printStackTrace();
         }
@@ -103,4 +109,11 @@ public class PlaceVO {
         return businessHours;
     }
 
+    public String getCoordinate_x() {
+        return coordinate_x;
+    }
+
+    public String getCoordinate_y() {
+        return coordinate_y;
+    }
 }

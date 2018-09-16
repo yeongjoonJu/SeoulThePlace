@@ -3,6 +3,7 @@ package com.ensharp.seoul.seoultheplace;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseVO {
@@ -30,6 +31,7 @@ public class CourseVO {
             likes = jsonObject.getInt("Likes");
             details = jsonObject.getString("Details");
 
+            placeCode = new ArrayList<>();
             for(int i = 1; i<=5; i++) {
                 placeCode.add(jsonObject.getString("PlaceCode" + i));
             }
