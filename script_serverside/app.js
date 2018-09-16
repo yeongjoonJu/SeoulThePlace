@@ -30,7 +30,7 @@ app.post('/user/register', function(req, res) {
 	var password = req.body.Password;
 	var name = req.body.Name;
 	var favorite_course = 'COURSEdefault';
-	var favorite_place = 'default';
+	var favorite_place = 'PLACEdefault';
 	var editted_course = 'editted';
 	var editted_place = 'editted';
 
@@ -189,7 +189,7 @@ app.post('/main/course_info', function(req, res) {
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
 
-   con.query('SELECT * FROM PLACE WHERE Name Like %?% OR Location Like %?% OR Type Like %?%', keyword, keyword, keyword, function(err, rows, fields) {
+   con.query('SELECT * FROM PLACE WHERE Name LIKE %?% OR Location LIKE %?% OR Type LIKE %?%', keyword, keyword, keyword, function(err, rows, fields) {
      if(err) {
        console.log('err : ' + err);
      } else {
@@ -206,7 +206,7 @@ app.post('/search/place', function(req, res) {
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
 
-  con.query('SELECT * FROM COURSE WHERE Name Like %?% OR Type Like %?%', keyword, keyword, function(err, rows, fields) {
+  con.query('SELECT * FROM COURSE WHERE Name LIKE %?% OR Type LIKE %?%', keyword, keyword, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
@@ -248,11 +248,11 @@ app.post('/course/like', function(req, res) {
           courseLikes = courseLikes - 1;
         }
         res.json([ {isCourseLiked: 'true', Likes: courseLikes}]);
-        con.query("DELETE FROM COURSELIKE WHERE CourseCode = '?' AND Person = '?'", courseCode, user_ID);
+	con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', courseCode, user_ID);
       } else {
         courseLikes = courseLikes + 1;
         res.json([ {isCourseLiked: 'false', Likes: courseLikes}]);
-        con.query("INSERT INTO COURSELIKE VALUES('?', '?')", courseCode, user_ID);
+	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', courseCode, user_ID);
       }
     }
   });
@@ -274,11 +274,11 @@ app.post('/place/like', function(req, res) {
           placeLikes = placeLikes - 1;
         }
         res.json([ {isPlaceLiked: 'true', Likes: placeLikes}]);
-        con.query("DELETE FROM PLACELIKE WHERE PlaceCode = '?' AND Person = '?'", placeCode, user_ID);
+	con.query('DELETE FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', placeCode, user_ID);
       } else {
         placeLikes = placeLikes + 1;
         res.json([ {isPlaceLiked: 'false', Likes: placeLikes}]);
-        con.query("INSERT INTO COURSELIKE VALUES('?', '?')", placeCode, user_ID);
+	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', placeCode, user_ID);
       }
     }
   });
@@ -318,6 +318,8 @@ function getInfoToArray(rows, table) {
       jsonResult.BusinessHours = rows[i].BusinessHours;
       jsonResult.Fee = rows[i].Fee;
       jsonResult.Tip = rows[i].Tip;
+      jsonResult.Coordinate_X = rows[i].Coordinate_X;
+      jsonResult.Coordinate_Y = rows[i].Coordinate_Y;
       jsonArray.push(jsonResult);
     }
   }
@@ -328,12 +330,13 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
   initJsonArray(jsonArray);
   //COURSE 마다의 이름, 설명, 좋아요 수, 위치(플레이스1)
   for(var i = 0; i < rows.length; i++) {
-    con.query('SELECT COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
+    con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Description, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
                rows[i].Code, rows[i].PlaceCode1, function(err, row, fields) {
                  if(err) {
                    console.log('err: ' + err);
                    return;
                  } else {
+		   jsonResult.Code = row[0].Code;
                    jsonResult.Name = row[0].Name;
                    jsonResult.Description = row[0].Description;
                    jsonResult.Likes = row[0].Likes;
@@ -362,21 +365,6 @@ function isCourseLiked(courseID, userID) {
   });
 }
 
-//user가 해당 플레이스 좋아요 눌렀는지 여
-function isPlaceLiked(placeID, userID) {
-  con.query('SELECT * FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', placeID, userID, function(err, result) {
-    if(err) {
-      console.log('err: ' + err);
-    } else {
-      if(result.length === 0) {
-        return 'false';
-      } else {
-        return 'true';
-      }
-    }
-  });
-}
-
 function initJsonArray(jsonArr) {
   if(jsonArr.length > 0) {
     jsonArr.length = 0;
@@ -393,7 +381,8 @@ function sendPlaceInfo(res, rows) {
   res.json([ {Code: rows[0].Code, Name: rows[0].Name, location: rows[0].Location, Description: rows[0].Description,
   Details: rows[0].Details, Type: rows[0].Type, Likes: rows[0].Likes, Phone: rows[0].Phone, Image1: rows[0].Image1,
   Image2: rows[0].Image2, Image3: rows[0].Image3, BusinessHours: rows[0].BusinessHours, Fee: rows[0].Fee,
-  Tag: rows[0].Tag, Tip: rows[0].Tip} ]);
+  Tag: rows[0].Tag, Tip: rows[0].Tip, Coordinate_X: rows[0].Coordinate_X,
+  Coordinate_Y: rows[0].Coordinate_Y} ]);
 }
 
 function sendCourseInfo(res, rows) {
