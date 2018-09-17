@@ -22,6 +22,12 @@ import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
     private Fragment[] fragments;
@@ -39,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         Constant.initPlaces();
 
         setContentView(R.layout.activity_main);
-        dao = new DAO();
-        //dao.insertMemberData(getIntent().getExtras());
 
         fragments = new Fragment[]{
                 new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new SettingFragment()
@@ -147,5 +151,6 @@ public class MainActivity extends AppCompatActivity {
     public void DeleteBackStack(){ //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
     }
 }

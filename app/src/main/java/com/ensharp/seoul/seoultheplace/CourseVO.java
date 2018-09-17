@@ -29,7 +29,7 @@ public class CourseVO {
             type = jsonObject.getString("Type");
             likes = jsonObject.getInt("Likes");
             details = jsonObject.getString("Details");
-
+//            placeCode = new String[5];
             for(int i = 1; i<=5; i++) {
                 placeCode.add(jsonObject.getString("PlaceCode" + i));
             }

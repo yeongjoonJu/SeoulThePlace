@@ -14,6 +14,7 @@ import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,16 +30,13 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
         CheckAlreadyLogin();
+
         dao = new DAO();
-        dao.execute();
 
         loginFragment = new LoginFragment();
 
         setVideo();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,loginFragment).commit();
-    }
-    public DAO getDAO(){
-        return this.dao;
     }
 
     @Override
