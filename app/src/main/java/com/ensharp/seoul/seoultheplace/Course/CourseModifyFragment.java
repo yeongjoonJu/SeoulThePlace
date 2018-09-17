@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.CourseVO;
@@ -34,6 +35,8 @@ public class CourseModifyFragment extends Fragment {
     private ItemAdapter iadapter;
     RecyclerView recyclerView;
     RecyclerView itemview;
+    Button saveBtn ;
+    MainActivity mActivity;
 
     @SuppressLint("ValidFragment")
     public CourseModifyFragment(List<PlaceVO> list){
@@ -49,8 +52,8 @@ public class CourseModifyFragment extends Fragment {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.modify_course, container, false);
-
         initView();
+
         CheckData("CreateView");
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
@@ -117,7 +120,6 @@ public class CourseModifyFragment extends Fragment {
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int dragFlags = 0;
                 int swipeFlags = 0;
-                MainActivity mActivity = (MainActivity)getActivity();
                 mActivity.changeFragment("j111",1);
                 Log.d("Move Ready: ","getMovementFlags" + dragFlags);
                 return makeMovementFlags(dragFlags, swipeFlags);
@@ -147,6 +149,7 @@ public class CourseModifyFragment extends Fragment {
         public void ChangeData(PlaceVO item){
         if(adapter.choosedMember == datas.size()-1&&datas.size()<5){ //5개가 아직 아닐경우 위치에다가 추가만함.
             adapter.choosedMember+=1; //새로추가하면서 +++로 가게하기 위해
+            ITEM_SIZE +=1;
             addData(item);
         }
         else { //5개일경우 자리만 바꿈
@@ -155,7 +158,6 @@ public class CourseModifyFragment extends Fragment {
             }
             datas.remove(adapter.choosedMember);
             adapter.notifyItemRemoved(adapter.choosedMember);
-            ITEM_SIZE +=1;
             datas.add(adapter.GetChoosedMemeber(), item);
             adapter.notifyItemInserted(adapter.choosedMember);
         }
@@ -192,6 +194,7 @@ public class CourseModifyFragment extends Fragment {
     }
 
     private void initView(){
+        mActivity = (MainActivity)getActivity();
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview);
         adapter = new RecyclerAdapter(getActivity(), datas,R.layout.modify_course);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -203,5 +206,25 @@ public class CourseModifyFragment extends Fragment {
         LinearLayoutManager layoutManagers = new LinearLayoutManager(getActivity());
         itemview.setLayoutManager(layoutManagers);
         itemview.setAdapter(iadapter);
+
+        saveBtn = (Button)view.findViewById(R.id.modify_save);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ITEM_SIZE > 0&&ITEM_SIZE<5){
+                    for(int i = 0 ; i <= datas.size();i++){
+                        PlaceVO item = datas.get(i);
+                        if(item.getName().equals("+")){
+                            datas.remove(i);
+                        }
+                    }
+                    mActivity.changeCourseViewFragment(datas);
+                    Toast.makeText(mActivity,"이거누르면 저장",Toast.LENGTH_LONG).show();
+                }
+                else if(ITEM_SIZE==5){
+                    Toast.makeText(mActivity,"이거누르면 저장",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

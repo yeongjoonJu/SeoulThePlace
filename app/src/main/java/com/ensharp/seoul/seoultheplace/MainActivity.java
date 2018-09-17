@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private LinearLayout rootLayout;
     private DAO dao;
+    private int currentFragmentNumber = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +56,31 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i=0; i<fragments.length; i++) {
             final Fragment fragment = fragments[i];
+            final int nextFragmentNumber = i;
             bottomButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currentFragment = fragment;
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment, fragment)
-                            .commit();
+                    if(currentFragmentNumber <= nextFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                                .replace(R.id.fragment, fragment)
+                                .commit();
+                    }
+                    else{
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                                .replace(R.id.fragment, fragment)
+                                .commit();
+                    }
+                    currentFragmentNumber = nextFragmentNumber;
                 }
             });
         }
 
         // 메인 fragment
         currentFragment = fragments[0];
+        currentFragmentNumber = 0;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[0])
                 .commit();
@@ -104,21 +118,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeFragment(String courseCode, int index) {
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
-        fragmentTransaction.replace(R.id.fragment, new PlaceFragment(courseCode, index));
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                .replace(R.id.fragment, new PlaceFragment(courseCode, index))
+                .addToBackStack(null)
+                .commit();
     }
     public void changeModifyFragment(List<PlaceVO> list){
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
-        fragmentTransaction.replace(R.id.fragment, new CourseModifyFragment(list));
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left)
+                .replace(R.id.fragment, new CourseModifyFragment(list))
+                .addToBackStack(null)
+                .commit();
     }
 
     public static float dpToPixels(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);
+    }
+
+    public void changeCourseViewFragment(List<PlaceVO> list){
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
+        fragmentTransaction.replace(R.id.fragment, new CourseFragment());
+        DeleteBackStack(); //뒤로가기하는거 다 없앰
+        fragmentTransaction.commit();
+    }
+
+    public void DeleteBackStack(){ //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }
