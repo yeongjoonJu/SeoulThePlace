@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Constant;
-import com.ensharp.seoul.seoultheplace.Course.Map.GeoCodeManager;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -106,7 +104,7 @@ public class PlaceFragment extends Fragment {
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.map, new MapFragment(place.getGeoX(), place.getGeoY()));
+        transaction.add(R.id.map, new MapFragment(place.getGeoX(), place.getGeoY(), place.getName()));
         transaction.commit();
 
         String parking = place.getParking();

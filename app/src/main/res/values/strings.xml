@@ -10,4 +10,6 @@
     <string name="facebook_app_id">717351961937108</string>
     <string name="fb_login_protocol_scheme">fb717351961937108</string>
 
+    <integer name="CODE_PERMISSIONS">0</integer>
+
 </resources>
