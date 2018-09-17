@@ -39,6 +39,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         this.url = url;
         sendingData = sending;
         status = PROCESSING;
+        int count = 0;
 
         // 네트워크 처리가 완료될 때까지 기다림
         while(status != WAIT);
@@ -220,7 +221,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
                 return null;
 
             courseData = new ArrayList<>();
-            for(int i=0; i<resultData.length(); i++)
+            for(int i=0; i < resultData.length(); i++)
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
 
         }catch (JSONException e) {
@@ -356,7 +357,12 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             while ((line = reader.readLine()) != null)
                 buffer.append(line);
 
-            result = new JSONArray(buffer.toString());
+            if(!buffer.toString().equals("null"))
+                result = new JSONArray(buffer.toString());
+
+            if(reader != null) {
+                reader.close(); //버퍼를 닫아줌
+            }
 
             return result;
         } catch (IOException e) {
@@ -371,8 +377,8 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return null;
         }
-        return null;
     }
 
     public void destory() {
@@ -403,7 +409,9 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
             // 데이터 송수신
             sendData(sendingData);
+            Log.i("yeongjoon", "데이터 송신 완료");
             resultData = getData();
+            Log.i("yeongjoon", "데이터 수신 완료");
             status = WAIT;
         }
     }
