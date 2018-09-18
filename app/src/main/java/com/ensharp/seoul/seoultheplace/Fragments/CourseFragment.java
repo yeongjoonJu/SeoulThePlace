@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class CourseFragment extends Fragment {
     private ViewPager viewPager;
     private CardFragmentPagerAdapter pagerAdapter;
     private List<PlaceVO> places;
+    private CourseMapFragment courseMapFragment;
 
     public CourseFragment() {
         code = "j111";
@@ -60,8 +62,10 @@ public class CourseFragment extends Fragment {
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_course, container, false);
 
+        courseMapFragment = new CourseMapFragment(Constant.getLongitudes(), Constant.getLatitudes());
+
         getChildFragmentManager().beginTransaction()
-                .add(R.id.fragment, new CourseMapFragment(Constant.getLongitudes(), Constant.getLatitudes()))
+                .add(R.id.fragment, courseMapFragment)
                 .commit();
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
@@ -74,6 +78,7 @@ public class CourseFragment extends Fragment {
         viewPager.setCurrentItem(index);
         viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(3);
+        viewPager.addOnPageChangeListener(onPageChangeListener);
 
         return rootView;
     }
@@ -93,5 +98,26 @@ public class CourseFragment extends Fragment {
 
         return places;
     }
+
+    public void setPageritem(int index) {
+        viewPager.setCurrentItem(index);
+    }
+
+    public ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            courseMapFragment.changeMapCenter(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
 }

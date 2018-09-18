@@ -13,6 +13,7 @@ import com.ensharp.seoul.seoultheplace.Course.Map.NMapCalloutCustomOldOverlay;
 import com.ensharp.seoul.seoultheplace.Course.Map.NMapFragment;
 import com.ensharp.seoul.seoultheplace.Course.Map.NMapPOIflagType;
 import com.ensharp.seoul.seoultheplace.Course.Map.NMapViewerResourceProvider;
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapOverlay;
@@ -36,6 +37,7 @@ public class CourseMapFragment extends NMapFragment{
     private NMapView mapView;
     private NMapController mapController;
     private NMapViewerResourceProvider mapViewerResourceProvider;
+    private NMapPOIdataOverlay poIdataOverlay;
     private NMapOverlayManager overlayManager;
     private List<String> longitudes;
     private List<String> latitudes;
@@ -44,6 +46,49 @@ public class CourseMapFragment extends NMapFragment{
     public CourseMapFragment(List<String> longitudes, List<String> latitudes) {
         this.longitudes = longitudes;
         this.latitudes = latitudes;
+    }
+
+    public void changeMapCenter(int position) {
+        if (position == 0) {
+            poIdataOverlay.showAllPOIdata(8);
+            adjustLatitude();
+            return;
+        }
+
+        NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
+        NGeoPoint point = item.getPoint();
+        NGeoPoint pointToCenter = new NGeoPoint();
+        pointToCenter.latitude = point.latitude;
+        pointToCenter.longitude = point.longitude;
+        pointToCenter.latitude -= 0.01;
+        mapController.setMapCenter(pointToCenter, 10);
+    }
+
+    public void adjustLatitude() {
+        NGeoPoint center = mapController.getMapCenter();
+
+        switch (mapController.getZoomLevel()) {
+            case 6:
+                center.latitude -= 0.2;
+                break;
+            case 7:
+                center.latitude -= 0.1;
+                break;
+            case 8:
+                center.latitude -= 0.05;
+                break;
+            case 9:
+                center.latitude -= 0.025;
+                break;
+            case 10:
+                center.latitude -= 0.006;
+                break;
+            default:
+                break;
+        }
+
+        mapController.setMapCenter(center, mapController.getZoomLevel());
+        return;
     }
 
     @Override
@@ -83,25 +128,22 @@ public class CourseMapFragment extends NMapFragment{
 
         mapViewerResourceProvider = new NMapViewerResourceProvider(getActivity());
         overlayManager = new NMapOverlayManager(getActivity(), mapView, mapViewerResourceProvider);
-        overlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
 
         int markedID = NMapPOIflagType.PIN;
-        NMapPOIdata poIData = new NMapPOIdata(2, mapViewerResourceProvider);
-        poIData.beginPOIdata(2);
+        NMapPOIdata poIData = new NMapPOIdata(longitudes.size(), mapViewerResourceProvider);
+        poIData.beginPOIdata(longitudes.size());
 
         for (int i = 0; i < longitudes.size(); i++) {
-            poIData.addPOIitem(Double.parseDouble(longitudes.get(i)), Double.parseDouble(latitudes.get(i)), "", markedID, 0);
+            poIData.addPOIitem(Double.parseDouble(longitudes.get(i)), Double.parseDouble(latitudes.get(i)), "", markedID, i);
         }
 
         poIData.endPOIdata();
 
-        NMapPOIdataOverlay poIdataOverlay = overlayManager.createPOIdataOverlay(poIData, null);
-        poIdataOverlay.showAllPOIdata(0);
+        poIdataOverlay = overlayManager.createPOIdataOverlay(poIData, null);
+        poIdataOverlay.showAllPOIdata(8);
         poIdataOverlay.setOnStateChangeListener(onPOIDataStateChangeListener);
 
-        NGeoPoint center = mapController.getMapCenter();
-        center.latitude = center.getLatitude() - 0.1;
-        mapController.setMapCenter(center);
+        adjustLatitude();
 
         mapContext.onStart();
     }
@@ -167,60 +209,17 @@ public class CourseMapFragment extends NMapFragment{
         }
     };
 
-    private final NMapOverlayManager.OnCalloutOverlayListener onCalloutOverlayListener = new NMapOverlayManager.OnCalloutOverlayListener() {
-        @Override
-        public NMapCalloutOverlay onCreateCalloutOverlay(NMapOverlay itemOverlay, NMapOverlayItem overlayItem, Rect itemBounds) {
-
-            Log.e("abcd", "코스마커1");
-
-            // handle overlapped items
-            if (itemOverlay instanceof NMapPOIdataOverlay) {
-                NMapPOIdataOverlay poIdataOverlay = (NMapPOIdataOverlay)itemOverlay;
-
-                // check if it is selected by touch event
-                if (!poIdataOverlay.isFocusedBySelectItem()) {
-                    int countOfOverlappedItemes = 1;
-
-                    NMapPOIdata poiData = poIdataOverlay.getPOIdata();
-                    for (int i = 0; i < poiData.count(); i++) {
-                        NMapPOIitem poIitem = poiData.getPOIitem(i);
-
-                        // skip selected item
-                        if (poIitem == overlayItem) {
-                            continue;
-                        }
-
-                        if (Rect.intersects(poIitem.getBoundsInScreen(), overlayItem.getBoundsInScreen())) {
-                            countOfOverlappedItemes++;
-                        }
-                    }
-
-                    if (countOfOverlappedItemes > 1) {
-                        String text = countOfOverlappedItemes + " overlapped items for " + overlayItem.getTitle();
-                        return null;
-                    }
-                }
-            }
-
-            // use custom old callout overlay
-            if (overlayItem instanceof NMapPOIitem) {
-                NMapPOIitem poiItem = (NMapPOIitem)overlayItem;
-
-                if (poiItem.showRightButton()) {
-                    return new NMapCalloutCustomOldOverlay(itemOverlay, overlayItem, itemBounds,
-                            mapViewerResourceProvider);
-                }
-            }
-
-            // use custom callout overlay
-            return new NMapCalloutCustomOldOverlay(itemOverlay, overlayItem, itemBounds, mapViewerResourceProvider);
-        }
-    };
-
     private final NMapPOIdataOverlay.OnStateChangeListener onPOIDataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
         @Override
         public void onFocusChanged(NMapPOIdataOverlay nMapPOIdataOverlay, NMapPOIitem nMapPOIitem) {
-            Log.e("abcd", "코스마커2");
+            int position = nMapPOIitem.getId() + 1;
+            CourseFragment fragment = (CourseFragment) getParentFragment();
+            fragment.setPageritem(position);
+
+            NGeoPoint point = nMapPOIitem.getPoint();
+            point.latitude -= 0.001;
+
+            mapController.setMapCenter(point, 14);
         }
 
         @Override
