@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -79,21 +80,19 @@ public class CardFragment extends Fragment {
         ImageView image = (ImageView) view.findViewById(R.id.placeImage);
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
-        TextView description = (TextView) view.findViewById(R.id.description);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
         new DownloadImageTask(image).execute(place.getImageURL()[0]);
         title.setText(place.getName());
         address.setText(place.getLocation());
-        description.setText("");
         placeIndex.setText(Integer.toString(index));
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        placeButton = (ImageButton) view.findViewById(R.id.place);
-        placeButton.setOnClickListener(new View.OnClickListener() {
+        FrameLayout placeLayout = (FrameLayout) view.findViewById(R.id.place_layout);
+        placeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 activity.changeFragment(courseCode, index);
             }
         });

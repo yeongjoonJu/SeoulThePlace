@@ -12,4 +12,7 @@
     <dimen name="place_detail_size">15sp</dimen>
     <dimen name="place_change_size">13sp</dimen>
 
+    <dimen name="card_title_size">18sp</dimen>
+    <dimen name="card_address_size">12sp</dimen>
+
 </resources>
