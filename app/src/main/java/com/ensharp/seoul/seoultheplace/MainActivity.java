@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment, "WEB_FRAGMENT")
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
