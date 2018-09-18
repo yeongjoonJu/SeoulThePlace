@@ -14,7 +14,9 @@ import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseMapFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.SavesFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
@@ -74,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         String[] neededPermissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.CALL_PHONE
         };
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
