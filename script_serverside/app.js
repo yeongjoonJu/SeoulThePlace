@@ -56,6 +56,7 @@ app.post('/user/register', function(req, res) {
 
 //로그인
 app.post('/login', function(req, res) {
+  console.log('로그인 들어옴');
   var id = req.body.Id;
   var password = req.body.Password;
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
@@ -78,7 +79,7 @@ app.post('/login', function(req, res) {
 //SNS 로그인시에 이미 있는 이메일이면 거기로 로그인
 app.post('/login/bysns', function(req, res) {
   var id = req.body.Id;
-
+console.log('asdf');
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
@@ -111,6 +112,7 @@ app.post('/login/byname', function(req, res) {
 
 //id 중복체크
 app.post('/user/register/id_duplicatecheck', function(req, res) {
+  console.log('아이디 중복 확인 체크 들어옴');
   var id = req.body.Id;
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
     if(err) {
@@ -311,6 +313,48 @@ app.post('/place/like', function(req, res) {
   });
 });
 
+//코스 수정 완료 후 입력
+app.post('/course/editted', function(req, res) {
+  var edittedCourse_name = req.body.Name;
+  var edittedCourse_description = req.body.Description;
+  var placeCode1 = req.body.PlaceCode1;
+  var placeCode2 = req.body.PlaceCode2;
+  var placeCode3 = req.body.PlaceCode3;
+  var placeCode4 = req.body.PlaceCode4;
+  var placeCode5 = req.body.PlaceCode5;
+
+  var insertQuery = 'INSERT INTO EDITTEDCOURSE VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+  var params = [null, edittedCourse_name, edittedCourse_description, placeCode1, placeCode2,
+                placeCode3, placeCode4, placeCode5];
+
+  con.query(insertQuery, params, function(err, rows, fields) {
+    if(err) {
+      res.json([ {success: 'false'}]);
+      console.log(err);
+    } else {
+      res.json( {success: 'true'});
+    }
+  });
+});
+
+//거리계산을 위한 모든 Place 리스트 다 받아오기
+app.post('/place/all', function(req, res) {
+  jsonArray = initJsonArray(jsonArray);
+  var query = "SELECT Code, Name, Image1, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code NOT IN('PLACEdefault')";
+  sync.fiber(function() {
+    var result = sync.await(con.query(query, sync.defer()));
+    for(var i = 0; i < result.length; i++) {
+      jsonResult.Code = result[i].Code;
+      jsonResult.Name = result[i].Name;
+      jsonResult.Image1 = result[i].Image1;
+      jsonResult.Coordinate_X = result[i].Coordinate_X;
+      jsonResult.Coordinate_Y = result[i].Coordinate_Y;
+    }
+    console.log(jsonArray.length);
+    res.json([ {jsonArr: jsonArray} ]);
+  });
+});
+
 //코스 및 플레이스 검색시 json 형태 배열에 데이터 담기.
 function getInfoToArray(rows, table) {
   if(table == 'COURSE') {
@@ -397,7 +441,7 @@ function pushedCourseListInfo(res, rows) {
     for(var i = 0; i < 5; i++) {
       var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
       if(result[0] == undefined)
-	break;
+				break;
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
       jsonResult.Location = result[0].Location;
