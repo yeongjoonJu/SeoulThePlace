@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,5 +99,25 @@ public class Constant {
         else if (code.equals("a222")) return places.get(1);
         else if (code.equals("a333")) return places.get(2);
         else return null;
+    }
+
+    public static List<String> getLongitudes() {
+        List<String> longitudes = new ArrayList<String>();
+
+        longitudes.add("126.937546");
+        longitudes.add("127.032519");
+        longitudes.add("126.992064");
+
+        return longitudes;
+    }
+
+    public static List<String> getLatitudes() {
+        List<String> latitudes = new ArrayList<String>();
+
+        latitudes.add("37.5637563");
+        latitudes.add("37.5886007");
+        latitudes.add("37.5884693");
+
+        return latitudes;
     }
 }

@@ -61,7 +61,7 @@ public class CourseFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_course, container, false);
 
         getChildFragmentManager().beginTransaction()
-                .add(R.id.fragment, new MapFragment())
+                .add(R.id.fragment, new CourseMapFragment(Constant.getLongitudes(), Constant.getLatitudes()))
                 .commit();
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);

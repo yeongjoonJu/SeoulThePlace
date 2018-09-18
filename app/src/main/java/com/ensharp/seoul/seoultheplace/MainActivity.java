@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment webViewFragment = getSupportFragmentManager().findFragmentByTag("WEB_FRAGMENT");
         if (webViewFragment != null && webViewFragment.isVisible()) {
+            Log.e("abcd", "back button pressed");
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //            fragmentTransaction.
         }
