@@ -170,6 +170,7 @@ app.post('/course/info', function(req, res) {
 
 //main에서 코스 리스트로 띄울 떄
 app.post('/main/course_info', function(req, res) {
+  console.log('메인에서 코스리스트로 띄울때 들어옴');
   var courseType = req.body.Type; //코스 타입
   var userID = req.body.Id; //로그인한 아이디
   //해당 타입에 맞는 코스 가져옴
@@ -178,6 +179,7 @@ app.post('/main/course_info', function(req, res) {
       console.log('메인에서 코스 리스트err: ' + err);
     } else {
       if(rows.length === 0) {
+	console.log('값 없음');
         res.json([ {User_Likes: 'false', Code: null, Name: null, Likes: null, location: null, Image: null} ]);
       } else {
         mainCourseListInfo(res, rows, userID);
@@ -364,25 +366,21 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
   }
 
   //COURSE 마다의 코드, 이름, 설명, 좋아요 수, 위치(플레이스1)
-  for(var i = 0; i < rows.length; i++) {
-    con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
-               [rows[i].Code, rows[i].PlaceCode1], function(err, row, fields) {
-                 if(err) {
-                   console.log('mainCourseListInfo 에러 err: ' + err);
-                   return;
-                 } else {
-		   jsonResult.Code = row[0].Code;
-                   jsonResult.Name = row[0].Name;
-                   jsonResult.Likes = row[0].Likes;
-                   jsonResult.location = row[0].Location;
-                   jsonResult.User_Likes = isCourseLiked(course_code[i], userID);
-                   jsonResult.Image = row[0].Image1;
-                   jsonArray.push(jsonResult);
-		console.log(jsonResult.Name);
-                 }
-               });
-  }
-  res.json(jsonArray);
+  sync.fiber(function() {
+    for(var i = 0; i < rows.length; i++) {
+      var result = sync.await(con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
+                 [rows[i].Code, rows[i].PlaceCode1], sync.defer()));
+                     jsonResult.Code = result[0].Code;
+                     jsonResult.Name = result[0].Name;
+                     jsonResult.Likes = result[0].Likes;
+                     jsonResult.location = result[0].Location;
+                     jsonResult.User_Likes = isCourseLiked(course_code[i], userID);
+                     jsonResult.Image = result[0].Image1;
+                     jsonArray.push(jsonResult);
+                 };
+             console.log(jsonArray.length);
+             res.json(jsonArray);
+    });
 }
 
 function pushedCourseListInfo(res, rows) {
@@ -398,8 +396,8 @@ function pushedCourseListInfo(res, rows) {
   sync.fiber(function() {
     for(var i = 0; i < 5; i++) {
       var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
-if(result[0] == undefined)
-break;
+      if(result[0] == undefined)
+	break;
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
       jsonResult.Location = result[0].Location;
