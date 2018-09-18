@@ -1,49 +1,16 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-public class DAO extends AsyncTask<Void, Void, Void> {
-    private HttpURLConnection conn = null;
-    private String url;
-
-    // 상태 상수
-    private final int WAIT = 0;
-    private final int PROCESSING = 1;
-    private final int EXIT = 3;
-
-    // 비동기를 위한 변수
-    private int status = WAIT;
-    private JSONObject sendingData = null;
+public class DAO {
     private JSONArray resultData = null;
 
     // 연결 주소
     final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
-
-    protected void processNetwork(String url, JSONObject sending) {
-        this.url = url;
-        sendingData = sending;
-        status = PROCESSING;
-        int count = 0;
-
-        // 네트워크 처리가 완료될 때까지 기다림
-        while(status != WAIT);
-    }
 
     // 중복되지 않으면 true, 중복되었으면 false
     public boolean checkIDduplicaion(String id) {
@@ -51,9 +18,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
         try {
             jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/user/register/id_duplicatecheck");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/user/register/id_duplicatecheck", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             // 결과 처리
             if(resultData == null)
@@ -62,7 +30,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             jsonObject = resultData.getJSONObject(0);
             if(jsonObject.getString("success").equals("true"))
                 return true;
-        }catch (JSONException e) {
+        }catch (JSONException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return false;
@@ -76,13 +44,15 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         try {
             if(key.equals("email")) {
                 jsonObject.accumulate("Id", value);
-                // 네트워크 처리 동기화
-                processNetwork(BASE_URL+"/login/bysns", jsonObject);
+                jsonObject.accumulate("url", BASE_URL+"/login/bysns");
+                // 네트워크 처리 비동기화
+                resultData = new NetworkProcessor().execute(jsonObject).get();
             }
             else {
                 jsonObject.accumulate("Name", value);
-                // 네트워크 처리 동기화
-                processNetwork(BASE_URL+"/login/byname", jsonObject);
+                jsonObject.accumulate("url", BASE_URL+"/login/byname");
+                // 네트워크 처리 비동기화
+                resultData = new NetworkProcessor().execute(jsonObject).get();
             }
 
             // 결과 처리
@@ -93,7 +63,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             if(jsonObject.getString("success").equals("true"))
                 return new MemberVO(jsonObject);
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -105,9 +75,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         try {
             jsonObject.accumulate("Id", id);
             jsonObject.accumulate("Password", password);
+            jsonObject.accumulate("url", BASE_URL+"/login");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/login", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             // 결과 처리
             if(resultData == null)
@@ -117,10 +88,29 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             if(jsonObject.getString("success").equals("true"))
                 return new MemberVO(jsonObject);
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public JSONArray getPushedCourseData(String code) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("url", BASE_URL+"/main/course_pushed");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData.getJSONObject(0).getString("success").equals("false"))
+                return null;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultData;
     }
 
     public JSONArray getUserCourseData(String type, String id) {
@@ -129,14 +119,15 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         try {
             jsonObject.accumulate("Type", type);
             jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/main/course_info");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/main/course_info", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData.getJSONObject(0).getString("success").equals("false"))
                 return null;
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return resultData;
@@ -148,15 +139,16 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("Code", key);
+            jsonObject.accumulate("url", BASE_URL+"/course/info");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/course/info", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData == null)
                 return null;
             courseData = new CourseVO(resultData.getJSONObject(0));
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return courseData;
@@ -168,16 +160,17 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("Code", key);
+            jsonObject.accumulate("url", BASE_URL+"/place/info");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/place/info", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData == null)
                 return null;
 
             placeData = new PlaceVO(resultData.getJSONObject(0));
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return placeData;
@@ -189,9 +182,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("keyword", keyword);
+            jsonObject.accumulate("url", BASE_URL+"/search/place");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/search/place", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData == null)
                 return null;
@@ -201,7 +195,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
             }
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return placeData;
@@ -213,9 +207,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("keyword", keyword);
+            jsonObject.accumulate("url", BASE_URL+"/search/course");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/search/course", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData == null)
                 return null;
@@ -224,7 +219,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             for(int i=0; i < resultData.length(); i++)
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return courseData;
@@ -237,11 +232,12 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
 
         try {
+            jsonObject.accumulate("url", BASE_URL+"/user/register");
             for (int i = 0; i < memberCategory.length; i++)
                 jsonObject.accumulate(memberCategory[i], information[i]);
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/user/register", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             // 결과 처리
             if(resultData == null)
@@ -254,8 +250,58 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         }catch (JSONException e) {
             e.printStackTrace();
             return "json error";
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
         return "success";
+    }
+
+    // 플레이스 좋아요
+    // Key : isPlaceLiked(String), Likes(int)
+    public JSONObject likePlace(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/place/like");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else
+                return resultData.getJSONObject(0);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 코스 좋아요
+    // Key : isCourseLiked(String), Likes(Int)
+    public JSONObject likeCourse(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/course/like");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else
+                return resultData.getJSONObject(0);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ArrayList<PlaceVO> searchPlaceByTag(String tag) {
@@ -264,9 +310,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("Tag", tag);
+            jsonObject.accumulate("url", BASE_URL+"/place/tag");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL+"/place/tag", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             if(resultData == null)
                 return null;
@@ -274,7 +321,7 @@ public class DAO extends AsyncTask<Void, Void, Void> {
             for(int i=0; i<resultData.length(); i++)
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
 
-        }catch (JSONException e) {
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return placeData;
@@ -289,9 +336,10 @@ public class DAO extends AsyncTask<Void, Void, Void> {
 
         try {
             jsonObject.accumulate("code", code);
+            jsonObject.accumulate("url", BASE_URL + "/tag");
 
-            // 네트워크 처리 동기화
-            processNetwork(BASE_URL + "/tag", jsonObject);
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
 
             // 결과 처리
             if(resultData == null)
@@ -303,116 +351,9 @@ public class DAO extends AsyncTask<Void, Void, Void> {
         }catch (JSONException e) {
             e.printStackTrace();
             return null;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
         return tags;
-    }
-
-    // 서버 연결 시도
-    protected boolean connectServer(String url) {
-        try {
-            URL urlObject = new URL(url);
-            conn = (HttpURLConnection) urlObject.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Cache-Control", "no-cache");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "text/html");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.connect();
-            return true;
-        }catch (Exception e) {
-            Log.e("connect", "fail");
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // 데이터 송신
-    protected void sendData(JSONObject jsonObject) {
-        try {
-            OutputStream outputStream = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-            writer.write(jsonObject.toString());
-            writer.flush();
-            writer.close();
-        }catch (IOException e ) {
-            e.printStackTrace();
-        }
-    }
-
-    // 데이터 수신
-    protected JSONArray getData() {
-        JSONArray result = null;
-        BufferedReader reader = null;
-        try {
-            InputStream stream = conn.getInputStream();
-
-            //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
-            reader = new BufferedReader(new InputStreamReader(stream));
-            StringBuffer buffer = new StringBuffer();
-
-            String line = "";
-
-            // 아래 라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
-            while ((line = reader.readLine()) != null)
-                buffer.append(line);
-
-            if(!buffer.toString().equals("null"))
-                result = new JSONArray(buffer.toString());
-
-            if(reader != null) {
-                reader.close(); //버퍼를 닫아줌
-            }
-
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if(reader != null) {
-                    reader.close(); //버퍼를 닫아줌
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    public void destory() {
-        status = EXIT;
-        try {
-            if(getStatus() == AsyncTask.Status.RUNNING)
-                cancel(true);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        while(true) {
-            while(status == WAIT);
-
-            if(status == EXIT || isCancelled())
-                return null;
-
-            // 서버 연결
-            if(url == null || !connectServer(url)) {
-                resultData = null;
-                status = WAIT;
-                continue;
-            }
-
-            // 데이터 송수신
-            sendData(sendingData);
-            Log.i("yeongjoon", "데이터 송신 완료");
-            resultData = getData();
-            Log.i("yeongjoon", "데이터 수신 완료");
-            status = WAIT;
-        }
     }
 }

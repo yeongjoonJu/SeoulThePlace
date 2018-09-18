@@ -20,6 +20,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
