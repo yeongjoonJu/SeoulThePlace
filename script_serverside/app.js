@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var async = require('async');
+var sync = require('synchronize');
 var app = express();
 
 // port setup
@@ -61,10 +63,8 @@ app.post('/login', function(req, res) {
     console.log('err: ' + err);
   } else {
     if(rows.length === 0) {
-      console.log('첫번째 이프문');
       res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
     } else {
-      console.log('두번째 이프문 앞에');
       if(password != rows[0].Password) {
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
@@ -189,30 +189,32 @@ app.post('/main/course_info', function(req, res) {
 //main에서 해당 코스 눌렀을 때
 app.post('/main/course_pushed', function(req, res) {
 	var courseCode = req.body.Code;
-
 	con.query('SELECT * FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
 		if(err) {
 			console.log('main에서 해당 코스눌렀을 때 err: ' + err)
 		} else {
-			pushedCourseListInfo(res, rows);
-			res.json([ {CourseDetails: rows[0].Details}, {jsonArray}]);
+			pushedCourseListInfo(res,rows);
 		}
 	});
 });
 
 //플레이스 검색
 app.post('/search/place', function(req, res) {
+   console.log('place search! router!');
    var keyword = req.body.keyword;
-   console.log('place search!');
+   console.log('place search! keyword: ' + keyword);
    con.query('SELECT * FROM PLACE WHERE Name LIKE ? OR Location LIKE ? OR Type LIKE ?',
  ["%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
      if(err) {
        console.log('라우터err : ' + err);
      } else {
        if(rows.length === 0) {
+	 console.log('null 날림 플레이스');
          res.json(null);
        } else {
-         res.json(getInfoToArray(rows, 'PLACE'));
+	 console.log('플레이스 결과 보냄');
+	 jsonArray = getInfoToArray(rows, 'PLACE');
+	 res.json(jsonArray);
        }
      }
    });
@@ -221,16 +223,18 @@ app.post('/search/place', function(req, res) {
 //코스 검색
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
-
+  console.log('course search! keyword: ' + keyword);
   con.query('SELECT * FROM COURSE WHERE Name LIKE ? OR Type LIKE ?',
 ["%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
       if(rows.length === 0) {
+	console.log('null 날림 코스');
         res.json(null);
       } else {
-        res.json(getInfoToArray(rows, 'COURSE'));
+	console.log('코스 결과 보냄');
+	res.json(getInfoToArray(rows, 'COURSE'));
       }
     }
   });
@@ -239,6 +243,7 @@ app.post('/search/course', function(req, res) {
 //PLACE 정보 가져오기
 app.post('/place/info', function(req, res) {
   var code = req.body.Code;
+  console.log(code);
   con.query('SELECT * FROM PLACE WHERE Code = ?', code, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
@@ -253,25 +258,27 @@ app.post('/place/info', function(req, res) {
 app.post('/course/like', function(req, res) {
   var courseCode = req.body.Code;
   var user_ID = req.body.Id;
-  var courseLikes;
+  var courseLikes; //해당 코스의 좋아요 수
+  var courseLiked; //해당 코스 좋아요 여부
 
-  con.query('SELECT Likes FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
-    if(err) {
-      console.log('err : ' + err);
-    } else {
-      courseLikes = rows[0].Likes;
-      if(isPlaceLiked(courseCode, user_ID) == 'true') {
-        if(courseLikes > 0) {
-          courseLikes = courseLikes - 1;
-        }
-        res.json([ {isCourseLiked: 'true', Likes: courseLikes}]);
-	con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseCode, user_ID]);
-      } else {
-        courseLikes = courseLikes + 1;
-        res.json([ {isCourseLiked: 'false', Likes: courseLikes}]);
-	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
+  sync.fiber(function() {
+    var result = sync.await(con.query('SELECT Likes FROM COURSE WHERE Code = ?', courseCode, sync.defer()));
+    courseLikes = result.Likes;
+    courseLiked = isCourseLiked(courseCode, user_ID);
+    console.log(courseLiked);
+    if(courseLiked == 'true') {
+      if(courseLikes > 0) {
+        courseLikes = courseLikes - 1;
       }
-    }
+      res.json([ {isCourseLiked: 'true', Likes: courseLikes} ]);
+      con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseCode, user_ID]);
+      con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
+    } else {
+       courseLikes = courseLikes + 1;
+       res.json([ {isCourseLiked: 'false', Likes: courseLikes} ]);
+       con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
+       con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
+      }
   });
 });
 
@@ -279,25 +286,26 @@ app.post('/course/like', function(req, res) {
 app.post('/place/like', function(req, res) {
   var placeCode = req.body.Code;
   var user_ID = req.body.Id;
-  var placeLikes;
+  var placeLikes; //해당 플레이스 좋아요 수
+  var placeLiked; //해당 플레이스 좋아요 여부
 
-  con.query('SELECT Likes FROM PLACE WHERE Code = ?', placeCode, function(err, rows, fields) {
-    if(err) {
-      console.log('err : ' + err);
-    } else {
-      placeLikes = rows[0].Likes;
-      if(isPlaceLiked(placeCode, user_ID) == 'true') {
-        if(placeLikes > 0) {
-          placeLikes = placeLikes - 1;
-        }
-        res.json([ {isPlaceLiked: 'true', Likes: placeLikes}]);
-	con.query('DELETE FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', [placeCode, user_ID]);
-      } else {
-        placeLikes = placeLikes + 1;
-        res.json([ {isPlaceLiked: 'false', Likes: placeLikes}]);
-	con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [placeCode, user_ID]);
+  sync.fiber(function() {
+    var result = sync.await(con.query('SELECT Likes FROM PLACE WHERE Code = ?', placeCode, sync.defer()));
+    placeLikes = result.Likes;
+    placeLiked = isPlaceLiked(placeCode, user_ID);
+    if(placeLiked == 'true') {
+      if(placeLikes > 0) {
+        placeLikes = placeLikes - 1;
       }
-    }
+      res.json([ {isPlaceLiked: 'true', Likes: placeLikes} ]);
+      con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [placeCode, user_ID]);
+      con.query('UPDATE PLACE set Likes = ? WHERE Code = ?', [placeLikes, placeCode]);
+    } else {
+       placeLikes = placeLikes + 1;
+       res.json([ {isPlaceLiked: 'false', Likes: placeLikes} ]);
+       con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
+       con.query('UPDATE PLACE set Likes = ? WHERE Code = ?', [placeLikes, placeCode]);
+      }
   });
 });
 
@@ -340,6 +348,10 @@ function getInfoToArray(rows, table) {
       jsonArray.push(jsonResult);
     }
   }
+  console.log(jsonArray.length);
+  for(var i = 0; i < jsonArray.length; i++) {
+     console.log(jsonArray.jsonResult[i].Name);
+  }
   return jsonArray;
 }
 
@@ -366,6 +378,7 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                    jsonResult.User_Likes = isCourseLiked(course_code[i], userID);
                    jsonResult.Image = row[0].Image1;
                    jsonArray.push(jsonResult);
+		console.log(jsonResult.Name);
                  }
                });
   }
@@ -373,45 +386,51 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
 }
 
 function pushedCourseListInfo(res, rows) {
-	//rows는 해당 코스 하나
-	place_code = initArray(place_code);
-	place_code[0] = rows[0].PlaceCode1;
-	place_code[1] = rows[0].PlaceCode2;
-	place_code[2] = rows[0].PlaceCode3;
-	place_code[3] = rows[0].PlaceCode4;
-	place_code[4] = rows[0].PlaceCode5;
+  //rows는 해당 코스 하나
+  jsonArray = initJsonArray(jsonArray);
+  place_code = [];
+  place_code[0] = rows[0].PlaceCode1;
+  place_code[1] = rows[0].PlaceCode2;
+  place_code[2] = rows[0].PlaceCode3;
+  place_code[3] = rows[0].PlaceCode4;
+  place_code[4] = rows[0].PlaceCode5;
 
-	jsonArray = initArray(jsonArray);
-	for(var i = 0; i < 5; i++) {
-		if(place_code[i] == null) {
-			return;
-		}
-
-		con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', place_code[i], function(err, row, fields) {
-			jsonResult.Image1 = row[0].Image1;
-			jsonResult.Name = row[0].Name;
-			jsonResult.Location = row[0].Location;
-			jsonResult.Details = row[0].Details;
-			jsonResult.Coordinate_X = row[0].Coordinate_X;
-			jsonResult.Coordinate_Y = row[0].Coordinate_Y;
-			jsonArray.push(jsonResult);
-		});
-	}
+  sync.fiber(function() {
+    for(var i = 0; i < 5; i++) {
+      var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
+if(result[0] == undefined)
+break;
+      jsonResult.Image1 = result[0].Image1;
+      jsonResult.Name = result[0].Name;
+      jsonResult.Location = result[0].Location;
+      jsonResult.Details = result[0].Details;
+      jsonResult.Coordinate_X = result[0].Coordinate_X;
+      jsonResult.Coordinate_Y = result[0].Coordinate_Y;
+      jsonArray.push(jsonResult);
+    }
+    console.log(jsonArray.length);
+    res.json([ {CourseDetails: rows[0].Details, jsonArr: jsonArray} ]);
+  });
 }
 
 //user가 해당 코스 좋아요 눌렀는지 여부
 function isCourseLiked(courseID, userID) {
-  con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseID, userID], function(err, result) {
-    if(err) {
-      console.log('isCourseLiked 에러 err: ' + err);
-    } else {
-      if(result.length === 0) {
-        return 'false';
-      } else {
-        return 'true';
-      }
-    }
-  });
+  var result = sync.await(con.query('SELECT * FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseID, userID], sync.defer()));
+  if(result.length === 0) {
+    return 'false';
+  } else {
+    return 'true';
+  }
+}
+
+//user가 해당 플레이스 좋아요 눌렀는지 여부
+function isPlaceLiked(placeID, userID) {
+   var result = sync.await(con.query('SELECT * FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?',[placeID, userID], sync.defer()));
+   if(result.lenth === 0) {
+     return 'false';
+   } else {
+     return 'true';
+   }
 }
 
 function initJsonArray(jsonArr) {
@@ -427,18 +446,16 @@ function sendUserInfo(res, rows) {
 }
 
 function sendPlaceInfo(res, rows) {
-  res.json([ {Code: rows[0].Code, Name: rows[0].Name, location: rows[0].Location, Description: rows[0].Description,
-  Details: rows[0].Details, Type: rows[0].Type, Likes: rows[0].Likes, Phone: rows[0].Phone, Image1: rows[0].Image1,
-  Image2: rows[0].Image2, Image3: rows[0].Image3, BusinessHours: rows[0].BusinessHours, Fee: rows[0].Fee,
-  Tag: rows[0].Tag, Tip: rows[0].Tip, Coordinate_X: rows[0].Coordinate_X,
-  Coordinate_Y: rows[0].Coordinate_Y}  ]);
+  res.json([ {Code: rows[0].Code, Name: rows[0].Name, location: rows[0].Location,
+  Details: rows[0].Details, Type: rows[0].Type, Likes: rows[0].Likes, Phone: rows[0].Phone, Parking: rows[0].Parking,
+  Image1: rows[0].Image1, Image2: rows[0].Image2, Image3: rows[0].Image3, BusinessHours: rows[0].BusinessHours,
+  Fee: rows[0].Fee,Tip: rows[0].Tip, Coordinate_X: rows[0].Coordinate_X, Coordinate_Y: rows[0].Coordinate_Y}  ]);
 }
 
 function sendCourseInfo(res, rows) {
-  res.json([ {Code: rows[0].Code, Tag: rows[0].Tag, Type: rows[0].Type, Likes: rows[0].Likes,
-  Description: rows[0].Description, Details: rows[0].Details, PlaceCode1: rows[0].PlaceCode1,
-  PlaceCode2: rows[0].PlaceCode2, PlaceCode3: rows[0].PlaceCode3, PlaceCode4: rows[0].PlaceCode4,
-  PlaceCode5: rows[0].PlaceCode5} ]);
+  res.json([ {Code: rows[0].Code, Name: rows[0].Name, Type: rows[0].Type, Likes: rows[0].Likes,
+  Details: rows[0].Details, PlaceCode1: rows[0].PlaceCode1,  PlaceCode2: rows[0].PlaceCode2,
+  PlaceCode3: rows[0].PlaceCode3, PlaceCode4: rows[0].PlaceCode4, PlaceCode5: rows[0].PlaceCode5} ]);
 }
 
 app.post('/member', function(req, res) {
