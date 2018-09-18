@@ -128,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
     }
+
+    public void changeFragment(String placeCode) {
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                .replace(R.id.fragment, new PlaceFragment(placeCode))
+                .addToBackStack(null)
+                .commit();
+    }
     public void changeModifyFragment(List<PlaceVO> list){
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left)

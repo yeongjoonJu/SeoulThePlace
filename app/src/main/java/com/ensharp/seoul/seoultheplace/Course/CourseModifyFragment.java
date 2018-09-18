@@ -118,10 +118,10 @@ public class CourseModifyFragment extends Fragment {
         ItemTouchHelper helpers = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                PlaceVO item = items.get(viewHolder.getAdapterPosition());
                 int dragFlags = 0;
                 int swipeFlags = 0;
-                mActivity.changeFragment("j111",1);
-                Log.d("Move Ready: ","getMovementFlags" + dragFlags);
+                mActivity.changeFragment(item.getCode());
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 
