@@ -1,12 +1,19 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.Manifest;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
@@ -19,6 +26,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.WebViewFragment;
 
 import java.util.List;
 
@@ -35,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout rootLayout;
     private DAO dao;
     private int currentFragmentNumber = 0;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +120,27 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        String[] neededPermissions = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.CALL_PHONE
+        };
+
+        ActivityCompat.requestPermissions(this, neededPermissions,0);
+    }
+
+    public void changeToWebFragment(String link) {
+        final Fragment fragment = new WebViewFragment(link);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment, "WEB_FRAGMENT")
+                .commit();
     }
 
     public float dpToPx(float valueInDp) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+
     }
 
     public void chagneToCourseFragment(int index) {
@@ -156,9 +186,26 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void DeleteBackStack(){ //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+    public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Fragment webViewFragment = getSupportFragmentManager().findFragmentByTag("WEB_FRAGMENT");
+//        if (webViewFragment != null && webViewFragment.isVisible()) {
+//            Log.e("abcd", "back button pressed");
+//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.
+//        }
+//    }
+
+//    public void pushStack() {
+//        int index = this.getSupportFragmentManager().getBackStackEntryCount() - 1;
+//        android.support.v4.app.FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
+//        String tag = backEntry.getName();
+//        Fragment myFragment = getSupportFragmentManager().findFragmentByTag(tag);
+//    }
 }

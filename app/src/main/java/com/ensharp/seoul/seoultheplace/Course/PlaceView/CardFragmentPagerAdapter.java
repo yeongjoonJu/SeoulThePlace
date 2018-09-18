@@ -24,13 +24,15 @@ public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements Ca
     private float baseElevation;
     private String courseCode;
     private CourseVO course;
+    private List<PlaceVO> places;
 
-    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation, String code) {
+    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation, String code, List<PlaceVO> places) {
         super(fm);
         PlaceVO place1 = new PlaceVO("j12315", "롯데월드", "서울 송파구 올림픽로 240", new String[]{"https://upload.wikimedia.org/wikipedia/commons/c/c2/Lotte_World_Theme_Park.jpg",	"http://img.insight.co.kr/static/2017/10/13/700/6r4f9ti8jo8837c8e900.jpg", "http://m.lottehotel.com/upload/imagePool/201605/PACKAGE/20160518112121956_1(5).jpg"}, "02-1661-2000", "어른 52000원 청소년 46000원 어린이 43000원 베이비 14000원", "주차장", "이용시 무료, 일반 30분 1000원 이후 10분에 1000원", 0, "국내 최초,최대 실내테마타크 및 놀이공원으로 서울시내에서 즐길 수 있는 놀이공원중 하나이다. 잠실역에 위치하여 바로 놀이공원으로 갈 수 있다는 점이 좋으며 실내와 실외 두군데로 구성이 되어있어 우천시에도 이용이 매우 유용하다. 젊은 사람들이 좋아하는 익스트림한 놀이기구들도 많아 젊은 10대나 커플들이 데이트하기에도 정말 좋은 장소 이다.", "커플끼리,가족끼리", "09:30~22:00");
         fragments = new ArrayList<>();
         this.baseElevation = baseElevation;
         courseCode = code;
+        this.places = places;
 
         course = Constant.getCourse();
 
@@ -43,9 +45,7 @@ public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements Ca
 
         fragments.add(new CardFragment(courseCode, 0, null));
         for (int i = 1; i <= course.getPlaceCount(); i++) {
-            placeCode = course.getPlaceCode(i - 1);
-            place = Constant.getPlace(placeCode);
-            fragments.add(new CardFragment(courseCode, i, place));
+            fragments.add(new CardFragment(courseCode, i, places.get(i - 1)));
         }
     }
 

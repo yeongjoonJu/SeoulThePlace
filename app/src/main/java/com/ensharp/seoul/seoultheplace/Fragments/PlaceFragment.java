@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.Constant;
-import com.ensharp.seoul.seoultheplace.Course.Map.GeoCodeManager;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -103,9 +103,8 @@ public class PlaceFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.description);
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
 
-//        FrameLayout miniMap = (FrameLayout) rootView.findViewById(R.id.map);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.map, new MapFragment());
+        transaction.add(R.id.map, new MapFragment(place.getCoordinate_x(), place.getCoordinate_y(), place.getName()));
         transaction.commit();
 
         String parking = place.getParking();
@@ -117,6 +116,16 @@ public class PlaceFragment extends Fragment {
         description.setText("");
         detail.setText(place.getDetails());
         detail.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+
+                intent.setData(Uri.parse("tel" + place.getPhone()));
+                getContext().startActivity(intent);
+            }
+        });
 
         ListView information = (ListView) rootView.findViewById(R.id.information);
 
