@@ -326,6 +326,57 @@ app.post('/place/all', function(req, res) {
   });
 });
 
+//커스텀 코스 띄울 때
+app.post('/editted_course/info', function(req, res) {
+	var user_ID = req.body.Id;
+	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE';
+	var query_place = 'SELECT Name, Image1, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE = ?';
+
+	jsonArray = initJsonArray(jsonArray);
+	var jsonArray2 = new Array();
+
+	sync.fiber(function() {
+		//edittedcourse 정보 받아오기
+		var query_edittedCourse_result = sync.await(con.query(query_edittedCourse_result, sync.defer()));
+		for(var i = 0; i < query_edittedCourse_result.length; i++) {
+			jsonResult = new Object();
+			jsonResult.edittedCourse_Code = query_edittedCourse_result[i].Code;
+			jsonResult.edittedCourse_Name = query_edittedCourse_result[i].Name;
+			jsonResult.edittedCourse_Description = query_edittedCourse_result[i].Description;
+			jsonResult.edittedCourse_PlaceCode1 = query_edittedCourse_result[i].PlaceCode1;
+			jsonResult.edittedCourse_PlaceCode2 = query_edittedCourse_result[i].PlaceCode2;
+			jsonResult.edittedCourse_PlaceCode3 = query_edittedCourse_result[i].PlaceCode3;
+			jsonResult.edittedCourse_PlaceCode4 = query_edittedCourse_result[i].PlaceCode4;
+			jsonResult.edittedCourse_PlaceCode5 = query_edittedCourse_result[i].PlaceCode5;
+
+			//place 정보 받아오기
+			jsonArray2 = initJsonArray(jsonArray2);
+			var query_place_result = [];
+			query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
+			query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
+			query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
+			query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
+			query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
+			for(var i = 0; i < 5; i++) {
+				if(query_place_result[i] == undefined) {
+					break;
+				}
+				var jsonResult2 = new Object();
+				jsonResult2.Image = query_place_result[i].Image1;
+				jsonResult2.Name = query_place_result[i].Name;
+				jsonResult2.Location = query_place_result[i].Location;
+				jsonResult2.Details = query_place_result[i].Details;
+				jsonResult2.PlaceCoordinate_X = query_place_result[i].Coordinate_X;
+				jsonResult2.PlaceCoordinate_Y = query_place_result[i].Coordinate_Y;
+				jsonArray2.push(jsonResult2);
+			}
+
+			jsonResult.placeInfoArray = jsonArray2;
+			jsonArray.push(jsonResult);
+		}
+	});
+});
+
 //커스텀 코스 지우면
 app.post('/editted_course/delete', function(req, res) {
 	var userID = req.body.Id;
