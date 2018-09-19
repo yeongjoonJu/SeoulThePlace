@@ -67,13 +67,13 @@ public class CourseModifyFragment extends Fragment {
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                PlaceVO item = items.get(viewHolder.getAdapterPosition());
+                CheckData("TouchDataName : "+viewHolder.getAdapterPosition());
+                PlaceVO item = datas.get(viewHolder.getAdapterPosition());
                 int swipeFlags = 0;
                 int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN ;
                 if(ITEM_SIZE > 0 &&!item.getName().equals("+")) { //+++밖에 안남았을때를 뺀다.
                     swipeFlags = ItemTouchHelper.LEFT;
                 }
-                CheckData("TouchDataName : "+item.getName());
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 
@@ -94,7 +94,7 @@ public class CourseModifyFragment extends Fragment {
                     ITEM_SIZE -= 1; //1개 이상 남아있어서 하나를 삭제했기에 하나 지움.
                     adapter.choosedMember -= 1;
                     Log.d("Move : ", "onSwiped, ITEM_SIZE : " + ITEM_SIZE);
-                    if (ITEM_SIZE <= 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
+                    if (ITEM_SIZE < 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
                         AddPlusBox();
                     }
                     //}
@@ -184,7 +184,7 @@ public class CourseModifyFragment extends Fragment {
     }
 
     public void CheckData(String TAG){
-        Toast.makeText(getActivity(),TAG + "   adapter : "+adapter.choosedMember+"   datas Size : "+datas.size() + "   ITEM_SIZE : " + ITEM_SIZE,Toast.LENGTH_LONG).show();
+        Log.e("TEST_TEST_ : ",TAG + "   adapter : "+adapter.choosedMember+"   datas Size : "+datas.size() + "   ITEM_SIZE : " + ITEM_SIZE);
     }
 
     private void setData() {
@@ -220,12 +220,10 @@ public class CourseModifyFragment extends Fragment {
                 double distance = 0;
                 try {
                     jsonObject = jsonArray.getJSONObject(i);
-                    LocationDistance.distance(jsonObject.getString("Coordinate_X"),jsonObject.getString("Coordinate_Y"),item.getCoordinate_x(),item.getCoordinate_y(),"meter") ;
+                    distance = LocationDistance.distance(jsonObject.getString("Coordinate_X"),jsonObject.getString("Coordinate_Y"),item.getCoordinate_x(),item.getCoordinate_y(),"meter") ;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }
     }

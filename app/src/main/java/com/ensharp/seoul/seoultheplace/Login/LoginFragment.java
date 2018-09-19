@@ -45,6 +45,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
     Button emailLogin;
     Button makeID;
     boolean alreadyOpen = false;
+    String TAG = "LoginFragment";
 
     int RC_SIGN_IN = 1000;
 
@@ -84,6 +85,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
         emailLogin = (Button)view.findViewById(R.id.EmailLogin);
         emailLogin.setOnClickListener(this);
 
+        Log.d(TAG,"Ready to Login");
         if(!alreadyOpen) {
             setGoogleLogin();
         }
@@ -106,6 +108,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
                 .build();
         googleLoginBtn.setScopes(gso.getScopeArray());
         alreadyOpen = true;
+        Log.d(TAG,"Ready to Login Google");
     }
 
     @Override
@@ -123,22 +126,26 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
         }
     }
     public static void SNSSignIn(){
+        Log.d("LoginFragment","KAKAO,NAVER SignIn");
         if(!LActivity.CheckEmail(LActivity.getSharedPreferences("data",0))) {
+            Log.d("LoginFragment","KAKAO,NAVER New ID");
             LActivity.SendData(LActivity.getSharedPreferences("data", 0));
         }
         LActivity.NextActivity();
     }
 
     private void googleSignIn(){
+        Log.d(TAG,"Start googleSignin");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        Log.d(TAG,"End googleSignin");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            Log.d(TAG,"onActivityResult in google Login");
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
@@ -147,6 +154,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
     //구글로그인 결과를 뿌려줍니다.
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
+            Log.d(TAG,"Success googleSignIn");
             GoogleSignInAccount acct = result.getSignInAccount();
             // Signed in successfully, show authenticated UI.
             editor.clear();
@@ -156,6 +164,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             editor.putString("name", acct.getDisplayName());
             editor.apply();
             if(!LActivity.CheckEmail(LActivity.getSharedPreferences("data",0))) {
+                Log.d(TAG,"New ID in googleSignIn");
                 LActivity.SendData(LActivity.getSharedPreferences("data", 0));
             }
             LActivity.NextActivity();

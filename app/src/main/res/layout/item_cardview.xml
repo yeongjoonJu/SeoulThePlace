@@ -20,7 +20,14 @@
             android:id="@+id/OriginCardImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:layout_width="600dp"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:clickable="false"
+            android:background="#00000000"/>
 
         <TextView
             android:id="@+id/OriginCardName"

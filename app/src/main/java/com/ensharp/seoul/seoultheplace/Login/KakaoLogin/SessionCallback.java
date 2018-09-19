@@ -13,17 +13,18 @@ import com.kakao.util.exception.KakaoException;
 public class SessionCallback implements ISessionCallback {
 
     public static boolean alreadyCheck = false;
+    public String TAG = "KAKAOTALK SessionCallBack";
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
-        Log.e("SessionCallback :: ", "startRequest" );
+        Log.e(TAG, "startRequest" );
         requestMe();
     }
 
     // 로그인에 실패한 상태
     @Override
     public void onSessionOpenFailed(KakaoException exception) {
-        Log.e("SessionCallback :: ", "onSessionOpenFailed : " + exception.getMessage());
+        Log.e(TAG, "onSessionOpenFailed : " + exception.getMessage());
     }
 
     // 사용자 정보 요청
@@ -33,20 +34,20 @@ public class SessionCallback implements ISessionCallback {
             // 세션 오픈 실패. 세션이 삭제된 경우,
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
-                Log.e("SessionCallback :: ", "onSessionClosed : " + errorResult.getErrorMessage());
+                Log.e(TAG, "onSessionClosed : " + errorResult.getErrorMessage());
             }
 
             // 회원이 아닌 경우,
             @Override
             public void onNotSignedUp() {
-                Log.e("SessionCallback :: ", "onNotSignedUp");
+                Log.e(TAG, "onNotSignedUp");
             }
 
             // 사용자정보 요청에 성공한 경우,
             @Override
             public void onSuccess(UserProfile userProfile) {
                 if(!alreadyCheck) {
-                    Log.e("KAKAOTALK :: ", "get email,name");
+                    Log.e(TAG, "get email,name");
                     LoginFragment.editor.putString("email", String.valueOf(userProfile.getId()));
                     LoginFragment.editor.putString("password","kakaotalk");
                     LoginFragment.editor.putString("name", userProfile.getNickname());
@@ -59,7 +60,7 @@ public class SessionCallback implements ISessionCallback {
             // 사용자 정보 요청 실패
             @Override
             public void onFailure(ErrorResult errorResult) {
-                Log.e("SessionCallback :: ", "onFailure : " + errorResult.getErrorMessage());
+                Log.e(TAG, "onFailure : " + errorResult.getErrorMessage());
             }
         });
 

@@ -28,7 +28,8 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
 
         <activity android:name=".Login.LoginBackgroundActivity">
