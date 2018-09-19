@@ -59,16 +59,21 @@ app.post('/login', function(req, res) {
   console.log('로그인 들어옴');
   var id = req.body.Id;
   var password = req.body.Password;
+  console.log(id);
+  console.log(password);
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
   } else {
     if(rows.length === 0) {
+	console.log('1');
       res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
     } else {
       if(password != rows[0].Password) {
+	console.log('2');
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
+	console.log('3');
         sendUserInfo(res, rows);
       }
     }
@@ -142,13 +147,12 @@ app.post('/main/course_info', function(req, res) {
   var courseType = req.body.Type; //코스 타입
   var userID = req.body.Id; //로그인한 아이디
   //해당 타입에 맞는 코스 가져옴
-  con.query('SELECT * FROM COURSE WHERE Type = ?', courseType, function(err, rows, fields) {
+  con.query('SELECT * FROM COURSE WHERE Type LIKE ?', ["%" + courseType + "%"], function(err, rows, fields) {
     if(err) {
       console.log('메인에서 코스 리스트err: ' + err);
     } else {
       if(rows.length === 0) {
 	console.log('값 없음');
-        res.json([ {User_Likes: 'false', Code: null, Name: null, Likes: null, location: null, Image: null} ]);
       } else {
         mainCourseListInfo(res, rows, userID);
       }
@@ -232,18 +236,20 @@ app.post('/course/like', function(req, res) {
 
   sync.fiber(function() {
     var result = sync.await(con.query('SELECT Likes FROM COURSE WHERE Code = ?', courseCode, sync.defer()));
-    courseLikes = result.Likes;
+    courseLikes = result[0].Likes;
     courseLiked = isCourseLiked(courseCode, user_ID);
-    console.log(courseLiked);
+console.log(courseLiked);
     if(courseLiked == 'true') {
       if(courseLikes > 0) {
         courseLikes = courseLikes - 1;
       }
+console.log('좋아요 버튼 눌러저 있어서 취소 되는 상황'+ courseLikes);
       res.json([ {isCourseLiked: 'true', Likes: courseLikes} ]);
       con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseCode, user_ID]);
       con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
     } else {
        courseLikes = courseLikes + 1;
+console.log('좋아요가 아닌 상태여서 하트가 되는 상황' + courseLikes);
        res.json([ {isCourseLiked: 'false', Likes: courseLikes} ]);
        con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
        con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
@@ -260,7 +266,7 @@ app.post('/place/like', function(req, res) {
 
   sync.fiber(function() {
     var result = sync.await(con.query('SELECT Likes FROM PLACE WHERE Code = ?', placeCode, sync.defer()));
-    placeLikes = result.Likes;
+    placeLikes = result[0].Likes;
     placeLiked = isPlaceLiked(placeCode, user_ID);
     if(placeLiked == 'true') {
       if(placeLikes > 0) {
@@ -276,6 +282,27 @@ app.post('/place/like', function(req, res) {
        con.query('UPDATE PLACE set Likes = ? WHERE Code = ?', [placeLikes, placeCode]);
       }
   });
+});
+
+//코스 좋아요 상태
+app.post('/course/like/status', function(req, res) {
+	var courseCode = req.body.Code;
+	var user_ID = req.body.Id;
+
+	sync.fiber(function() {
+       	  var isCourseLike = isCourseLiked(courseCode, user_ID);
+	  res.json([ {isCourseLiked: isCourseLike} ]);
+        });
+});
+
+//플레이스 좋아요 상태
+app.post('/place/like/status', function(req, res) {
+	var placeCode = req.body.Code;
+	var user_ID = req.body.Id;
+	sync.fiber(function() {
+	  var isPlaceLike = isPlaceLiked(placeCode, user_ID);
+	  res.json([ {isPlaceLiked: isPlaceLike} ]);
+	});
 });
 
 //코스 수정 완료 후 입력
@@ -327,7 +354,7 @@ app.post('/place/all', function(req, res) {
 });
 
 //커스텀 코스 띄울 때
-app.post('/editted_course/info', function(req, res) {
+app.post('/edited_course/info', function(req, res) {
 	var user_ID = req.body.Id;
 	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE';
 	var query_place = 'SELECT Name, Image1, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE = ?';
@@ -366,15 +393,15 @@ app.post('/editted_course/info', function(req, res) {
 				jsonResult2.Name = query_place_result[i].Name;
 				jsonResult2.Location = query_place_result[i].Location;
 				jsonResult2.Details = query_place_result[i].Details;
-				jsonResult2.PlaceCoordinate_X = query_place_result[i].Coordinate_X;
-				jsonResult2.PlaceCoordinate_Y = query_place_result[i].Coordinate_Y;
+				jsonResult2.Coordinate_X = query_place_result[i].Coordinate_X;
+				jsonResult2.Coordinate_Y = query_place_result[i].Coordinate_Y;
 				jsonArray2.push(jsonResult2);
 			}
-
 			jsonResult.placeInfoArray = jsonArray2;
 			jsonArray.push(jsonResult);
 		}
 	});
+	res.json([ {jsonArr: jsonArray} ]);
 });
 
 //커스텀 코스 지우면
@@ -392,6 +419,74 @@ app.post('/editted_course/delete', function(req, res) {
 		}
 	});
 });
+
+//좋아요 한 코스 띄우기
+app.post('/likedcourses', function(req, res) {
+	var userID = req.body.Id;
+	var selectQuery = 'SELECT CourseCode FROM COURSELIKE WHERE Person = ?';
+	var selectQuery2 = 'SELECT * FROM COURSE WHERE Code=?';
+	var selectQuery3 = 'SELECT Image1 FROM PLACE WHERE Code=?'
+
+	jsonArray = initJsonArray(jsonArray);
+	sync.fiber(function() {
+		var courseCodeList = sync.await(con.query(selectQuery, userID, sync.defer()));
+		for(var i = 0; i < courseCodeList.length; i++) {
+			var result = sync.await(con.query(selectQuery2, courseCodeList[i], sync.defer()));
+			jsonResult = new Object();
+			jsonResult.Code = result[i].Code;
+			jsonResult.Name = result[i].Name;
+			jsonResult.Type = result[i].Type;
+			jsonResult.Likes = result[i].Likes;
+			jsonResult.Details = result[i].Details;
+			jsonResult.PlaceCode1 = result[i].PlaceCode1;
+			jsonResult.PlaceCode2 = result[i].PlaceCode2;
+			jsonResult.PlaceCode3 = result[i].PlaceCode3;
+			jsonResult.PlaceCode4 = result[i].PlaceCode4;
+			jsonResult.PlaceCode5 = result[i].PlaceCode5;
+			var result = sync.await(con.query(selectQuery3, jsonResult.PlaceCode1, sync.defer()));
+			jsonResult.Image = result[0].Image1;
+			jsonArray.push(jsonResult);
+		}
+
+		res.json([ {jsonArr: jsonArray}]);
+	});
+});
+
+//좋아요 한 플레이스 띄우기
+app.post('/likedplaces', function(req, res) {
+	var userID = req.body.Id;
+	var selectQuery = 'SELECT PlaceCode FROM PLACELIKE WHERE Person = ?';
+	var selectQuery2 = 'SELECT * FROM PLACE WHERE Code=?';
+
+	jsonArray = initJsonArray(jsonArray);
+	sync.fiber(function() {
+		var placeCodeList = sync.await(con.query(selectQuery, userID, sync.defer()));
+		for(var i = 0; i < courseCodeList.length; i++) {
+			var result = sync.await(con.query(selectQuery2, placeCodeList[i], sync.defer()));
+			jsonResult = new Object();
+			jsonResult.Code = result[i].Code;
+			jsonResult.Name = result[i].Name;
+			jsonResult.Location = result[i].Location;
+			jsonResult.Type = result[i].Type;
+			jsonResult.Likes = result[i].Likes;
+			jsonResult.Details = result[i].Details;
+			jsonResult.Phone = result[i].Phone;
+			jsonResult.Parking = result[i].Parking;
+			jsonResult.Image1 = result[i].Image1;
+			jsonResult.Image2 = result[i].Image2;
+			jsonResult.Image3 = result[i].Image3;
+			jsonResult.BusinessHours = result[i].BusinessHours;
+			jsonResult.Fee = result[i].Fee;
+			jsonResult.Tip = result[i].Tip;
+			jsonResult.Coordinate_X = result[i].Coordinate_X;
+			jsonResult.Coordinate_Y = result[i].Coordinate_Y;
+			jsonArray.push(jsonResult);
+		}
+
+		res.json([ {jsonArr: jsonArray}]);
+	});
+});
+
 
 //코스 및 플레이스 검색시 json 형태 배열에 데이터 담기.
 function getInfoToArray(rows, table) {
@@ -435,9 +530,6 @@ function getInfoToArray(rows, table) {
     }
   }
   console.log(jsonArray.length);
-  for(var i = 0; i < jsonArray.length; i++) {
-     console.log(jsonArray.jsonResult[i].Name);
-  }
   return jsonArray;
 }
 
@@ -463,7 +555,6 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                      jsonResult.Image = result[0].Image1;
                      jsonArray.push(jsonResult);
                  };
-             console.log(jsonArray.length);
              res.json([ {jsonArr: jsonArray} ]);
     });
 }
@@ -482,7 +573,7 @@ function pushedCourseListInfo(res, rows) {
     for(var i = 0; i < 5; i++) {
       var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
       if(result[0] == undefined)
-	       break;
+	break;
       jsonResult = new Object();
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
