@@ -93,23 +93,6 @@ console.log('asdf');
   });
 });
 
-//SNS 로그인시에 이메일 권한 안줬을 경우 이름으로 로그인
-app.post('/login/byname', function(req, res) {
-  var name = req.body.Name;
-
-  con.query('SELECT * FROM USER WHERE Name = ?', name, function(err, rows) {
-  if(err) {
-    console.log('err: ' + err);
-  } else {
-    if(rows.length === 0) {
-      res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
-    } else {
-        sendUserInfo(res, rows);
-    }
-  }
-  });
-});
-
 //id 중복체크
 app.post('/user/register/id_duplicatecheck', function(req, res) {
   console.log('아이디 중복 확인 체크 들어옴');
@@ -122,23 +105,6 @@ app.post('/user/register/id_duplicatecheck', function(req, res) {
         res.json([ {success: 'true'} ]);
       } else {
         res.json([ {success: 'false', msg: '중복'} ]);
-      }
-    }
-  });
-});
-
-//name 중복체크
-app.post('/user/register/name_duplicatecheck', function(req, res) {
-  var name = req.body.Name;
-
-  con.query('SELECT * FROM USER WHERE Name = ?', name, function(err, result) {
-    if(err) {
-      console.log(err);
-    } else {
-      if(result.length === 0) {
-        res.json([ {success: 'true'} ]);
-      } else {
-        res.json([ {success: 'false', msg: '중복'}]);
       }
     }
   });
@@ -170,7 +136,7 @@ app.post('/course/info', function(req, res) {
   });
 });
 
-//main에서 코스 리스트로 띄울 떄
+//Main에서 type으로 코스 리스트로 띄울 때 필요한 정보 가져오기
 app.post('/main/course_info', function(req, res) {
   console.log('메인에서 코스리스트로 띄울때 들어옴');
   var courseType = req.body.Type; //코스 타입
@@ -190,7 +156,7 @@ app.post('/main/course_info', function(req, res) {
   });
 });
 
-//main에서 해당 코스 눌렀을 때
+//Main에서 해당 코스 눌렀을 때 필요한 정보 가져오기
 app.post('/main/course_pushed', function(req, res) {
 	var courseCode = req.body.Code;
 	con.query('SELECT * FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
@@ -423,7 +389,7 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
                      jsonArray.push(jsonResult);
                  };
              console.log(jsonArray.length);
-             res.json(jsonArray);
+             res.json([ {jsonArr: jsonArray} ]);
     });
 }
 
@@ -441,7 +407,7 @@ function pushedCourseListInfo(res, rows) {
     for(var i = 0; i < 5; i++) {
       var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
       if(result[0] == undefined)
-				break;
+	break;
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
       jsonResult.Location = result[0].Location;
@@ -500,7 +466,7 @@ function sendCourseInfo(res, rows) {
   PlaceCode3: rows[0].PlaceCode3, PlaceCode4: rows[0].PlaceCode4, PlaceCode5: rows[0].PlaceCode5} ]);
 }
 
-app.post('/member', function(req, res) {
+app.get('/member', function(req, res) {
 	res.send('테스트용');
 	console.log('테스트용');
 });
