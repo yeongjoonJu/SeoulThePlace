@@ -14,6 +14,7 @@ import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.FavoriteVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -47,10 +48,9 @@ public class CustomizedCourseAdapter extends ArrayAdapter<FavoriteVO> {
         name = (TextView) listItem.findViewById(R.id.customized_course_name);
         location = (TextView) listItem.findViewById(R.id.customized_course_location);
 
-        new DownloadImageTask(image).execute(currentInformation.getImageURL());
+        Picasso.get().load(currentInformation.getImageURL()).into(image);
         name.setText(currentInformation.getName());
         location.setText(currentInformation.getLocation());
-        listItem.setId(position);
 
         return listItem;
     }

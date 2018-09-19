@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.DimFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
@@ -115,22 +117,4 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        Fragment webViewFragment = getSupportFragmentManager().findFragmentByTag("WEB_FRAGMENT");
-        if (webViewFragment != null && webViewFragment.isVisible()) {
-            Log.e("abcd", "back button pressed");
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.
-        }
-    }
-
-    public void pushStack() {
-        int index = this.getSupportFragmentManager().getBackStackEntryCount() - 1;
-        android.support.v4.app.FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
-        String tag = backEntry.getName();
-        Fragment myFragment = getSupportFragmentManager().findFragmentByTag(tag);
-    }
 }

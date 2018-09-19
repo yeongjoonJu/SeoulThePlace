@@ -16,6 +16,9 @@ import com.ensharp.seoul.seoultheplace.FavoriteVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomizedCourseAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.SwipeDismissListViewTouchListener;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +41,37 @@ public class CustomizedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_customized, container, false);
         listView = (ListView) rootView.findViewById(R.id.customized_list);
 
-        final MainActivity activity = (MainActivity)getActivity();
+        final MainActivity activity = (MainActivity) getActivity();
 
         initFavorites();
         adapter = new CustomizedCourseAdapter(getContext(), 0, favorites);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickListener);
+        SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+            @Override
+            public boolean canDismiss(int position) {
+                return true;
+            }
 
-        getTotalHeightOfListView();
+            @Override
+            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                for (int position : reverseSortedPositions) {
+                    favorites.remove(position);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        listView.setOnTouchListener(touchListener);
+
+
+        FloatingActionsMenu actionsMenu = (FloatingActionsMenu) rootView.findViewById(R.id.multiple_actions);
+        FloatingActionButton nearCourse = (FloatingActionButton) rootView.findViewById(R.id.action_a);
+        FloatingActionButton createCourse = (FloatingActionButton) rootView.findViewById(R.id.action_b);
+
+        actionsMenu.setOnClickListener(onActionMenuListener);
+        nearCourse.setOnClickListener(onNearCourseListener);
+        createCourse.setOnClickListener(onCreateCourseListener);
 
         return rootView;
     }
@@ -56,32 +82,34 @@ public class CustomizedFragment extends Fragment {
         favorites.add(new FavoriteVO("http://news.kbs.co.kr/data/news/2018/03/04/3613494_pc3.jpg", "김태리", "서울특별시 강남구 학동로28길 23"));
     }
 
-    public void getTotalHeightOfListView() {
-        ListAdapter adapter = listView.getAdapter();
-        int totalHeight = 0;
-
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View view = adapter.getView(i, null, listView);
-
-            view.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-            totalHeight += view.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
     private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            Object object =  listView.getItemAtPosition(position);
+            Object object = listView.getItemAtPosition(position);
             FavoriteVO favorite = (FavoriteVO) object;
             Toast.makeText(getContext(), ((FavoriteVO) object).getName(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private FloatingActionsMenu.OnClickListener onActionMenuListener = new FloatingActionsMenu.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+
+    private FloatingActionButton.OnClickListener onNearCourseListener = new FloatingActionButton.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+
+    private FloatingActionButton.OnClickListener onCreateCourseListener = new FloatingActionButton.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+
 }
