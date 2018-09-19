@@ -1,8 +1,11 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseVO {
@@ -28,14 +31,18 @@ public class CourseVO {
 
     public CourseVO(JSONObject jsonObject) {
         try {
+
             code = jsonObject.getString("Code");
             name = jsonObject.getString("Name");
             type = jsonObject.getString("Type");
             likes = jsonObject.getInt("Likes");
             details = jsonObject.getString("Details");
-//            placeCode = new String[5];
+            placeCode = new ArrayList<String>();
             for(int i = 1; i<=5; i++) {
-                placeCode.add(jsonObject.getString("PlaceCode" + i));
+                Log.d("ttttt","PlaceCode"+i+" : " + jsonObject.getString("PlaceCode"+i));
+               if(!jsonObject.getString("PlaceCode"+i).equals("null")) {
+                   placeCode.add(jsonObject.getString("PlaceCode" + i));
+               }
             }
         }catch (JSONException e) {
             e.printStackTrace();
@@ -77,6 +84,33 @@ public class CourseVO {
     public int getPlaceCount() {
         return placeCode.size();
     }
-    public double getGeoX() { return x; }
-    public double getGeoY() { return y; }
+
+    public List<PlaceVO> getPlaceVO(){
+        DAO dao = new DAO();
+        List<PlaceVO> places = new ArrayList<PlaceVO>();
+        for(int i = 0 ; i < placeCode.size();i++) {
+            places.add(dao.getPlaceData(placeCode.get(i)));
+        }
+        return places;
+    }
+
+    public List<String> getLongitudes(){
+        List<String> longitudes = new ArrayList<String>();
+        DAO dao = new DAO();
+        for(int i = 0 ; i < placeCode.size();i++) {
+            String str = dao.getPlaceData(placeCode.get(i)).getCoordinate_x();
+            longitudes.add(str);
+        }
+        return longitudes;
+    }
+
+    public List<String> getlatitudes(){
+        List<String> latitude= new ArrayList<String>();
+
+        DAO dao = new DAO();
+        for(int i = 0 ; i < placeCode.size();i++) {
+            latitude.add(dao.getPlaceData(placeCode.get(i)).getCoordinate_y());
+        }
+        return latitude;
+    }
 }

@@ -76,7 +76,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     private void setVideo(){
         mVideoview = (VideoView)findViewById(R.id.videoview);
         //play video
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.background); //영상 추가.
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.background2); //영상 추가.
         Log.d("Uri", String.valueOf(uri));
         //mVideoview.setVideoPath();
         mVideoview.setVideoURI(uri); //실행
@@ -121,6 +121,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     }
     public boolean LoginEmail(String id,String passwd){
         JSONObject jsonObject = dao.loginCheck(id,passwd);
+        Log.e("DAO", String.valueOf(jsonObject));
         if(jsonObject.equals(null)){
             return false;
         }

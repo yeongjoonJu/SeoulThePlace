@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
+    android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="5dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/AddCardView"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_margin="5dp"
         android:layout_marginBottom="20dp"
@@ -16,7 +16,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:foregroundGravity="center"
-        android:background="@drawable/unchoicedpin">
+        android:background="@drawable/unchoicedpin"
+        android:stateListAnimator="@anim/lift_on_touch">
 
         <ImageView
             android:id="@+id/AddCardImage"

@@ -1,14 +1,11 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +13,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 
 import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -41,7 +38,8 @@ public class CardFragment extends Fragment {
         this.index = index;
         this.place = place;
 
-        course = Constant.getCourse();
+        DAO dao = new DAO();
+        course = dao.getCourseData(courseCode);
     }
 
     @SuppressLint("DefaultLocale")

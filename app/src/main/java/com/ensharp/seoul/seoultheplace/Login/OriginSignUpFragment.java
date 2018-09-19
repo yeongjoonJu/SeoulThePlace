@@ -93,7 +93,7 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
             email.setFocusable(true);
             return false;
         }
-        if(LActivity.CheckDoubleEmail(String.valueOf(email.getText()))){
+        if(!LActivity.CheckDoubleEmail(String.valueOf(email.getText()))){
             Toast.makeText(getActivity(),"이미 가입된 이메일 입니다. SNS로그인이나 이메일로그인을 이용해주세요.",Toast.LENGTH_LONG).show();
             email.setFocusable(true);
             return false;

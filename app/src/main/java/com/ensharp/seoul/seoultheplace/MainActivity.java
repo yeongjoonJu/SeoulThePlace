@@ -55,13 +55,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // course, place 초기화
-        Constant.initCourse();
-        Constant.initPlaces();
 
         setContentView(R.layout.activity_main);
 
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("j111"), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new CourseFragment("c001"), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -91,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                 .replace(R.id.fragment, fragment)
                                 .commit();
                     }
+                    DeleteBackStack();
                     currentFragmentNumber = nextFragmentNumber;
                 }
             });
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void chagneToCourseFragment(int index) {
-        final Fragment fragment = new CourseFragment(index);
+        final Fragment fragment = new CourseFragment("c001");
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     public void changeCourseViewFragment(List<PlaceVO> list){
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
-        fragmentTransaction.replace(R.id.fragment, new CourseFragment());
+        fragmentTransaction.replace(R.id.fragment, new CourseFragment("c001"));
         DeleteBackStack(); //뒤로가기하는거 다 없앰
         fragmentTransaction.commit();
     }

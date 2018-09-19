@@ -25,7 +25,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ensharp.seoul.seoultheplace.Constant;
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -54,7 +54,9 @@ public class PlaceFragment extends Fragment {
     public PlaceFragment(String placeCode) {
         courseCode = "";
         index = 0;
-        place = Constant.getPlace(placeCode);
+
+        DAO dao = new DAO();
+        place = dao.getPlaceData(placeCode);
     }
 
     @SuppressLint("ValidFragment")
@@ -62,7 +64,8 @@ public class PlaceFragment extends Fragment {
         this.courseCode = courseCode;
         this.index = index;
 
-        place = Constant.getPlace(Constant.getCourse().getPlaceCode(index - 1));
+        DAO dao = new DAO();
+        place = dao.getPlaceData(dao.getCourseData(courseCode).getPlaceCode(index - 1));
     }
 
     @Override
@@ -211,10 +214,12 @@ public class PlaceFragment extends Fragment {
         ImageButton nextImage = (ImageButton) rootView.findViewById(R.id.next_page_image_button);
         Button next = (Button) rootView.findViewById(R.id.next_page_text_button);
 
+        DAO dao = new DAO();
+
         if (index == 1) {
             previousImage.setVisibility(View.INVISIBLE);
             previous.setVisibility(View.INVISIBLE);
-        } else if (index == Constant.getCourse().getPlaceCount()) {
+        } else if (index == dao.getCourseData("c001").getPlaceCount()) {
             nextImage.setVisibility(View.INVISIBLE);
             next.setVisibility(View.INVISIBLE);
         }

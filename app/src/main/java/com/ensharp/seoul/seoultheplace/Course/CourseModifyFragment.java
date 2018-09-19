@@ -8,17 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +45,7 @@ public class CourseModifyFragment extends Fragment {
     RecyclerView itemview;
     Button saveBtn ;
     MainActivity mActivity;
+    EditText searchData;
 
     @SuppressLint("ValidFragment")
     public CourseModifyFragment(List<PlaceVO> list){
@@ -47,7 +56,7 @@ public class CourseModifyFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setData();
-        setItemData();
+        setItemData(null);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -85,7 +94,7 @@ public class CourseModifyFragment extends Fragment {
                     ITEM_SIZE -= 1; //1개 이상 남아있어서 하나를 삭제했기에 하나 지움.
                     adapter.choosedMember -= 1;
                     Log.d("Move : ", "onSwiped, ITEM_SIZE : " + ITEM_SIZE);
-                    if (ITEM_SIZE == 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
+                    if (ITEM_SIZE <= 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
                         AddPlusBox();
                     }
                     //}
@@ -189,14 +198,42 @@ public class CourseModifyFragment extends Fragment {
         datas.add(new PlaceVO(null,"+",null,imageURL,null,null,null,null,0,null,null,null));
     }
 
-    private void setItemData(){
-        items = datas;
+    public void setItemData(PlaceVO item){
+        items = new ArrayList<PlaceVO>();
+        DAO dao = new DAO();
+        JSONArray jsonArray = dao.AllPlaceDownload();
+        if(item==null) {
+            try {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    PlaceVO mplace = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
+                    items.add(mplace);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            for(int i = 0; i<jsonArray.length(); i++){
+                JSONObject jsonObject = new JSONObject();
+                double coordinate_x ;
+                double coordinate_y ;
+                double distance = 0;
+                try {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    LocationDistance.distance(jsonObject.getString("Coordinate_X"),jsonObject.getString("Coordinate_Y"),item.getCoordinate_x(),item.getCoordinate_y(),"meter") ;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
     }
 
     private void initView(){
         mActivity = (MainActivity)getActivity();
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview);
-        adapter = new RecyclerAdapter(getActivity(), datas,R.layout.modify_course);
+        adapter = new RecyclerAdapter(getActivity(), datas,R.layout.modify_course,this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -224,6 +261,21 @@ public class CourseModifyFragment extends Fragment {
                 else if(ITEM_SIZE==5){
                     Toast.makeText(mActivity,"이거누르면 저장",Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        searchData = (EditText)view.findViewById(R.id.search_Place);
+        searchData.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //여기다가 넣으면 됨.
             }
         });
     }

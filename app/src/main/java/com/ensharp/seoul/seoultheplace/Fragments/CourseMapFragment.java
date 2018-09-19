@@ -55,13 +55,13 @@ public class CourseMapFragment extends NMapFragment{
             return;
         }
 
-        NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
-        NGeoPoint point = item.getPoint();
-        NGeoPoint pointToCenter = new NGeoPoint();
-        pointToCenter.latitude = point.latitude;
-        pointToCenter.longitude = point.longitude;
-        pointToCenter.latitude -= 0.01;
-        mapController.setMapCenter(pointToCenter, 10);
+        //NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
+        //NGeoPoint point = item.getPoint();
+        //NGeoPoint pointToCenter = new NGeoPoint();
+      //  pointToCenter.latitude = point.latitude;
+    //    pointToCenter.longitude = point.longitude;
+  //      pointToCenter.latitude -= 0.01;
+//        mapController.setMapCenter(pointToCenter, 10);
     }
 
     public void adjustLatitude() {

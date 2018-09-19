@@ -4,19 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.ensharp.seoul.seoultheplace.Constant;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
+import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
@@ -37,23 +35,13 @@ public class CourseFragment extends Fragment {
     private Button modifyCourse;
     private List<PlaceVO> places;
     private CourseMapFragment courseMapFragment;
-
-    public CourseFragment() {
-        code = "j111";
-        index = 0;
-        places = Constant.getPlaces(code);
-    }
-
-    public CourseFragment(int index) {
-        code = "j111";
-        this.index = index;
-        places = Constant.getPlaces(code);
-    }
+    private CourseVO course;
 
     @SuppressLint("ValidFragment")
     public CourseFragment(String code) {
+        DAO dao = new DAO();
         this.code = code;
-        places = Constant.getPlaces(code);
+        course = dao.getCourseData(code);
         index = 0;
     }
 
@@ -67,7 +55,7 @@ public class CourseFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_course, container, false);
 
         mActivity = (MainActivity)getActivity();
-        courseMapFragment = new CourseMapFragment(Constant.getLongitudes(), Constant.getLatitudes());
+        courseMapFragment = new CourseMapFragment(course.getLongitudes(), course.getlatitudes());
 
         getChildFragmentManager().beginTransaction()
                 .add(R.id.fragment, courseMapFragment)
@@ -78,11 +66,11 @@ public class CourseFragment extends Fragment {
         modifyCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.changeModifyFragment(getPlaces());
+                mActivity.changeModifyFragment(course.getPlaceVO());
             }
         });
 
-        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code, places);
+        pagerAdapter = new CardFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()), code,course);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(true);
 
@@ -100,17 +88,6 @@ public class CourseFragment extends Fragment {
 
     }
 
-    public List<PlaceVO> getPlaces() {
-        List<PlaceVO> places = new ArrayList<PlaceVO>();
-        List<String> placeCodes = Constant.getCourse().getPlaceCode();
-
-        for (int i=0; i<placeCodes.size(); i++) {
-            places.add(Constant.getPlace(placeCodes.get(i)));
-        }
-
-        return places;
-    }
-
     public void setPageritem(int index) {
         viewPager.setCurrentItem(index);
     }
@@ -123,7 +100,7 @@ public class CourseFragment extends Fragment {
 
         @Override
         public void onPageSelected(int position) {
-            courseMapFragment.changeMapCenter(position);
+            //courseMapFragment.changeMapCenter(position);
         }
 
         @Override

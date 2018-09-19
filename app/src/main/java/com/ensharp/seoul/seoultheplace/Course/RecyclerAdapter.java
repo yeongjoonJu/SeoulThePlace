@@ -25,14 +25,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     Context context;
     List<PlaceVO> items;
     int item_layout;
+    CourseModifyFragment fragment;
     public int choosedMember = 0;
-    RelativeLayout.LayoutParams params1;
-    RelativeLayout.LayoutParams params2;
 
-    public RecyclerAdapter(Context context, List<PlaceVO> items, int item_layout) {
+
+    public RecyclerAdapter(Context context, List<PlaceVO> items, int item_layout,CourseModifyFragment fragment) {
         this.context = context;
         this.items = items;
         this.item_layout = item_layout;
+        this.fragment = fragment;
     }
 
     public int GetChoosedMemeber(){
@@ -42,10 +43,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cardview, null);
-        params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ChangeDp(200));
-        params1.setMargins(ChangeDp(10),ChangeDp(10),ChangeDp(10),ChangeDp(10));
-        params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ChangeDp(100));
-        params2.setMargins(ChangeDp(10),ChangeDp(10),ChangeDp(10),ChangeDp(10));
         return new ViewHolder(v);
     }
 
@@ -61,8 +58,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
                 choosedMember = position;
                 NotifyDataSetChanged(position);
+                fragment.setItemData(item);
                 Toast.makeText(context, item.getName()+"  "+choosedMember, Toast.LENGTH_SHORT).show();
-
             }
         });
     }
@@ -73,10 +70,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
     public void SetImageBox(ViewHolder holder,final int position){
         if(choosedMember == position){
-            holder.cardview.setLayoutParams(params1);
+            holder.cardview.setLayoutParams(holder.params1);
         }
         else{
-            holder.cardview.setLayoutParams(params2);
+            holder.cardview.setLayoutParams(holder.params2);
         }
     }
 
@@ -89,12 +86,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ImageView image;
         TextView title;
         CardView cardview;
+        RelativeLayout.LayoutParams params1;
+        RelativeLayout.LayoutParams params2;
+        RecyclerView recyclerView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.OriginCardImage);
             title = (TextView) itemView.findViewById(R.id.OriginCardName);
             cardview = (CardView) itemView.findViewById(R.id.OriginCardView);
+            params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ChangeDp(200));
+            params1.setMargins(ChangeDp(10),ChangeDp(10),ChangeDp(10),ChangeDp(10));
+            params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ChangeDp(100));
+            params2.setMargins(ChangeDp(10),ChangeDp(10),ChangeDp(10),ChangeDp(10));
         }
     }
     public int ChangeDp(int data){

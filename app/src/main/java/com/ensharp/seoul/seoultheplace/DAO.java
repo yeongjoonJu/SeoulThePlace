@@ -13,7 +13,7 @@ public class DAO {
     private JSONArray resultData = null;
 
     // 연결 주소
-    final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
+    final String BASE_URL = "http://ec2-52-79-227-1.ap-northeast-2.compute.amazonaws.com:9000";
 
     // 중복되지 않으면 true, 중복되었으면 false
     public boolean checkIDduplicaion(String id) {
@@ -360,6 +360,25 @@ public class DAO {
         return tags;
     }
     public void destroy(){
+    }
 
+    public JSONArray AllPlaceDownload() {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("url", BASE_URL + "/place/all");
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+            // 결과 처리
+            if (resultData == null)
+                return null;
+            jsonObject = resultData.getJSONObject(0);
+            JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
+            return jsonArray;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
