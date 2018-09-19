@@ -1,5 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +17,7 @@ public class CourseVO {
     private String details;
     private List<String> placeCode;
 
+    private String image;
     private boolean liked;
     private String location;
 
@@ -36,16 +39,15 @@ public class CourseVO {
             likes = jsonObject.getInt("Likes");
             if(!jsonObject.isNull("Details"))
                 details = jsonObject.getString("Details");
-
             placeCode = new ArrayList<>();
             for(int i = 1; i<=5; i++) {
                 if(!jsonObject.isNull("PlaceCode" + i))
                 placeCode.add(jsonObject.getString("PlaceCode" + i));
             }
-
+            if(!jsonObject.isNull("Image"))
+                image = jsonObject.getString("Image");
             if(!jsonObject.isNull("location"))
                 location = jsonObject.getString("location");
-
             if(!jsonObject.isNull("User_Likes")) {
                 if (jsonObject.getString("User_Likes").equals("true"))
                     liked = true;

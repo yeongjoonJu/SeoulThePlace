@@ -41,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // 아이디 초기화
-        SharedPreferences sf = getSharedPreferences("data",0);
-        SharedPreferences.Editor editor = sf.edit();
-        editor.clear();
-        editor.apply();
-
         fragments = new Fragment[]{
                 new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment("a333")
         };
