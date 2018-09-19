@@ -62,6 +62,12 @@ public class MapFragment extends NMapFragment {
         this.destination = destination;
     }
 
+    public MapFragment(String x, String y, String destination) {
+        this.x = Double.parseDouble(x);
+        this.y = Double.parseDouble(y);
+        this.destination = destination;
+    }
+
     public void link() {
         mapLocationManager = new NMapLocationManager(getContext());
         mapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);

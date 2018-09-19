@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -28,7 +32,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-
     // 카카오톡 SDK 추가
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt',
             version: project.KAKAO_SDK_VERSION
@@ -36,13 +39,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:+'//원래 16.0.1
     implementation 'com.google.android.gms:play-services-auth:+'
-    //페북로그인
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    // For Naver API
+    //네이버 로그인
+    implementation ('com.naver.nid:naveridlogin-android-sdk:4.2.0')
     implementation 'com.naver.maps.open:naver-map-api:2.1.2@aar'
-    // For Card View
-    implementation 'com.android.support:design:27.1.1'
+//    implementation files('source/naveridlogin_android_sdk_4.2.0.aar')
+//    compile files('source/naveridlogin_android_sdk_4.x.x.aar')
+    //Cardview
     implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     // For Refresh List View
     implementation 'com.yalantis:phoenix:1.2.3'
     // For Customized Tab View

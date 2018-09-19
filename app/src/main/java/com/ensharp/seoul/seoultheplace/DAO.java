@@ -1,145 +1,403 @@
 package com.ensharp.seoul.seoultheplace;
-
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class DAO {
-    private JSONObject jsonObject;
-    private HttpURLConnection conn = null;
+    private JSONArray resultData = null;
 
     // 연결 주소
-    final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
+    final String BASE_URL = "http://ec2-52-79-227-1.ap-northeast-2.compute.amazonaws.com:9000";
 
-    public boolean insertMemberData(Bundle information) {
-        String[] memberCategory = new String[]{"name", "email", "password", "sex", "age", "type"};
-        jsonObject = new JSONObject();
+    // 중복되지 않으면 true, 중복되었으면 false
+    public boolean checkIDduplicaion(String id) {
+        JSONObject jsonObject = new JSONObject();
         try {
-            // 서버 연결
-            if(!connectServer(BASE_URL + "/user/register"))
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/user/register/id_duplicatecheck");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
                 return false;
 
-            for (int i = 0; i < memberCategory.length; i++)
-                jsonObject.accumulate(memberCategory[i], information.getString(memberCategory[i]));
-
-            sendData(jsonObject);
-        }catch (JSONException e) {
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+        }catch (JSONException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        }finally {
-            if(conn != null)
-                conn.disconnect();
         }
-        return true;
+        return false;
+    }
+
+    // SNS Login
+    // key : email or name, value : 이메일 혹은 이름
+    public JSONObject SNSloginCheck(String key, String value) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            if(key.equals("email")) {
+                jsonObject.accumulate("Id", value);
+                jsonObject.accumulate("url", BASE_URL+"/login/bysns");
+                // 네트워크 처리 비동기화
+                resultData = new NetworkProcessor().execute(jsonObject).get();
+            }
+            else {
+                jsonObject.accumulate("Name", value);
+                jsonObject.accumulate("url", BASE_URL+"/login/byname");
+                // 네트워크 처리 비동기화
+                resultData = new NetworkProcessor().execute(jsonObject).get();
+            }
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return jsonObject;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONObject loginCheck(String id, String password) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("Password", password);
+            jsonObject.accumulate("url", BASE_URL+"/login");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return jsonObject;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONArray getPushedCourseData(String code) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("url", BASE_URL+"/main/course_pushed");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultData;
+    }
+
+    public JSONArray getUserCourseData(String type, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Type", type);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/main/course_info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultData;
+    }
+
+    public CourseVO getCourseData(String key) {
+        CourseVO courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", key);
+            jsonObject.accumulate("url", BASE_URL+"/course/info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            courseData = new CourseVO(resultData.getJSONObject(0));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
+    public PlaceVO getPlaceData(String key) {
+        PlaceVO placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", key);
+            jsonObject.accumulate("url", BASE_URL+"/place/info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            placeData = new PlaceVO(resultData.getJSONObject(0));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    public ArrayList<PlaceVO> searchPlace(String keyword) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("keyword", keyword);
+            jsonObject.accumulate("url", BASE_URL+"/search/place");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            placeData = new ArrayList<>();
+            for(int i=0; i<resultData.length(); i++) {
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+            }
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
+    // 회원 정보 가져오기
+    public MemberVO getMemberInformation(String id) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/user/info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<CourseVO> searchCourse(String keyword) {
+        ArrayList<CourseVO> courseData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("keyword", keyword);
+            jsonObject.accumulate("url", BASE_URL+"/search/course");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            courseData = new ArrayList<>();
+            for(int i=0; i < resultData.length(); i++)
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
+    // 회원가입
+    public String insertMemberData(String[] information) {
+        Log.v("test", "insertMemberData");
+        // 처리 설정
+        String[] memberCategory = new String[]{"Id", "Password", "Name"};
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("url", BASE_URL+"/user/register");
+            for (int i = 0; i < memberCategory.length; i++)
+                jsonObject.accumulate(memberCategory[i], information[i]);
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return "incomplete network";
+            else {
+                jsonObject = resultData.getJSONObject(0);
+                if(jsonObject.getString("result").equals("false"))
+                    return jsonObject.getString("msg");
+            }
+            Log.v("test", "insertMemberData Complete");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "json error";
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return "success";
+    }
+
+    // 플레이스 좋아요
+    // Key : isPlaceLiked(String), Likes(int)
+    public JSONObject likePlace(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/place/like");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else
+                return resultData.getJSONObject(0);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 코스 좋아요
+    // Key : isCourseLiked(String), Likes(Int)
+    public JSONObject likeCourse(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/course/like");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else
+                return resultData.getJSONObject(0);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<PlaceVO> searchPlaceByTag(String tag) {
+        ArrayList<PlaceVO> placeData = null;
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Tag", tag);
+            jsonObject.accumulate("url", BASE_URL+"/place/tag");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            for(int i=0; i<resultData.length(); i++)
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return placeData;
     }
 
     // 태그 목록을 불러온다.
-    public String[] getTagList() {
-        String[] tags;
-        // 서버 연결
-        if(!connectServer(BASE_URL + "/tag"))
-            return null;
-        String result = getData().toString();
-        return result.split(",");
-    }
+    // code "ALL" : 모든 태그 목록을 불러온다.
+    // code "플레이스 or 코스 고유 코드"
+    public ArrayList<String> getTagList(String code) {
+        ArrayList<String> tags = new ArrayList<String>();
+        JSONObject jsonObject = new JSONObject();
 
-    // 플레이스 검색
-    public ArrayList<PlaceVO> searchPlace(String keyword) {
-        ArrayList<PlaceVO> results = new ArrayList<PlaceVO>();
-        // 서버 연결
-        if(!connectServer(BASE_URL + "/place"))
-            return null;
-        JSONArray jsonResult = getData();
         try {
-            for (int i = 0; i < jsonResult.length(); i++) {
-                PlaceVO place = new PlaceVO(jsonResult.getJSONObject(i));
-                if(place.getName().contains(keyword) || place.getLocation().contains(keyword)
-                        || place.getDetails().contains(keyword))
-                    results.add(place);
+            jsonObject.accumulate("code", code);
+            jsonObject.accumulate("url", BASE_URL + "/tag");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+            else {
+                for(int idx = 0; idx < resultData.length(); idx++)
+                    tags.add(resultData.getJSONObject(idx).getString("tag"));
             }
-        }catch(JSONException e) {
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return results;
+        return tags;
+    }
+    public void destroy(){
     }
 
-    // 서버 연결 시도
-    protected boolean connectServer(String url) {
+    public JSONArray AllPlaceDownload() {
+        JSONObject jsonObject = new JSONObject();
+
         try {
-            URL urlObject = new URL(url);
-            conn = (HttpURLConnection) urlObject.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Cache-Control", "no-cache");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "text/html");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.connect();
-            return true;
-        }catch (Exception e) {
-            Log.e("connect", "fail");
+            jsonObject.accumulate("url", BASE_URL + "/place/all");
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+            // 결과 처리
+            if (resultData == null)
+                return null;
+            jsonObject = resultData.getJSONObject(0);
+            JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
+            return jsonArray;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
-            return false;
-        }
-    }
-
-    // 데이터 송신
-    protected void sendData(JSONObject jsonObject) {
-        try {
-            OutputStream outputStream = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-            writer.write(jsonObject.toString());
-            writer.flush();
-            writer.close();
-        }catch (IOException e ) {
-            e.printStackTrace();
-        }
-    }
-
-    // 데이터 수신
-    protected JSONArray getData() {
-        JSONArray result = null;
-        BufferedReader reader = null;
-        try {
-            InputStream stream = conn.getInputStream();
-
-            //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
-            reader = new BufferedReader(new InputStreamReader(stream));
-            StringBuffer buffer = new StringBuffer();
-
-            String line = "";
-
-            // 아래 라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
-            while ((line = reader.readLine()) != null)
-                buffer.append(line);
-
-            result = new JSONArray(buffer.toString());
-
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if(reader != null) {
-                    reader.close(); //버퍼를 닫아줌
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return null;
     }

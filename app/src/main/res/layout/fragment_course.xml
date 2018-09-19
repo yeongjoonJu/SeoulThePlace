@@ -7,11 +7,20 @@
     android:orientation="vertical"
     tools:context=".Fragments.CourseFragment">
 
+    <Button
+        android:id="@+id/modifycoursebtn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="코스 수정"
+        android:textSize="20sp"
+        android:layout_gravity="right"/>
+
     <FrameLayout
         android:id="@+id/fragment"
-        android:background="#EBE7E6"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#EBE7E6">
+
     </FrameLayout>
 
     <android.support.v4.view.ViewPager

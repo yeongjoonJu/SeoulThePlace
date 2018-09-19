@@ -14,19 +14,22 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
     private ImageView image;
 
     public DownloadImageTask(ImageView image) {
+        Log.d("TestImage : ", "new DownloadIamgeTask");
         this.image = image;
     }
 
     @Override
     protected Bitmap doInBackground(String... urls) {
+        Log.e("TestImage : ", "doInBackground");
         String imageURL = urls[0];
         Bitmap bitmap = null;
 
         try {
+            Log.e("TestImage : ", "downloadImage");
             InputStream inputStream = new java.net.URL(imageURL).openStream();
             bitmap = BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
-            Log.e("Error", e.getMessage());
+            Log.e("TestImage : ","Error : "+ e.getMessage());
             e.printStackTrace();
         }
 

@@ -63,6 +63,7 @@ public class CourseMapFragment extends NMapFragment{
         pointToCenter.longitude = point.longitude;
         pointToCenter.latitude -= 0.005;
         mapController.setMapCenter(pointToCenter, 10);
+
     }
 
     public void adjustLatitude() {

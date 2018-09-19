@@ -55,16 +55,22 @@
                         android:paddingTop="15dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/card_title_size"/>
+                <TextView
+                    android:id="@+id/address"
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_margin="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/black"/>
 
-                    <TextView
-                        android:id="@+id/address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:paddingTop="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/card_address_size"/>
-
+                <TextView
+                    android:id="@+id/description"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_margin="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <FrameLayout
