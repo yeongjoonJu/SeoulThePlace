@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeFragment(String courseCode, int index) {
+    public void changeFragment(CourseVO course, int index) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
-                .replace(R.id.fragment, new PlaceFragment(courseCode, index))
+                .replace(R.id.fragment, new PlaceFragment(course, index))
                 .addToBackStack(null)
                 .commit();
     }
@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
     }
+
     public void changeModifyFragment(List<PlaceVO> list){
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left)
@@ -191,21 +192,4 @@ public class MainActivity extends AppCompatActivity {
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Fragment webViewFragment = getSupportFragmentManager().findFragmentByTag("WEB_FRAGMENT");
-//        if (webViewFragment != null && webViewFragment.isVisible()) {
-//            Log.e("abcd", "back button pressed");
-//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.
-//        }
-//    }
-
-//    public void pushStack() {
-//        int index = this.getSupportFragmentManager().getBackStackEntryCount() - 1;
-//        android.support.v4.app.FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
-//        String tag = backEntry.getName();
-//        Fragment myFragment = getSupportFragmentManager().findFragmentByTag(tag);
-//    }
 }
