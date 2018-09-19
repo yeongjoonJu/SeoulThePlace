@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CourseVO {
@@ -14,26 +15,42 @@ public class CourseVO {
     private String details;
     private List<String> placeCode;
 
-    public CourseVO(String code, String name, String type, int likes, String details, List<String> placeCode) {
+    private boolean liked;
+    private String location;
+
+    public CourseVO(String code, String name, String type, int likes, String details, String[] placeCode) {
         this.code = code;
         this.name = name;
         this.type = type;
         this.likes = likes;
         this.details = details;
-        this.placeCode = placeCode;
+        this.placeCode = new ArrayList<>(Arrays.asList(placeCode));
     }
 
     public CourseVO(JSONObject jsonObject) {
         try {
             code = jsonObject.getString("Code");
             name = jsonObject.getString("Name");
-            type = jsonObject.getString("Type");
+            if(!jsonObject.isNull("Type"))
+                type = jsonObject.getString("Type");
             likes = jsonObject.getInt("Likes");
-            details = jsonObject.getString("Details");
+            if(!jsonObject.isNull("Details"))
+                details = jsonObject.getString("Details");
 
             placeCode = new ArrayList<>();
             for(int i = 1; i<=5; i++) {
+                if(!jsonObject.isNull("PlaceCode" + i))
                 placeCode.add(jsonObject.getString("PlaceCode" + i));
+            }
+
+            if(!jsonObject.isNull("location"))
+                location = jsonObject.getString("location");
+
+            if(!jsonObject.isNull("User_Likes")) {
+                if (jsonObject.getString("User_Likes").equals("true"))
+                    liked = true;
+                else
+                    liked = false;
             }
         }catch (JSONException e) {
             e.printStackTrace();
@@ -74,5 +91,13 @@ public class CourseVO {
 
     public int getPlaceCount() {
         return placeCode.size();
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

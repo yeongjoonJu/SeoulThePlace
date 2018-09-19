@@ -69,8 +69,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        dao = new DAO();
-        dao.execute();
 
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.VISIBLE);
@@ -111,7 +109,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dao.destory();
         if(placeViewPager != null)
             currentPlacePosition = placeViewPager.getCurrentItem();
         if(courseViewPager != null)
@@ -132,6 +129,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dao = new DAO();
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if(recentSearchList == null)
             recentSearchList = new ArrayList<>();

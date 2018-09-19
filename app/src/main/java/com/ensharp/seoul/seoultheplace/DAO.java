@@ -10,7 +10,7 @@ public class DAO {
     private JSONArray resultData = null;
 
     // 연결 주소
-    final String BASE_URL = "http://ec2-52-78-245-211.ap-northeast-2.compute.amazonaws.com";
+    final String BASE_URL = "http://ec2-52-79-227-1.ap-northeast-2.compute.amazonaws.com:9000";
 
     // 중복되지 않으면 true, 중복되었으면 false
     public boolean checkIDduplicaion(String id) {
@@ -123,6 +123,9 @@ public class DAO {
 
             // 네트워크 처리 비동기화
             resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
 
             if(resultData.getJSONObject(0).getString("success").equals("false"))
                 return null;

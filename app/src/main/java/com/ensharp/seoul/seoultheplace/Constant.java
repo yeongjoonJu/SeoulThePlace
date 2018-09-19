@@ -35,7 +35,7 @@ public class Constant {
         placeCode.add("a333");
 
         course = new CourseVO("j111", "서울시내 대학 경유 273번 버스로 떠나는 청춘과 낭만의 대학 투어", "친구끼리, 연인끼리",
-                5, detail, placeCode);
+                5, detail, new String[]{"a111", "a222", "a333"});
     }
 
     public static void initPlaces() {

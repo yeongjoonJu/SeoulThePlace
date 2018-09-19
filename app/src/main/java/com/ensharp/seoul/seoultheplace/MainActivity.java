@@ -1,6 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] fragments;
     private Fragment currentFragment;
     private LinearLayout rootLayout;
-    private DAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         Constant.initPlaces();
 
         setContentView(R.layout.activity_main);
+
+        // 아이디 초기화
+        SharedPreferences sf = getSharedPreferences("data",0);
+        SharedPreferences.Editor editor = sf.edit();
+        editor.clear();
+        editor.apply();
 
         fragments = new Fragment[]{
                 new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment("a333")

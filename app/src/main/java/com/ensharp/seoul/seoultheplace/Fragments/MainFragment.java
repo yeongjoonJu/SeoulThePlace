@@ -7,7 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.CourseAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
 import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 
@@ -30,10 +36,10 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ArrayList<String> tags = new ArrayList<String>(
-                Arrays.asList(new String[]{"#오늘 서울은?", "#감성적", "#인생샷 서울", "#데이트", "#레트로", "#여름"}));
+                Arrays.asList(new String[]{"친구끼리", "가족끼리"}));
 
         TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
-
+        tagAdapter.setMainListView(getActivity(), (ListView) rootView.findViewById(R.id.course_list_view));
         HorizontalListView tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         tagListView.setAdapter(tagAdapter);
 
