@@ -15,4 +15,7 @@
     <dimen name="card_title_size">18sp</dimen>
     <dimen name="card_address_size">12sp</dimen>
 
+    <dimen name="navigator_margin_top">5dp</dimen>
+    <dimen name="common_navigator_height">45dp</dimen>
+
 </resources>

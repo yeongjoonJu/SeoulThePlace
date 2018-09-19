@@ -1,7 +1,6 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.Manifest;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,12 +13,10 @@ import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.CourseMapFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SavesFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.WebViewFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         dao = new DAO();
         dao.insertMemberData(getIntent().getExtras());
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment(), new PlaceFragment("a333")
+                new MainFragment(), new SearchFragment(), new FavoriteFragment(), new PlaceFragment("a333")
         };
 
         // 하단 버튼 객체 초기화

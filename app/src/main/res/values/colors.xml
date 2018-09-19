@@ -19,8 +19,7 @@
     <color name="active_dot">#4A4A4A</color>
     <color name="non_active_dot">#D9D9D9</color>
 
-    <color name="saves_background">#EBE7E6</color>
-    <color name="saves_line">#D6CECC</color>
-    <color name="saves_unchoiced_tab">#BBC0C6</color>
-    <color name="saves_choiced_tab">#B5D4FE</color>
+    <color name="favorite_indicator_text">#E94220</color>
+    <color name="favorite_indicator">#BC2A2A</color>
+
 </resources>
