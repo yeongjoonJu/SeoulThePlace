@@ -183,8 +183,7 @@ app.post('/search/place', function(req, res) {
          res.json(null);
        } else {
 	 console.log('플레이스 결과 보냄');
-	 jsonArray = getInfoToArray(rows, 'PLACE');
-	 res.json(jsonArray);
+	 res.json(getInfoToArray(rows, 'PLACE'));
        }
      }
    });
@@ -305,20 +304,42 @@ app.post('/course/editted', function(req, res) {
 
 //거리계산을 위한 모든 Place 리스트 다 받아오기
 app.post('/place/all', function(req, res) {
+  console.log
   jsonArray = initJsonArray(jsonArray);
-  var query = "SELECT Code, Name, Image1, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code NOT IN('PLACEdefault')";
+  var query = 'SELECT Code, Name, Image1, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code NOT IN("PLACEdefault")';
   sync.fiber(function() {
     var result = sync.await(con.query(query, sync.defer()));
     for(var i = 0; i < result.length; i++) {
+      jsonResult = new Object();
       jsonResult.Code = result[i].Code;
       jsonResult.Name = result[i].Name;
       jsonResult.Image1 = result[i].Image1;
       jsonResult.Coordinate_X = result[i].Coordinate_X;
       jsonResult.Coordinate_Y = result[i].Coordinate_Y;
+      jsonArray.push(jsonResult);
     }
+    console.log(jsonArray[0]);
+    console.log(jsonArray[1]);
+    console.log(jsonArray[2]);
     console.log(jsonArray.length);
     res.json([ {jsonArr: jsonArray} ]);
   });
+});
+
+//커스텀 코스 지우면
+app.post('/editted_course/delete', function(req, res) {
+	var userID = req.body.Id;
+	var edittedCourse_code = req.body.Code;
+
+	var query = 'DELETE FROM EDITTEDCOURSE WHERE Code = ?';
+	con.query(query, edittedCourse_code, function(err, rows, fields) {
+		if(err) {
+			res.json([ {success: 'false'} ]);
+			console.log(err);
+		} else {
+			res.json([ {success: 'true'} ]);
+		}
+	});
 });
 
 //코스 및 플레이스 검색시 json 형태 배열에 데이터 담기.
@@ -326,6 +347,7 @@ function getInfoToArray(rows, table) {
   if(table == 'COURSE') {
     initJsonArray(jsonArray);
     for(var i = 0; i < rows.length; i++) {
+      jsonResult = new Object();
       jsonResult.Code = rows[i].Code;
       jsonResult.Name = rows[i].Name;
       jsonResult.Type = rows[i].Type;
@@ -341,6 +363,7 @@ function getInfoToArray(rows, table) {
   } else {
     initJsonArray(jsonArray);
     for(var i = 0; i < rows.length; i++) {
+      jsonResult = new Object();
       jsonResult.Code = rows[i].Code;
       jsonResult.Name = rows[i].Name;
       jsonResult.location = rows[i].Location;
@@ -380,6 +403,7 @@ function mainCourseListInfo(res, rows, userID) { //rows는 해당 Type의 코스
     for(var i = 0; i < rows.length; i++) {
       var result = sync.await(con.query('SELECT COURSE.Code, COURSE.Name, COURSE.Likes, PLACE.Location, PLACE.Image1 FROM COURSE, PLACE WHERE COURSE.Code=? AND PLACE.Code=?',
                  [rows[i].Code, rows[i].PlaceCode1], sync.defer()));
+                     jsonResult = new Object();
                      jsonResult.Code = result[0].Code;
                      jsonResult.Name = result[0].Name;
                      jsonResult.Likes = result[0].Likes;
@@ -407,7 +431,8 @@ function pushedCourseListInfo(res, rows) {
     for(var i = 0; i < 5; i++) {
       var result = sync.await(con.query('SELECT Image1, Name, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?', [place_code[i]], sync.defer()));
       if(result[0] == undefined)
-	break;
+	       break;
+      jsonResult = new Object();
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
       jsonResult.Location = result[0].Location;
