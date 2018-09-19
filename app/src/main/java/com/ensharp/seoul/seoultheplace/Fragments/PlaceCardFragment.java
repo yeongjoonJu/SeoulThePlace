@@ -59,7 +59,7 @@ public class PlaceCardFragment extends Fragment {
         title.setText(place.getName());
         title.setTextColor(Color.rgb(0,0,0));
         address.setText(place.getLocation());
-        address.setTextColor(Color.rgb(0,0,0));
+        address.setTextColor(Color. rgb(0,0,0));
         description.setText(place.getDetails());
         description.setTextColor(Color.rgb(0,0,0));
         index.setTextColor(Color.rgb(255,255,255));

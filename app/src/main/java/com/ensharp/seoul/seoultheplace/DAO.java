@@ -1,6 +1,4 @@
 package com.ensharp.seoul.seoultheplace;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -105,9 +103,6 @@ public class DAO {
             // 네트워크 처리 비동기화
             resultData = new NetworkProcessor().execute(jsonObject).get();
 
-            if(resultData.getJSONObject(0).getString("success").equals("false"))
-                return null;
-
         }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -125,7 +120,7 @@ public class DAO {
             // 네트워크 처리 비동기화
             resultData = new NetworkProcessor().execute(jsonObject).get();
 
-            if(resultData.getJSONObject(0).getString("success").equals("false"))
+            if(resultData == null)
                 return null;
 
         }catch (JSONException | ExecutionException | InterruptedException e) {
@@ -202,6 +197,31 @@ public class DAO {
         return placeData;
     }
 
+    // 회원 정보 가져오기
+    public MemberVO getMemberInformation(String id) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/user/info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return null;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return new MemberVO(jsonObject);
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<CourseVO> searchCourse(String keyword) {
         ArrayList<CourseVO> courseData = null;
         // 처리 설정
@@ -217,7 +237,7 @@ public class DAO {
                 return null;
 
             courseData = new ArrayList<>();
-            for(int i=0; i<resultData.length(); i++)
+            for(int i=0; i < resultData.length(); i++)
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
 
         }catch (JSONException | ExecutionException | InterruptedException e) {
