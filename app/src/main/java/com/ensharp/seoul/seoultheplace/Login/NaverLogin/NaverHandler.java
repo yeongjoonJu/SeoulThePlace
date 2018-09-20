@@ -23,9 +23,11 @@ public class NaverHandler extends OAuthLoginHandler {
     private Context mContext;
     private LoginBackgroundActivity activity;
     private OAuthLogin mOAuthLoginModule;
+    String TAG = "NAVER Login";
 
 
     public NaverHandler(Context mContext, OAuthLogin mOAuthLoginModule, LoginBackgroundActivity activity) {
+        Log.d(TAG,"Make Handler");
         this.mContext = mContext;
         this.mOAuthLoginModule = mOAuthLoginModule;
         this.activity = activity;

@@ -55,7 +55,7 @@ public class PlaceCardFragment extends Fragment {
         TextView index = (TextView) view.findViewById(R.id.index);
 
         ImageView image = (ImageView) view.findViewById(R.id.placeImage);
-        new DownloadImageTask(image).execute(place.getImageURL()[0]);
+        new DownloadImageTask(image).execute(place.getImageURL());
         title.setText(place.getName());
         title.setTextColor(Color.rgb(0,0,0));
         address.setText(place.getLocation());
@@ -71,7 +71,7 @@ public class PlaceCardFragment extends Fragment {
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment(place.getCode(), position);
+                activity.changeFragment(place.getCode());
             }
         });
 

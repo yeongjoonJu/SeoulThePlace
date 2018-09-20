@@ -27,6 +27,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView;
 
+import com.ensharp.seoul.seoultheplace.MainActivity;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.AddFloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
@@ -52,6 +54,8 @@ public class FavoriteFragment extends Fragment {
     private CustomizedFragment customizedFragment;
     private boolean isPlusButtonExpanded = false;
 
+    private MainActivity mActivity;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
-
+        mActivity = (MainActivity)getActivity();
         initFragments();
         initMagicIndicator();
 
@@ -148,6 +152,7 @@ public class FavoriteFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Toast.makeText(getContext(), "actionB clicked", Toast.LENGTH_SHORT).show();
+            mActivity.changeModifyFragment(new ArrayList<PlaceVO>());
         }
     };
 

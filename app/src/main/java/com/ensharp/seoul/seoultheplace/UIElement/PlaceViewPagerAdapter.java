@@ -49,7 +49,7 @@ public class PlaceViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.item_place_image, null);
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.imageView)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,images[position]);
+        new DownloadImageTask((ImageView) view.findViewById(R.id.imageView)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,images);
 
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view, 0);

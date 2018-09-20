@@ -47,12 +47,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final PlaceVO item = items.get(position);
         String ImageURL = item.getImageURL()[0];
-        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,ImageURL);
+        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
+        holder.distance.setText(String.valueOf(item.getDistance()));
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 courseModifyFragment.ChangeData(item);
+                courseModifyFragment.setItemData(null);
+                courseModifyFragment.ChangeItemData();
             }
         });
     }
@@ -66,12 +69,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         ImageView image;
         TextView title;
         CardView cardview;
+        TextView distance;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.AddCardImage);
             title = (TextView) itemView.findViewById(R.id.AddCardName);
             cardview = (CardView) itemView.findViewById(R.id.AddCardView);
+            distance = (TextView)itemView.findViewById(R.id.addCardDistance);
         }
     }
 }

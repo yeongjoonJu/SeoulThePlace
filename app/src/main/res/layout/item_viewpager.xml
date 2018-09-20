@@ -21,14 +21,22 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0dp"
                 android:layout_weight="1.4"
+                android:orientation="horizontal"
                 android:background="@color/non_active_dot">
+
                 <ImageView
                     android:id="@+id/placeImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="centerCrop"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="#00000000"/>
             </LinearLayout>
 
             <LinearLayout
@@ -104,7 +112,7 @@
             android:layout_gravity="center"
             android:src="@drawable/item_circle"
             android:layout_marginBottom="10dp"
-            android:scaleType="fitXY"/>
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/index"

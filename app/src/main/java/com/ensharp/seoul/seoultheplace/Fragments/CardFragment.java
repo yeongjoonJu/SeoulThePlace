@@ -26,7 +26,6 @@ import com.ensharp.seoul.seoultheplace.R;
 @SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
 
-    private String courseCode;
     private CourseVO course;
     private int index;
     private PlaceVO place;
@@ -34,13 +33,10 @@ public class CardFragment extends Fragment {
     private ImageButton placeButton;
 
     @SuppressLint("ValidFragment")
-    public CardFragment(String courseCode, int index, PlaceVO place) {
-        this.courseCode = courseCode;
+    public CardFragment(CourseVO course, int index, PlaceVO place) {
         this.index = index;
         this.place = place;
-
-        DAO dao = new DAO();
-        course = dao.getCourseData(courseCode);
+        this.course = course;
     }
 
     @SuppressLint("DefaultLocale")
@@ -81,7 +77,7 @@ public class CardFragment extends Fragment {
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL()[0]);
+        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL());
         title.setText(place.getName());
         address.setText(place.getLocation());
         placeIndex.setText(Integer.toString(index));
@@ -91,8 +87,8 @@ public class CardFragment extends Fragment {
         FrameLayout placeLayout = (FrameLayout) view.findViewById(R.id.place_layout);
         placeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                activity.changeFragment(courseCode, index);
+            public void onClick(View v) {
+                activity.changeFragment(course, index);
             }
         });
 

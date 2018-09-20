@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Login;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.ensharp.seoul.seoultheplace.R;
 public class EmailLoginFragment extends Fragment implements View.OnClickListener {
     private View view;
 
+    String TAG = "LoginEmail";
     EditText email;
     EditText password;
     Button Login;
@@ -33,7 +35,7 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
         password=(EditText)view.findViewById(R.id.passwdloginEditText);
         Login = (Button)view.findViewById(R.id.emailloginbtn);
         Login.setOnClickListener(this);
-
+        Log.d(TAG,"Ready To EmailLogin");
         return view;
     }
 
@@ -45,9 +47,11 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
     }
     public boolean CheckEmail(){
         if(LActivity.LoginEmail(String.valueOf(email.getText()),String.valueOf(password.getText()))){
+            Log.d(TAG,"Success Email Login");
             Toast.makeText(getActivity(),"로그인 성공.",Toast.LENGTH_LONG).show();
             return true;
         }
+        Log.d(TAG,"Fail Email Login");
         Toast.makeText(getActivity(),"이메일이나 비밀번호가 틀렸습니다.",Toast.LENGTH_LONG).show();
         return false;
     }

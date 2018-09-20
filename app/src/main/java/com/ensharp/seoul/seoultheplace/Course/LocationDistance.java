@@ -12,7 +12,7 @@ public class LocationDistance {
      * @param unit 거리 표출단위 *
      * @return
      * */
-    public static double distance(String lat1, String lon1, String lat2, String lon2, String unit) {
+    public static int distance(String lat1, String lon1, String lat2, String lon2, String unit) {
         double theta = Double.parseDouble(lon1) - Double.parseDouble(lon2);
         double dist = Math.sin(deg2rad(Double.parseDouble(lat1)))
                 * Math.sin(deg2rad(Double.parseDouble(lat2)))
@@ -27,7 +27,7 @@ public class LocationDistance {
         } else if(unit == "meter"){
             dist = dist * 1609.344;
         }
-        return (dist);
+        return (int)dist;
     }
         // This function converts decimal degrees to radians
     private static double deg2rad(double deg) {
