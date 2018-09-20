@@ -25,6 +25,13 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     LoginFragment loginFragment;
     public DAO dao;
 
+    public void DeleteData(){
+        SharedPreferences sf = getSharedPreferences("data",0);
+        SharedPreferences.Editor editor = sf.edit();
+        editor.clear();
+        editor.apply();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

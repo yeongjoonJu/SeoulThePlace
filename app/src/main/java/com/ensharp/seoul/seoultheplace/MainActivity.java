@@ -3,39 +3,22 @@ package com.ensharp.seoul.seoultheplace;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
-import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
-
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.WebViewFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.*;
 
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
@@ -114,9 +97,11 @@ public class MainActivity extends AppCompatActivity {
                         // 키보드가 내려간 상태면
                         if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
                             ((SearchFragment)fragments[1]).viewVisible();
+                            Log.i("yeongjoon", "키보드 내려감");
                         }
                         else {
                             ((SearchFragment)fragments[1]).viewInvisible();
+                            Log.i("yeongjoon", "키보드 올라감");
                         }
                     }
                 });

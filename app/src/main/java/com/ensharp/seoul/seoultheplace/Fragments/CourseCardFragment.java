@@ -1,9 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
 
 public class CourseCardFragment extends Fragment {
     private CardView cardView;
@@ -55,21 +52,14 @@ public class CourseCardFragment extends Fragment {
 
         TextView title = (TextView) view.findViewById(R.id.course_name);
         TextView description = (TextView) view.findViewById(R.id.course_location);
+        ImageButton representImage = (ImageButton) view.findViewById(R.id.ex_image);
+        //new DownloadImageTask(representImage).execute(course.getImage());
+        Picasso.get().load(course.getImage()).into(representImage);
 
         title.setText(course.getName());
         description.setText(course.getDetails());
-
         heartButton = (ImageButton) view.findViewById(R.id.like_button);
-        heartButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(heartButton.getDrawable().equals(choicedHeart))
-                    heartButton.setImageDrawable(unchoicedHeart);
-                else
-                    heartButton.setImageDrawable(choicedHeart);
-            }
-        });
+        heartButton.setVisibility(View.GONE);
 
         return view;
     }

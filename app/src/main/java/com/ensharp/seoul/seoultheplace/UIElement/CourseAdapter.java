@@ -18,8 +18,12 @@ import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseCardFragment;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -49,28 +53,41 @@ public class CourseAdapter extends ArrayAdapter<CourseVO> {
         TextView title = (TextView) listItemView.findViewById(R.id.course_name);
         TextView description = (TextView) listItemView.findViewById(R.id.course_location);
         ImageButton heartButton = (ImageButton) listItemView.findViewById(R.id.like_button);
+        ImageButton representImage = (ImageButton) listItemView.findViewById(R.id.ex_image);
 
         title.setText(course.getName());
         description.setText(course.getDetails());
+        Picasso.get().load(course.getImage()).into(representImage);
+
         // 좋아요 되어있으면
-        if(course.isLiked())
+        if (dao.checkLikedCourse(getItem(position).getCode(), useremail).equals("true")) {
             heartButton.setImageDrawable(listItemView.getResources().getDrawable(R.drawable.choiced_heart));
-        else
+            getItem(position).setLikedState(true);
+        }
+        else {
             heartButton.setImageDrawable(listItemView.getResources().getDrawable(R.drawable.unchoiced_heart));
+            getItem(position).setLikedState(false);
+        }
 
         View finalListItemView = listItemView;
         heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CourseVO currentCourse = getItem(position);
+                Log.i("yeongjoon", "하트 눌림");
 
-                if(currentCourse.isLiked()) {
-                    heartButton.setImageDrawable(finalListItemView.getResources().getDrawable(R.drawable.unchoiced_heart));
-                    dao.likeCourse(currentCourse.getCode(), useremail);
-                }
-                else {
-                    heartButton.setImageDrawable(finalListItemView.getResources().getDrawable(R.drawable.choiced_heart));
-                    dao.likeCourse(currentCourse.getCode(), useremail);
+                try {
+                    if (dao.likeCourse(currentCourse.getCode(), useremail).getString("isCourseLiked").equals("true")) {
+                        Log.i("yeongjoon", "좋아요 해제");
+                        heartButton.setImageDrawable(finalListItemView.getResources().getDrawable(R.drawable.unchoiced_heart));
+                        currentCourse.changeLiked();
+                    } else {
+                        Log.i("yeongjoon", "좋아요 눌림");
+                        heartButton.setImageDrawable(finalListItemView.getResources().getDrawable(R.drawable.choiced_heart));
+                        currentCourse.changeLiked();
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

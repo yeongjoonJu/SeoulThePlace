@@ -43,15 +43,15 @@ public class TagAdapter extends ArrayAdapter<String> {
     }
 
     public ArrayList<CourseVO> getCourseByType(String type, String user) {
-        JSONArray jsonArray = dao.getUserCourseData(type, user);
-        if (jsonArray == null)
+        JSONObject jsonObject = dao.getUserCourseData(type, user);
+        if (jsonObject == null)
             return null;
         ArrayList<CourseVO> courses = new ArrayList<CourseVO>();
+        Log.i("yeongjoon",  "서버 코스 로드");
         try {
-            for(int i=0; i<jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                courses.add(new CourseVO(jsonObject));
-            }
+            JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
+            for(int i=0; i<jsonArray.length(); i++)
+                courses.add(new CourseVO(jsonArray.getJSONObject(i)));
         }catch (JSONException e) {
             e.printStackTrace();
         }
@@ -113,6 +113,7 @@ public class TagAdapter extends ArrayAdapter<String> {
                 // 타입에 따라 데이터를 불러온다
                 ArrayList<CourseVO> courses = getCourseByType(getItem(0), useremail);
                 if(courses != null) {
+                    Log.i("yeongjoon", "타입에 따라 데이터를 불러온다");
                     CourseAdapter courseAdapter = new CourseAdapter(mainFragmentActivity, courses);
                     mainListView.setAdapter(courseAdapter);
                 }

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
+public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private ImageView image;
 
@@ -24,14 +24,14 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
         String imageURL = urls[0];
         Bitmap bitmap = null;
 
+        Log.e("TestImage : ", "downloadImage");
+        InputStream inputStream = null;
         try {
-            Log.e("TestImage : ", "downloadImage");
-            InputStream inputStream = new java.net.URL(imageURL).openStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream = new java.net.URL(imageURL).openStream();
         } catch (IOException e) {
-            Log.e("TestImage : ","Error : "+ e.getMessage());
             e.printStackTrace();
         }
+        bitmap = BitmapFactory.decodeStream(inputStream);
 
         return bitmap;
     }

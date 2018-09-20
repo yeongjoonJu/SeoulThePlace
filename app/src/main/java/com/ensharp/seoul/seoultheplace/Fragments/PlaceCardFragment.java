@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
-import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
 
 public class PlaceCardFragment extends Fragment {
 
@@ -53,9 +52,8 @@ public class PlaceCardFragment extends Fragment {
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView description = (TextView) view.findViewById(R.id.description);
         TextView index = (TextView) view.findViewById(R.id.index);
-
         ImageView image = (ImageView) view.findViewById(R.id.placeImage);
-        new DownloadImageTask(image).execute(place.getImageURL()[0]);
+
         title.setText(place.getName());
         title.setTextColor(Color.rgb(0,0,0));
         address.setText(place.getLocation());
@@ -65,13 +63,28 @@ public class PlaceCardFragment extends Fragment {
         index.setTextColor(Color.rgb(255,255,255));
         index.setText(String.format("%d", position));
 
+        try {
+            Picasso.get().load(place.getImageURL()[0]).into(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                Picasso.get().load(place.getImageURL()[1]).into(image);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                Picasso.get().load(place.getImageURL()[2]).into(image);
+            }
+            //new DownloadImageTask(image).execute(place.getImageURL()[0]);
+        }
+
         final MainActivity activity = (MainActivity)getActivity();
 
         placeButton = (ImageButton) view.findViewById(R.id.place);
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment(place.getCode(), position);
+                activity.changeFragment(place.getCode());
             }
         });
 

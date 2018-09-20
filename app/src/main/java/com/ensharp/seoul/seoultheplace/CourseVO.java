@@ -33,6 +33,14 @@ public class CourseVO {
         this.placeCode = new ArrayList<>(Arrays.asList(placeCode));
     }
 
+    public void setLikedState(boolean liked) {
+        this.liked = liked;
+    }
+
+    public void changeLiked() {
+        liked = !liked;
+    }
+
     public CourseVO(JSONObject jsonObject) {
         try {
 
@@ -43,6 +51,8 @@ public class CourseVO {
             likes = jsonObject.getInt("Likes");
             placeCode = new ArrayList<String>();
             for(int i = 1; i<=5; i++) {
+                if(jsonObject.isNull("PlaceCode"+i))
+                    continue;
                 if (!jsonObject.getString("PlaceCode" + i).equals("null")) {
                     placeCode.add(jsonObject.getString("PlaceCode" + i));
                 }
@@ -136,5 +146,9 @@ public class CourseVO {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

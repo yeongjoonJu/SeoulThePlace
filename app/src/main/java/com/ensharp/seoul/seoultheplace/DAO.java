@@ -109,7 +109,7 @@ public class DAO {
         return resultData;
     }
 
-    public JSONArray getUserCourseData(String type, String id) {
+    public JSONObject getUserCourseData(String type, String id) {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
@@ -123,10 +123,12 @@ public class DAO {
             if(resultData == null)
                 return null;
 
+            jsonObject = resultData.getJSONObject(0);
+            Log.i("yeongjoon", resultData.toString());
         }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        return resultData;
+        return jsonObject;
     }
 
     public CourseVO getCourseData(String key) {
@@ -186,6 +188,8 @@ public class DAO {
             if(resultData == null)
                 return null;
 
+            Log.i("플레이스 검색", resultData.toString());
+
             placeData = new ArrayList<>();
             for(int i=0; i<resultData.length(); i++) {
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
@@ -235,6 +239,8 @@ public class DAO {
 
             if(resultData == null)
                 return null;
+
+            Log.i("코스 검색", resultData.toString());
 
             courseData = new ArrayList<>();
             for(int i=0; i < resultData.length(); i++)
@@ -303,6 +309,36 @@ public class DAO {
         return null;
     }
 
+    //  코스 좋아요 확인
+    // Key : isCourseLiked(String)
+    public String checkLikedCourse(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/course/like/status");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else {
+                String liked = null;
+                try {
+                    liked = resultData.getJSONObject(0).getString("isCourseLiked");
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return liked;
+            }
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // 코스 좋아요
     // Key : isCourseLiked(String), Likes(Int)
     public JSONObject likeCourse(String code, String id) {
@@ -348,38 +384,6 @@ public class DAO {
             e.printStackTrace();
         }
         return placeData;
-    }
-
-    // 태그 목록을 불러온다.
-    // code "ALL" : 모든 태그 목록을 불러온다.
-    // code "플레이스 or 코스 고유 코드"
-    public ArrayList<String> getTagList(String code) {
-        ArrayList<String> tags = new ArrayList<String>();
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.accumulate("code", code);
-            jsonObject.accumulate("url", BASE_URL + "/tag");
-
-            // 네트워크 처리 비동기화
-            resultData = new NetworkProcessor().execute(jsonObject).get();
-
-            // 결과 처리
-            if(resultData == null)
-                return null;
-            else {
-                for(int idx = 0; idx < resultData.length(); idx++)
-                    tags.add(resultData.getJSONObject(idx).getString("tag"));
-            }
-        }catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return tags;
-    }
-    public void destroy(){
     }
 
     public JSONArray AllPlaceDownload() {

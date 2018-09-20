@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     app:cardUseCompatPadding="true"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:weightSum="3"
         android:background="@color/white">
 
@@ -28,7 +30,8 @@
                     android:id="@+id/placeImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitXY"/>
+                    android:src="@drawable/cantload"
+                    android:scaleType="centerCrop"/>
             </LinearLayout>
 
             <LinearLayout
@@ -43,26 +46,32 @@
                 <TextView
                     android:id="@+id/title"
                     style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="14dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/address"
                     style="@style/TextAppearance.AppCompat.Body2"
-                    android:layout_margin="0dp"
+                    android:layout_margin="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+                    android:textSize="14sp"
                     android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/description"
                     style="@style/TextAppearance.AppCompat.Body1"
-                    android:layout_margin="0dp"
+                    android:textSize="11sp"
+                    android:layout_margin="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/black"/>
 
                 <ImageButton
@@ -71,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@null"
+                    android:scaleType="fitXY"
                     android:src="@drawable/item_angle"/>
 
             </LinearLayout>

@@ -17,6 +17,7 @@
         android:background="@drawable/item_unchoicedtag">
 
         <ImageButton
+            android:id="@+id/ex_image"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="8"
@@ -39,7 +40,6 @@
                 android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:singleLine="true"
                 android:text="서촌, 감성을 깨우다"
                 android:layout_gravity="center_vertical"
                 android:textColor="#A9A9A9"

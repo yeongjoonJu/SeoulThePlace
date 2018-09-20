@@ -50,5 +50,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     // For Refresh List View
     implementation 'com.yalantis:phoenix:1.2.3'
+    // For Download Image
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
 apply plugin: 'com.google.gms.google-services'
