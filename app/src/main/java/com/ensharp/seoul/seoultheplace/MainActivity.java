@@ -3,6 +3,7 @@ package com.ensharp.seoul.seoultheplace;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
 
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
+import com.ensharp.seoul.seoultheplace.Course.SaveCourseActivity;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.DimFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
@@ -147,15 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void chagneToCourseFragment(int index) {
-        final Fragment fragment = new CourseFragment("c001");
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
     public void changeFragment(CourseVO course, int index) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
@@ -184,12 +177,28 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
+    public void chagneCourseFragment(int index) {
+        final Fragment fragment = new CourseFragment("c001");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     public void changeCourseViewFragment(List<PlaceVO> list){
+        DeleteBackStack(); //뒤로가기하는거 다 없앰
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
         fragmentTransaction.replace(R.id.fragment, new CourseFragment("c001"));
-        DeleteBackStack(); //뒤로가기하는거 다 없앰
         fragmentTransaction.commit();
+    }
+
+    public void ChangeFavoriteFragment(){
+        DeleteBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                .replace(R.id.fragment, new FavoriteFragment())
+                .commit();
     }
 
     public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
@@ -197,4 +206,34 @@ public class MainActivity extends AppCompatActivity {
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
+    public void SetSaveData(String[] datas){
+        for(int i = 0 ; i < datas.length;i++){
+            if(datas[i]!=null)
+            Log.e("Datas :",datas[i]);
+        }
+        Intent intent = new Intent(this, SaveCourseActivity.class);
+        intent.putExtra("codes",datas);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==1) {
+            if(resultCode==RESULT_OK) {
+                SharedPreferences sp = getSharedPreferences("data",0);
+                Log.e("SaveTest :", "onActivityResult");
+                Log.e("SaveTest : ","email " + sp.getString("email",""));
+                Log.e("SaveTest :", "title : " +data.getStringExtra("title"));
+                Log.e("SaveTest :","description : "+data.getStringExtra("description"));
+                for(int i = 0 ; i < data.getStringArrayExtra("codes").length;i++){
+                    if(data.getStringArrayExtra("codes")[i]!=null)
+                        Log.e("SaveTest :","codes : "+data.getStringArrayExtra("codes")[i]);
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        .replace(R.id.fragment, new FavoriteFragment())
+                        .commit();
+            }
+        }
+    }
 }

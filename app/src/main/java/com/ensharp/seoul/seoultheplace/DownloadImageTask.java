@@ -22,7 +22,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
     protected Bitmap doInBackground(String... urls) {
         Log.e("TestImage : ", "doInBackground");
         Bitmap bitmap = null;
-        for(int i = 0 ; i < 3; i++) {
+        for(int i = 0 ; i < urls.length; i++) {
             try {
                 Log.e("TestImage : ", "downloadImage");
                 InputStream inputStream = new java.net.URL(urls[i]).openStream();

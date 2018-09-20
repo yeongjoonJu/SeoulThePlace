@@ -29,10 +29,12 @@
             android:value="@string/facebook_app_id"/>
 
         <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".Login.LoginBackgroundActivity">
+        <activity android:name=".Login.LoginBackgroundActivity"
+            android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -44,6 +46,8 @@
             <data android:scheme="@string/fb_login_protocol_scheme" />
         </intent-filter>
         </activity>
+        <activity android:name=".Course.SaveCourseActivity"
+            android:theme="@android:style/Theme.Dialog"/>
 
     </application>
 

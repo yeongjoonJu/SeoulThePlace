@@ -1,10 +1,10 @@
 package com.ensharp.seoul.seoultheplace.Course;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -26,7 +25,6 @@ import com.ensharp.seoul.seoultheplace.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -280,11 +278,13 @@ public class CourseModifyFragment extends Fragment {
                             datas.remove(i);
                         }
                     }
-                    mActivity.changeCourseViewFragment(datas);
-                    Toast.makeText(mActivity,"이거누르면 저장",Toast.LENGTH_LONG).show();
+                    mActivity.SetSaveData(GetPlaceCode(datas));
                 }
                 else if(ITEM_SIZE==5){
-                    Toast.makeText(mActivity,"이거누르면 저장",Toast.LENGTH_LONG).show();
+                    mActivity.SetSaveData(GetPlaceCode(datas));
+                }
+                else{ //아무것도 없음.
+                    mActivity.changeCourseViewFragment(datas);
                 }
             }
         });
@@ -310,5 +310,13 @@ public class CourseModifyFragment extends Fragment {
         LinearLayoutManager layoutManagers = new LinearLayoutManager(getActivity());
         itemview.setLayoutManager(layoutManagers);
         itemview.setAdapter(iadapter);
+    }
+
+    public String[] GetPlaceCode(List<PlaceVO> datas){
+        String[] codes = new String[]{null,null,null,null,null};
+        for(int i=0;i<datas.size();i++){
+            codes[i]=datas.get(i).getCode();
+        }
+        return codes;
     }
 }
