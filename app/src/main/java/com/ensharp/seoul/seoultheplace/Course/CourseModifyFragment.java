@@ -194,8 +194,7 @@ public class CourseModifyFragment extends Fragment {
         }
     }
     private void AddPlusBox(){
-        String[] imageURL= {"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAA1BMVEX///+nxBvIAAAASElEQVR4nO3BgQAAAADDoPlTX+AIVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDcaiAAFXD1ujAAAAAElFTkSuQmCC",null,null};
-        datas.add(new PlaceVO(null,"+",null,imageURL,null,null,null,null,0,null,null,null));
+        datas.add(new PlaceVO(null,"+",null,null,null));
     }
 
     public void setItemData(PlaceVO item){
@@ -214,17 +213,44 @@ public class CourseModifyFragment extends Fragment {
         }
         else{
             for(int i = 0; i<jsonArray.length(); i++){
-                JSONObject jsonObject = new JSONObject();
-                double coordinate_x ;
-                double coordinate_y ;
-                double distance = 0;
+                JSONObject jsonObject;
+                boolean setData = false;
                 try {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    distance = LocationDistance.distance(jsonObject.getString("Coordinate_X"),jsonObject.getString("Coordinate_Y"),item.getCoordinate_x(),item.getCoordinate_y(),"meter") ;
+/*                  jsonObject = jsonArray.getJSONObject(i);  //dao 에서 이미지 url을 하나만 줘서 무의함..
+                    String coordinate_x = jsonObject.getString("Coordinate_X");
+                    String coordinate_y = jsonObject.getString("Coordinate_Y");
+                    String name = jsonObject.getString("Name");
+                    String code = jsonObject.getString("Code");
+                    String url = jsonObject.getString("Image1");
+                    PlaceVO instantVO = new PlaceVO(code,name,url,coordinate_x,coordinate_y);*/
+                    PlaceVO instantVO = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
+                    if(item.getName().equals(instantVO.getName())) //이미 있는곳은 안만듬
+                        continue;
+                    instantVO.setDistance(LocationDistance.distance(instantVO.getCoordinate_x()
+                            ,instantVO.getCoordinate_y()
+                            ,item.getCoordinate_x()
+                            ,item.getCoordinate_y()
+                            ,"meter"));
+                    if(items.size() ==0) { //0이면 일단 넣어준다.
+                        items.add(instantVO);
+                    }
+                    else {
+                        for(int j = 0; j<items.size();j++){ //거리순으로 배열 생성
+                            if(items.get(j).getDistance() > instantVO.getDistance()){
+                                items.add(j,instantVO);
+                                setData = true;
+                                break;
+                            }
+                        }
+                        if(!setData && items.size()<=10){ //제일 사이즈가 큼 10개 이하일때만
+                            items.add(instantVO);
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+            ChangeItemData();
         }
     }
 
@@ -237,10 +263,7 @@ public class CourseModifyFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         itemview = (RecyclerView)view.findViewById(R.id.Itemview);
-        iadapter = new ItemAdapter(this,items,R.layout.modify_course,recyclerView);
-        LinearLayoutManager layoutManagers = new LinearLayoutManager(getActivity());
-        itemview.setLayoutManager(layoutManagers);
-        itemview.setAdapter(iadapter);
+        ChangeItemData();
 
         saveBtn = (Button)view.findViewById(R.id.modify_save);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -276,5 +299,12 @@ public class CourseModifyFragment extends Fragment {
                 //여기다가 넣으면 됨.
             }
         });
+    }
+
+    public void ChangeItemData(){
+        iadapter = new ItemAdapter(this,items,R.layout.modify_course,recyclerView);
+        LinearLayoutManager layoutManagers = new LinearLayoutManager(getActivity());
+        itemview.setLayoutManager(layoutManagers);
+        itemview.setAdapter(iadapter);
     }
 }

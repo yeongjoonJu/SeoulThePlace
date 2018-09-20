@@ -77,7 +77,7 @@ public class CardFragment extends Fragment {
         TextView description = (TextView) view.findViewById(R.id.description);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL()[0]);
+        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL());
         title.setText(place.getName());
         address.setText(place.getLocation());
         description.setText("");

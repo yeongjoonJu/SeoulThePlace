@@ -22,22 +22,16 @@ public class PlaceVO {
     private String tip;
     private String coordinate_x;
     private String coordinate_y;
+    private int distance;
 
-    public PlaceVO(String code, String name, String location, String[] imageURL, String phone,
-                   String tip, String parking, String parkFee, int likes, String details,
-                   String type, String businessHours){
+    public PlaceVO(String code, String name, String imageURL,String coordinate_x,String coordinate_y){
         this.code = code;
         this.name = name;
-        this.location = location;
-        this.imageURL = imageURL;
-        this.phone = phone;
-        this.parking = parking;
-        this.parkFee = parkFee;
-        this.likes = likes;
-        this.details = details;
-        this.type = type;
-        this.businessHours = businessHours;
-        this.tip = tip;
+        this.imageURL = new String[3];
+        this.imageURL[0] = imageURL;
+        this.coordinate_x = coordinate_x;
+        this.coordinate_y = coordinate_y;
+        this.distance = 0;
     }
 
     public PlaceVO(JSONObject jsonObject) {
@@ -59,6 +53,7 @@ public class PlaceVO {
             this.businessHours = jsonObject.getString("BusinessHours");
             this.coordinate_x = jsonObject.getString("Coordinate_X");
             this.coordinate_y = jsonObject.getString("Coordinate_Y");
+            this.distance = 0;
         }catch (JSONException e) {
             e.printStackTrace();
         }
@@ -117,5 +112,11 @@ public class PlaceVO {
     public String getCoordinate_y() {
         return coordinate_y;
     }
+
+    public void setDistance(int distance){
+        this.distance = distance;
+    }
+
+    public int getDistance(){ return distance;}
 
 }

@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         final PlaceVO item = items.get(position);
         SetImageBox(holder,position);
         String ImageURL = item.getImageURL()[0];
-        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,ImageURL);
+        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override

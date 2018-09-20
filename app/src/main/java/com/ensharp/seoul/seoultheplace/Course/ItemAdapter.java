@@ -47,9 +47,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final PlaceVO item = items.get(position);
         String ImageURL = item.getImageURL()[0];
-        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,ImageURL);
+        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
-        holder.distance.setText("300m");
+        holder.distance.setText(String.valueOf(item.getDistance()));
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
