@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="black_opacity">#C4000000</color>
-    <color name="black_background_opacity">#01000000</color>
+    <color name="black_background_opacity">#9E000000</color>
     <color name="white">#FFFFFF</color>
 
     <color name="place_title">#434343</color>
@@ -25,5 +25,9 @@
 
     <color name="white_pressed">#f1f1f1</color>
     <color name="half_black">#808080</color>
+
+    <color name="plus_color">#000000</color>
+    <color name="plus_color_normal">#FFFFFF</color>
+    <color name="plus_pressed">#F1F1F1</color>
 
 </resources>

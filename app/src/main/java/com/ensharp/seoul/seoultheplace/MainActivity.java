@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("c001"), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new FavoriteFragment(), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화

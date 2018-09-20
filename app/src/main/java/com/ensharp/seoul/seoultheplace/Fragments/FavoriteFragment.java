@@ -8,9 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -23,6 +27,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView;
 
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.AddFloatingActionButton;
+import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
+import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +39,17 @@ public class FavoriteFragment extends Fragment {
     private List<Fragment> mFragments = new ArrayList<Fragment>();
     private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
     private View rootView;
+
+    private FrameLayout actionMenuLayout;
+    private FloatingActionsMenu actionsMenu;
+    private FloatingActionButton nearCourse;
+    private FloatingActionButton createCourse;
+
+    private MagicIndicator magicIndicator;
+    private CommonNavigator commonNavigator;
+
+    private CustomizedFragment customizedFragment;
+    private boolean isPlusButtonExpanded = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,10 +62,21 @@ public class FavoriteFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         initFragments();
-        initMagicIndicator1();
+        initMagicIndicator();
 
-        mFragmentContainerHelper.handlePageSelected(1, false);
-        switchPages(1);
+        actionMenuLayout = rootView.findViewById(R.id.plus_button_background_layout);
+
+        mFragmentContainerHelper.handlePageSelected(0, false);
+        switchPages(0);
+
+        actionsMenu = rootView.findViewById(R.id.multiple_actions);
+        nearCourse = (FloatingActionButton) rootView.findViewById(R.id.action_a);
+        createCourse = (FloatingActionButton) rootView.findViewById(R.id.action_b);
+
+        actionsMenu.passParentLayout(actionMenuLayout);
+        actionsMenu.passFragment(this);
+        nearCourse.setOnClickListener(onNearCourseListener);
+        createCourse.setOnClickListener(onCreateCourseListener);
 
         return rootView;
     }
@@ -69,6 +98,9 @@ public class FavoriteFragment extends Fragment {
         else fragmentTransaction.add(R.id.fragment_container, fragment);
 
         fragmentTransaction.commitAllowingStateLoss();
+
+        if (index == 0) actionMenuLayout.setVisibility(View.INVISIBLE);
+        else actionMenuLayout.setVisibility(View.VISIBLE);
     }
 
     private void initFragments() {
@@ -80,50 +112,77 @@ public class FavoriteFragment extends Fragment {
         mFragments.add(testFragment);
 
         // user customized course fragment
-        CustomizedFragment customizedFragment = new CustomizedFragment();
+        customizedFragment = new CustomizedFragment();
         mFragments.add(customizedFragment);
+
     }
 
-    private void initMagicIndicator1() {
-        MagicIndicator magicIndicator = (MagicIndicator) rootView.findViewById(R.id.magic_indicator);
+    private void initMagicIndicator() {
+        magicIndicator = (MagicIndicator) rootView.findViewById(R.id.magic_indicator);
         magicIndicator.setBackgroundResource(R.drawable.round_indicator_background);
-        CommonNavigator commonNavigator = new CommonNavigator(getContext());
-        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
-            @Override
-            public int getCount() {
-                return CHANNELS.length;
-            }
 
-            @Override
-            public IPagerTitleView getTitleView(Context context, final int index) {
-                ClipPagerTitleView clipPagerTitleView = new ClipPagerTitleView(context);
-                clipPagerTitleView.setText(CHANNELS[index]);
-                clipPagerTitleView.setTextColor(Color.parseColor("#E94220"));
-                clipPagerTitleView.setClipColor(Color.WHITE);
-                clipPagerTitleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        commonNavigator = new CommonNavigator(getContext());
+        commonNavigator.setAdapter(commonNavigatorAdapter);
+
+        magicIndicator.setNavigator(commonNavigator);
+        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
+
+    }
+
+    public void setIsExpanded(boolean value) {
+        isPlusButtonExpanded = value;
+        customizedFragment.setIsExpanded(value);
+    }
+
+    private FloatingActionButton.OnClickListener onNearCourseListener = new FloatingActionButton.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getContext(), "actionA clicked", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private FloatingActionButton.OnClickListener onCreateCourseListener = new FloatingActionButton.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getContext(), "actionB clicked", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
+        @Override
+        public int getCount() {
+            return CHANNELS.length;
+        }
+
+        @Override
+        public IPagerTitleView getTitleView(Context context, int index) {
+            ClipPagerTitleView clipPagerTitleView = new ClipPagerTitleView(context);
+            clipPagerTitleView.setText(CHANNELS[index]);
+            clipPagerTitleView.setTextColor(Color.parseColor("#E94220"));
+            clipPagerTitleView.setClipColor(Color.WHITE);
+            clipPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isPlusButtonExpanded) {
                         mFragmentContainerHelper.handlePageSelected(index);
                         switchPages(index);
                     }
-                });
-                return clipPagerTitleView;
-            }
+                }
+            });
+            return clipPagerTitleView;
+        }
 
-            @Override
-            public IPagerIndicator getIndicator(Context context) {
-                LinePagerIndicator indicator = new LinePagerIndicator(context);
-                float navigatorHeight = context.getResources().getDimension(R.dimen.common_navigator_height);
-                float borderWidth = UIUtil.dip2px(context, 1);
-                float lineHeight = navigatorHeight - 2 * borderWidth;
-                indicator.setLineHeight(lineHeight);
-                indicator.setRoundRadius(lineHeight / 2);
-                indicator.setYOffset(borderWidth);
-                indicator.setColors(Color.parseColor("#BC2A2A"));
-                return indicator;
-            }
-        });
-        magicIndicator.setNavigator(commonNavigator);
-        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
-    }
+        @Override
+        public IPagerIndicator getIndicator(Context context) {
+            LinePagerIndicator indicator = new LinePagerIndicator(context);
+            float navigatorHeight = context.getResources().getDimension(R.dimen.common_navigator_height);
+            float borderWidth = UIUtil.dip2px(context, 1);
+            float lineHeight = navigatorHeight - 2 * borderWidth;
+            indicator.setLineHeight(lineHeight);
+            indicator.setRoundRadius(lineHeight / 2);
+            indicator.setYOffset(borderWidth);
+            indicator.setColors(Color.parseColor("#BC2A2A"));
+            return indicator;
+        }
+    };
 }
