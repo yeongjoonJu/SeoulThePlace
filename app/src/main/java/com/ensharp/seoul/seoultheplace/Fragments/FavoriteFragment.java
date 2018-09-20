@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
@@ -135,7 +136,9 @@ public class FavoriteFragment extends Fragment {
 
     public void setIsExpanded(boolean value) {
         isPlusButtonExpanded = value;
-        customizedFragment.setIsExpanded(value);
+        ListView listView = ((CustomizedFragment)mFragments.get(1)).getListView();
+        if (isPlusButtonExpanded) listView.setEnabled(false);
+        else listView.setEnabled(true);
     }
 
     private FloatingActionButton.OnClickListener onNearCourseListener = new FloatingActionButton.OnClickListener() {

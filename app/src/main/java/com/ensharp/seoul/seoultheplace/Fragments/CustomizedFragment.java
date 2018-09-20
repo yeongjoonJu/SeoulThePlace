@@ -82,11 +82,8 @@ public class CustomizedFragment extends Fragment {
         favorites.add(new FavoriteVO("http://news.kbs.co.kr/data/news/2018/03/04/3613494_pc3.jpg", "김태리", "서울특별시 강남구 학동로28길 23"));
     }
 
-    public void setIsExpanded(boolean value) {
-        isExpanded = value;
-
-        if (isExpanded) listView.setEnabled(false);
-        else listView.setEnabled(true);
+    public ListView getListView() {
+        return listView;
     }
 
     private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
