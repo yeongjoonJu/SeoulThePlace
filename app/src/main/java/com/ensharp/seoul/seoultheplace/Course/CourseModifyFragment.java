@@ -132,7 +132,7 @@ public class CourseModifyFragment extends Fragment {
                 PlaceVO item = items.get(viewHolder.getAdapterPosition());
                 int dragFlags = 0;
                 int swipeFlags = 0;
-                mActivity.changeFragment(item.getCode());
+                mActivity.changeToPlaceFragment(item.getCode());
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 

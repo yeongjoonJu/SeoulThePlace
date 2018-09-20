@@ -37,12 +37,21 @@ public class CourseFragment extends Fragment {
     private CourseMapFragment courseMapFragment;
     private CourseVO course;
 
+    public CourseFragment() {
+
+    }
+
     @SuppressLint("ValidFragment")
     public CourseFragment(String code) {
         DAO dao = new DAO();
         this.code = code;
         course = dao.getCourseData(code);
         index = 0;
+    }
+
+    public CourseFragment(CourseVO course) {
+        this.code = course.getCode();
+        this.course = course;
     }
 
     @Override

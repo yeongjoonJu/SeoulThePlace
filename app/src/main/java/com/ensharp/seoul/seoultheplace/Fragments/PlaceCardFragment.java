@@ -71,7 +71,7 @@ public class PlaceCardFragment extends Fragment {
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment(place.getCode());
+                activity.changeToPlaceFragment(place.getCode());
             }
         });
 

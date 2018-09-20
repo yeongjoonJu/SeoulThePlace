@@ -31,6 +31,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         setContentView(R.layout.first_background);
         CheckAlreadyLogin();
         DeleteData();
+        convertToMainActivity();
 
         dao = new DAO();
 

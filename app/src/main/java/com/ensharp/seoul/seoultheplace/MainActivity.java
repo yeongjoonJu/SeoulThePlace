@@ -156,7 +156,16 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeFragment(CourseVO course, int index) {
+    public void changeToCourseFragment(CourseVO course) {
+        final Fragment fragment = new CourseFragment(course);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void changeToPlaceFragment(CourseVO course, int index) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                 .replace(R.id.fragment, new PlaceFragment(course, index))
@@ -164,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeFragment(String placeCode) {
+    public void changeToPlaceFragment(String placeCode) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                 .replace(R.id.fragment, new PlaceFragment(placeCode))
@@ -180,10 +189,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public static float dpToPixels(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().density);
-    }
-
     public void changeCourseViewFragment(List<PlaceVO> list){
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
@@ -197,4 +202,7 @@ public class MainActivity extends AppCompatActivity {
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
 }

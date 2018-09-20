@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.CourseCardFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseFragmentPagerAdapter extends FragmentStatePagerAdapter implements CardAdapter {
+public class CourseFragmentPagerAdapter extends FragmentPagerAdapter implements CardAdapter {
 
     List<CourseCardFragment> courseCards;
     private float baseElevation;
@@ -30,9 +31,12 @@ public class CourseFragmentPagerAdapter extends FragmentStatePagerAdapter implem
         }
     }
 
-    @Override
-    public CardView getCardViewAt(int position) {
-        return courseCards.get(position).getCardView();
+    public void addCardFragment(CourseCardFragment fragment) {
+        courseCards.add(fragment);
+    }
+
+    public void changeToCourseFragment(CourseVO course) {
+
     }
 
     @Override
@@ -40,8 +44,14 @@ public class CourseFragmentPagerAdapter extends FragmentStatePagerAdapter implem
         return baseElevation;
     }
 
-    public void addCardFragment(CourseCardFragment fragment) {
-        courseCards.add(fragment);
+    @Override
+    public CardView getCardViewAt(int position) {
+        return courseCards.get(position).getCardView();
+    }
+
+    @Override
+    public int getCount() {
+        return courseCards.size();
     }
 
     @Override
@@ -54,10 +64,5 @@ public class CourseFragmentPagerAdapter extends FragmentStatePagerAdapter implem
         Object fragment = super.instantiateItem(container, position);
         courseCards.set(position, (CourseCardFragment)fragment);
         return fragment;
-    }
-
-    @Override
-    public int getCount() {
-        return courseCards.size();
     }
 }

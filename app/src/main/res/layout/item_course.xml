@@ -17,6 +17,7 @@
         android:background="@drawable/item_unchoicedtag">
 
         <ImageButton
+            android:id="@+id/course_image"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="8"
