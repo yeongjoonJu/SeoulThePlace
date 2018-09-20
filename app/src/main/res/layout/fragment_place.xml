@@ -59,17 +59,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/place_address"
                 android:textSize="@dimen/place_address_size"/>
 
             <TextView
                 android:id="@+id/phone"
+                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/place_phone"
-                android:textSize="@dimen/place_phone_size"/>
+                android:textSize="@dimen/place_phone_size" />
 
             <FrameLayout
                 android:layout_width="match_parent"

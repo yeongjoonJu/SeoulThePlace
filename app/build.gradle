@@ -50,6 +50,10 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     // For Refresh List View
     implementation 'com.yalantis:phoenix:1.2.3'
+    // For Customized Tab View
+    implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+    // For Plus Button
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
     // For Download Image
     implementation 'com.squareup.picasso:picasso:2.71828'
 }

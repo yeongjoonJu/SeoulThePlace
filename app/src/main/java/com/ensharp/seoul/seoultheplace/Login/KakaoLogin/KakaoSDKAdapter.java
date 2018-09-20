@@ -10,12 +10,15 @@ import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 public class KakaoSDKAdapter extends KakaoAdapter {
 
     // 로그인 시 사용 될, Session의 옵션 설정을 위한 인터페이스 입니다.
 
-    @Override
+    public String TAG = "KAKAOTALK SDKAdapter";
 
+    @Override
     public ISessionConfig getSessionConfig() {
         return new ISessionConfig() {
             // 로그인 시에 인증 타입을 지정합니다.
@@ -28,8 +31,8 @@ public class KakaoSDKAdapter extends KakaoAdapter {
                 // KAKAO_ACCOUNT : 웹뷰 다이얼로그를 통한 계정연결 타입
                 // KAKAO_TALK_EXCLUDE_NATIVE_LOGIN : 카카오톡 로그인 타입과 함께 계정생성을 위한 버튼을 함께 제공
                 // KAKAO_LOGIN_ALL : 모든 로그인 방식을 제공
-                Log.e("KAKAOTALK :: ", "start");
-                return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
+                Log.e(TAG, "kakao Login Start");
+                return new AuthType[]{AuthType.KAKAO_ACCOUNT};
             }
 
             // 로그인 웹뷰에서 pause와 resume시에 타이머를 설정하여, CPU의 소모를 절약 할 지의 여부를 지정합니다.
@@ -37,6 +40,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
 
             @Override
             public boolean isUsingWebviewTimer() {
+                Log.d(TAG,"isUsingWebviewTimer");
                 return false;
             }
 
@@ -44,6 +48,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             // 로그인 시 토큰을 저장할 때의 암호화 여부를 지정합니다.
             @Override
             public boolean isSecureMode() {
+                Log.d(TAG,"isSecureMode : false");
                 return false;
             }
 
@@ -51,6 +56,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             // 값을 지정하지 않을 경우, ApprovalType.INDIVIDUAL 값으로 사용됩니다.
             @Override
             public ApprovalType getApprovalType() {
+                Log.d(TAG,"getApprovalType");
                 return ApprovalType.INDIVIDUAL;
             }
 
@@ -58,6 +64,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
 
             @Override
             public boolean isSaveFormData() {
+                Log.d(TAG,"isSaveFormData");
                 return true;
             }
         };

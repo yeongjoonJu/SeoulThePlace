@@ -2,27 +2,20 @@ package com.ensharp.seoul.seoultheplace.UIElement;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.DownloadImageTask;
-import com.ensharp.seoul.seoultheplace.Fragments.CourseCardFragment;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -51,12 +44,12 @@ public class CourseAdapter extends ArrayAdapter<CourseVO> {
         CourseVO course = getItem(position);
 
         TextView title = (TextView) listItemView.findViewById(R.id.course_name);
-        TextView description = (TextView) listItemView.findViewById(R.id.course_location);
+        TextView location = (TextView) listItemView.findViewById(R.id.course_location);
         ImageButton heartButton = (ImageButton) listItemView.findViewById(R.id.like_button);
-        ImageButton representImage = (ImageButton) listItemView.findViewById(R.id.ex_image);
+        ImageView representImage = (ImageView) listItemView.findViewById(R.id.ex_image);
 
         title.setText(course.getName());
-        description.setText(course.getDetails());
+        location.setText(course.getLocation());
         Picasso.get().load(course.getImage()).into(representImage);
 
         // 좋아요 되어있으면

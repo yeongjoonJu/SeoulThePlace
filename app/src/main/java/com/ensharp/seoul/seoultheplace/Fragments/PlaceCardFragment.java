@@ -88,7 +88,7 @@ public class PlaceCardFragment extends Fragment {
             {
                 CustomAnimationDialog customAnimationDialog = new CustomAnimationDialog(activity);
                 customAnimationDialog.show();
-                activity.changeFragment(place.getCode());
+                activity.changeToPlaceFragment(place.getCode());
                 customAnimationDialog.dismiss();
             }
         });

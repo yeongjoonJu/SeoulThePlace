@@ -1,13 +1,16 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +28,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.DetailInformationVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
@@ -47,6 +51,7 @@ public class PlaceFragment extends Fragment {
     private DetailInformationAdapter adapter;
     private ImageView[] dots;
     private int dotCount;
+    private CourseVO courseVO;
 
     private PullToRefreshView destroyView;
 
@@ -54,18 +59,17 @@ public class PlaceFragment extends Fragment {
     public PlaceFragment(String placeCode) {
         courseCode = "";
         index = 0;
-
         DAO dao = new DAO();
         place = dao.getPlaceData(placeCode);
     }
 
     @SuppressLint("ValidFragment")
-    public PlaceFragment(String courseCode, int index) {
+    public PlaceFragment(CourseVO course, int index) {
         this.courseCode = courseCode;
         this.index = index;
-
         DAO dao = new DAO();
-        place = dao.getPlaceData(dao.getCourseData(courseCode).getPlaceCode(index - 1));
+        courseVO = course;
+        place = dao.getPlaceData(courseVO.getPlaceCode(index - 1));
     }
 
     @Override
@@ -90,7 +94,7 @@ public class PlaceFragment extends Fragment {
                 destroyView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        activity.chagneToCourseFragment(index);
+                        activity.chagneCourseFragment(index);
                     }
                 }, 1000);
             }
@@ -123,10 +127,17 @@ public class PlaceFragment extends Fragment {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
 
-                intent.setData(Uri.parse("tel" + place.getPhone()));
-                getContext().startActivity(intent);
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CALL_PHONE}, 0);
+                }
+
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+
+                    intent.setData(Uri.parse("tel:" + place.getPhone()));
+                    getContext().startActivity(intent);
+                }
             }
         });
 
@@ -229,28 +240,28 @@ public class PlaceFragment extends Fragment {
         previousImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseCode, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1);
             }
         });
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseCode, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1);
             }
         });
 
         nextImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseCode, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1);
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseCode, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1);
             }
         });
 

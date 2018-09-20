@@ -4,18 +4,31 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.CourseVO;
+import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.MainActivity;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
+import org.w3c.dom.Text;
 
 public class CourseCardFragment extends Fragment {
+    public static final int HEART_BUTTON = 0;
+    public static final int COURSE_NAME = 1;
+    public static final int COURSE_LOCATION = 2;
+    public static final int COURSE_IMAGE = 3;
+
+    private View view;
     private CardView cardView;
     private ImageButton heartButton;
     private CourseVO course;
@@ -23,8 +36,12 @@ public class CourseCardFragment extends Fragment {
     private Drawable choicedHeart;
     private int position;
 
+    private ImageButton image;
+    private TextView name;
+    private TextView location;
+
     public CourseCardFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -34,9 +51,13 @@ public class CourseCardFragment extends Fragment {
         unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
 
-    public void setData(CourseVO course) { this.course = course; }
+    public void setData(CourseVO course) {
+        this.course = course;
+    }
 
-    public void setPosition(int position) { this.position = position; }
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public CardView getCardView() {
         return cardView;
@@ -45,26 +66,53 @@ public class CourseCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_course, container, false);
+        view = inflater.inflate(R.layout.item_course, container, false);
 
         cardView = (CardView) view.findViewById(R.id.courseView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
-        TextView title = (TextView) view.findViewById(R.id.course_name);
-        TextView description = (TextView) view.findViewById(R.id.course_location);
-        ImageButton representImage = (ImageButton) view.findViewById(R.id.ex_image);
-        //new DownloadImageTask(representImage).execute(course.getImage());
-        try {
-            Picasso.get().load(course.getImage()).into(representImage);
-        }catch (Exception e) {
-            representImage.setBackground(getResources().getDrawable(R.drawable.cantload));
-        }
-
-        title.setText(course.getName());
-        description.setText(course.getDetails());
+        image = (ImageButton) view.findViewById(R.id.course_image);
+        name = (TextView) view.findViewById(R.id.course_name);
+        location = (TextView) view.findViewById(R.id.course_location);
         heartButton = (ImageButton) view.findViewById(R.id.like_button);
-        heartButton.setVisibility(View.GONE);
+
+        setElements();
+
+        heartButton.setOnClickListener(onHeartButtonClickListener);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MainActivity activity = (MainActivity)getActivity();
+                activity.changeToCourseFragment(course);
+            }
+        });
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MainActivity activity = (MainActivity)getActivity();
+                activity.changeToCourseFragment(course);
+            }
+        });
 
         return view;
     }
+
+    public void setElements() {
+        DAO dao = new DAO();
+        PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
+        String imageURL = firstPlace.getImageURL()[0];
+        Picasso.get().load(imageURL).into(image);
+        name.setText(course.getName());
+        location.setText(firstPlace.getLocation());
+    }
+
+    public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (heartButton.getDrawable().equals(choicedHeart))
+                heartButton.setImageDrawable(unchoicedHeart);
+            else
+                heartButton.setImageDrawable(choicedHeart);
+        }
+    };
 }

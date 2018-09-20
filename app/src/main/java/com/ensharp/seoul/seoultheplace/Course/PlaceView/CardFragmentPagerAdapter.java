@@ -35,9 +35,9 @@ public class CardFragmentPagerAdapter extends FragmentPagerAdapter implements Ca
     }
 
     public void generateCardFragment() {
-        fragments.add(new CardFragment(courseCode, 0, null));
+        fragments.add(new CardFragment(course, 0, null));
         for (int i = 0; i < course.getPlaceCount(); i++) {
-            fragments.add(new CardFragment(courseCode, i+1, places.get(i)));
+            fragments.add(new CardFragment(course, i+1, places.get(i)));
             Log.e("Place : ",places.get(i).getName());
         }
     }

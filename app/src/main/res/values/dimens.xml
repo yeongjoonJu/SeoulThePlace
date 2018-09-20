@@ -12,4 +12,25 @@
     <dimen name="place_detail_size">15sp</dimen>
     <dimen name="place_change_size">13sp</dimen>
 
+    <dimen name="card_title_size">18sp</dimen>
+    <dimen name="card_address_size">12sp</dimen>
+
+    <dimen name="navigator_margin_top">5dp</dimen>
+    <dimen name="common_navigator_height">45dp</dimen>
+
+    <dimen name="regular_plus_button">56dp</dimen>
+
+    <!--for floating action button-->
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="fab_icon_size">24dp</dimen>
+    <dimen name="fab_plus_icon_size">14dp</dimen>
+    <dimen name="fab_plus_icon_stroke">2dp</dimen>
+    <dimen name="fab_shadow_offset">3dp</dimen>
+    <dimen name="fab_shadow_radius">9dp</dimen>
+    <dimen name="fab_stroke_width">1dp</dimen>
+    <dimen name="fab_actions_spacing">16dp</dimen>
+    <dimen name="fab_labels_margin">3dp</dimen>
+    <dimen name="plus_button_text_size">18sp</dimen>
+
 </resources>

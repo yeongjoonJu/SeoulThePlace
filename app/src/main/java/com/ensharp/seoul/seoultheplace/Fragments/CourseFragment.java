@@ -19,7 +19,6 @@ import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
@@ -37,12 +36,21 @@ public class CourseFragment extends Fragment {
     private CourseMapFragment courseMapFragment;
     private CourseVO course;
 
+    public CourseFragment() {
+
+    }
+
     @SuppressLint("ValidFragment")
     public CourseFragment(String code) {
         DAO dao = new DAO();
         this.code = code;
         course = dao.getCourseData(code);
         index = 0;
+    }
+
+    public CourseFragment(CourseVO course) {
+        this.code = course.getCode();
+        this.course = course;
     }
 
     @Override
@@ -100,7 +108,8 @@ public class CourseFragment extends Fragment {
 
         @Override
         public void onPageSelected(int position) {
-            //courseMapFragment.changeMapCenter(position);
+            courseMapFragment.changeMapCenter(position);
+            index = position;
         }
 
         @Override
@@ -109,4 +118,7 @@ public class CourseFragment extends Fragment {
         }
     };
 
+    public int getIndex() {
+        return index;
+    }
 }

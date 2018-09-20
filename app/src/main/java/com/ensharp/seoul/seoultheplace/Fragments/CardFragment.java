@@ -12,20 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
-
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.DownloadImageTask;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.*;
 
 @SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
 
-    private String courseCode;
     private CourseVO course;
     private int index;
     private PlaceVO place;
@@ -33,13 +25,10 @@ public class CardFragment extends Fragment {
     private ImageButton placeButton;
 
     @SuppressLint("ValidFragment")
-    public CardFragment(String courseCode, int index, PlaceVO place) {
-        this.courseCode = courseCode;
+    public CardFragment(CourseVO course, int index, PlaceVO place) {
         this.index = index;
         this.place = place;
-
-        DAO dao = new DAO();
-        course = dao.getCourseData(courseCode);
+        this.course = course;
     }
 
     @SuppressLint("DefaultLocale")
@@ -78,22 +67,20 @@ public class CardFragment extends Fragment {
         ImageView image = (ImageView) view.findViewById(R.id.placeImage);
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
-        TextView description = (TextView) view.findViewById(R.id.description);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL()[0]);
+        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL());
         title.setText(place.getName());
         address.setText(place.getLocation());
-        description.setText("");
         placeIndex.setText(Integer.toString(index));
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        placeButton = (ImageButton) view.findViewById(R.id.place);
+        ImageButton placeButton = (ImageButton) view.findViewById(R.id.place);
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment(courseCode, index);
+                activity.changeToPlaceFragment(course, index);
             }
         });
 
