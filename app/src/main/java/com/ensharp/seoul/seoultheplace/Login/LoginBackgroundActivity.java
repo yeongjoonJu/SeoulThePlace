@@ -30,7 +30,6 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
         CheckAlreadyLogin();
-        DeleteData();
 
         dao = new DAO();
 
@@ -71,8 +70,11 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         Log.d(TAG,"CheckAlreadyLogin");
         SharedPreferences sf = getSharedPreferences("data",0);
         if(sf.getString("email","")!=""){
-            Log.d(TAG,"Already Login");
+            Log.d(TAG,"Already Login : "+sf.getString("email",""));
             convertToMainActivity();
+        }
+        else{
+            DeleteData(); //없으면 초기화
         }
     }
 

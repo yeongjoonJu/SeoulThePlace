@@ -437,4 +437,29 @@ public class DAO {
         }
         return "success";
     }
+
+    public boolean SaveNameCheck(String id, String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("Name", name);
+            jsonObject.accumulate("url", BASE_URL+"/course/editted/duplicatecheck");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return false;
+
+            jsonObject = resultData.getJSONObject(0);
+            if(jsonObject.getString("success").equals("true"))
+                return true;
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

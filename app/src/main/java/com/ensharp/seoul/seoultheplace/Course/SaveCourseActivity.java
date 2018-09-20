@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.R;
 
 public class SaveCourseActivity extends Activity {
@@ -39,7 +40,7 @@ public class SaveCourseActivity extends Activity {
                 String mDecription = String.valueOf(description.getText());
                 Log.e("SaveTest :", mtitle);
                 Log.e("SaveTest :", mDecription);
-                if (mtitle.length()>0 && mDecription.length()>0) {
+                if (mtitle.length()>0 && mDecription.length()>0&&CheckDuplicate(mtitle)) {
                     Intent newIntent = new Intent();
                     newIntent.putExtra("codes", intent.getStringArrayExtra("codes"));
                     newIntent.putExtra("title", mtitle);
@@ -54,6 +55,15 @@ public class SaveCourseActivity extends Activity {
                 }
             }
         });
+    }
+
+    public boolean CheckDuplicate(String title){
+        DAO dao = new DAO();
+        String Id = getSharedPreferences("data", 0).getString("email","");
+        if(dao.SaveNameCheck(Id,title))
+            return true;
+        Toast.makeText(getApplicationContext(),"중복된 제목입니다.",Toast.LENGTH_LONG).show();
+        return false;
     }
 
     @Override
