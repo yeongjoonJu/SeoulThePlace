@@ -5,21 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
@@ -27,12 +17,10 @@ import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -40,6 +28,7 @@ public class SearchFragment extends Fragment {
     static final String KEY_COURSE = "KEY_COURSE";
     static final String KEY_PLACE = "KEY_PLACE";
 
+    private CustomAnimationDialog customAnimationDialog;
     InputMethodManager inputMethodManager;
     TextView courseText;
     TextView placeText;
@@ -167,6 +156,9 @@ public class SearchFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                customAnimationDialog = new CustomAnimationDialog(getActivity());
+                customAnimationDialog.show();
+
                 courseText.setVisibility(View.VISIBLE);
                 placeText.setVisibility(View.VISIBLE);
 
@@ -189,6 +181,7 @@ public class SearchFragment extends Fragment {
 
                 // 키보드 숨김
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+                customAnimationDialog.dismiss();
             }
         });
         return rootView;

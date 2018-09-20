@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,17 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,12 +103,16 @@ public class TagAdapter extends ArrayAdapter<String> {
                 preChoicedButton = tagButton;
 
                 // 타입에 따라 데이터를 불러온다
+                CustomAnimationDialog customAnimationDialog = new CustomAnimationDialog(mainFragmentActivity);
+                customAnimationDialog.show();
+
                 ArrayList<CourseVO> courses = getCourseByType(getItem(0), useremail);
                 if(courses != null) {
-                    Log.i("yeongjoon", "타입에 따라 데이터를 불러온다");
                     CourseAdapter courseAdapter = new CourseAdapter(mainFragmentActivity, courses);
                     mainListView.setAdapter(courseAdapter);
                 }
+
+                customAnimationDialog.dismiss();
             }
         });
 

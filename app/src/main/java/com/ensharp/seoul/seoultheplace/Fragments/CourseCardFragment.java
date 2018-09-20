@@ -54,7 +54,11 @@ public class CourseCardFragment extends Fragment {
         TextView description = (TextView) view.findViewById(R.id.course_location);
         ImageButton representImage = (ImageButton) view.findViewById(R.id.ex_image);
         //new DownloadImageTask(representImage).execute(course.getImage());
-        Picasso.get().load(course.getImage()).into(representImage);
+        try {
+            Picasso.get().load(course.getImage()).into(representImage);
+        }catch (Exception e) {
+            representImage.setBackground(getResources().getDrawable(R.drawable.cantload));
+        }
 
         title.setText(course.getName());
         description.setText(course.getDetails());

@@ -6,6 +6,7 @@
     tools:context=".Fragments.SearchFragment">
 
     <ScrollView
+        android:id="@+id/search_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
