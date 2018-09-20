@@ -38,7 +38,7 @@
                 android:gravity="top"
                 android:padding="10dp"
                 android:textColor="#FFFFFF"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/addCardDistance"

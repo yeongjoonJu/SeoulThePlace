@@ -220,15 +220,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==1) {
             if(resultCode==RESULT_OK) {
+                String[] insertData = new String[]{null,null,null,null,null,null,null,null};
                 SharedPreferences sp = getSharedPreferences("data",0);
                 Log.e("SaveTest :", "onActivityResult");
                 Log.e("SaveTest : ","email " + sp.getString("email",""));
-                Log.e("SaveTest :", "title : " +data.getStringExtra("title"));
-                Log.e("SaveTest :","description : "+data.getStringExtra("description"));
+                insertData[0] = sp.getString("email","");
+                insertData[1] = data.getStringExtra("title");;
+                insertData[2] = data.getStringExtra("description");
                 for(int i = 0 ; i < data.getStringArrayExtra("codes").length;i++){
-                    if(data.getStringArrayExtra("codes")[i]!=null)
-                        Log.e("SaveTest :","codes : "+data.getStringArrayExtra("codes")[i]);
+                    if(data.getStringArrayExtra("codes")[i]!=null) {
+                        insertData[3+i]=data.getStringArrayExtra("codes")[i];
+                    }
+                    else{
+                        insertData[3+i] = null;
+                    }
                 }
+                DAO dao= new DAO();
+                Log.e("SaveTest : ",dao.insertMemberCourseData(insertData));
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
                         .replace(R.id.fragment, new FavoriteFragment())

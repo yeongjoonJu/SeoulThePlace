@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -16,6 +18,7 @@ public class SaveCourseActivity extends Activity {
     EditText title;
     EditText description;
     Intent intent;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +30,30 @@ public class SaveCourseActivity extends Activity {
         intent = getIntent();
         title = (EditText)findViewById(R.id.savetitle);
         description = (EditText)findViewById(R.id.savedescription);
-    }
-
-    //확인 버튼 클릭
-    public void mOnClose(View v){
-        //데이터 전달하기
-        Log.e("SaveTest :", String.valueOf(title.getText()));
-        Log.e("SaveTest :", String.valueOf(description.getText()));
-        Log.e("SaveTest :", String.valueOf(title.getText()));
-        Log.e("SaveTest :", String.valueOf(description.getText()));
-        if(title.getText()!=null&&description.getText()!=null) {
-            Intent newIntent = new Intent();
-            newIntent.putExtra("codes", intent.getStringArrayExtra("codes"));
-            newIntent.putExtra("title", String.valueOf(title.getText()));
-            newIntent.putExtra("description", String.valueOf(description.getText()));
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+        btn = (Button)findViewById(R.id.saveDataBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //데이터 전달하기
+                String mtitle = String.valueOf(title.getText());
+                String mDecription = String.valueOf(description.getText());
+                Log.e("SaveTest :", mtitle);
+                Log.e("SaveTest :", mDecription);
+                if (mtitle.length()>0 && mDecription.length()>0) {
+                    Intent newIntent = new Intent();
+                    newIntent.putExtra("codes", intent.getStringArrayExtra("codes"));
+                    newIntent.putExtra("title", mtitle);
+                    newIntent.putExtra("description", mDecription);
+                    Log.e("SaveTest :",mtitle+"  "+ String.valueOf(title.getText()));
+                    Log.e("SaveTest :", mDecription+ " " + String.valueOf(description.getText()));
+                    setResult(RESULT_OK, newIntent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "모든 항목을 입력해주세요.",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -54,11 +64,11 @@ public class SaveCourseActivity extends Activity {
         }
         return true;
     }
-
+/*
     @Override
     public void onBackPressed() {
         //안드로이드 백버튼 막기
         return;
-    }
+    }*/
 }
 

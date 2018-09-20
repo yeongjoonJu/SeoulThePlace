@@ -271,16 +271,7 @@ public class CourseModifyFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ITEM_SIZE > 0&&ITEM_SIZE<5){
-                    for(int i = 0 ; i <= datas.size();i++){
-                        PlaceVO item = datas.get(i);
-                        if(item.getName().equals("+")){
-                            datas.remove(i);
-                        }
-                    }
-                    mActivity.SetSaveData(GetPlaceCode(datas));
-                }
-                else if(ITEM_SIZE==5){
+                if(ITEM_SIZE > 0&&ITEM_SIZE<=5){
                     mActivity.SetSaveData(GetPlaceCode(datas));
                 }
                 else{ //아무것도 없음.
@@ -315,7 +306,8 @@ public class CourseModifyFragment extends Fragment {
     public String[] GetPlaceCode(List<PlaceVO> datas){
         String[] codes = new String[]{null,null,null,null,null};
         for(int i=0;i<datas.size();i++){
-            codes[i]=datas.get(i).getCode();
+            if(!datas.get(i).getName().equals("+"))
+                codes[i]=datas.get(i).getCode();
         }
         return codes;
     }

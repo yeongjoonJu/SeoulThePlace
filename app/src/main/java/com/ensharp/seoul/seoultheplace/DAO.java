@@ -401,4 +401,40 @@ public class DAO {
         }
         return null;
     }
+
+    // 회원가입
+    public String insertMemberCourseData(String[] information) {
+        Log.v("test", "insertMemberData");
+        // 처리 설정
+        String[] memberCategory = new String[]{"Id", "Name","Description","PlaceCode1","PlaceCode2","PlaceCode3","PlaceCode4","PlaceCode5"};
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("url", BASE_URL+"/course/editted");
+            for (int i = 0; i < memberCategory.length; i++) {
+                jsonObject.accumulate(memberCategory[i], information[i]);
+                Log.e("SaveTest :",memberCategory[i] +"  "+information[i]);
+            }
+
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return "incomplete network";
+            else {
+                jsonObject = resultData.getJSONObject(0);
+                if(jsonObject.getString("success").equals("false"))
+                    return "error";
+            }
+            Log.v("test", "insertMemberData Complete");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "json error";
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return "success";
+    }
 }
