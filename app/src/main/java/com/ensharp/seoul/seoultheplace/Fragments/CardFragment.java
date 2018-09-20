@@ -88,7 +88,7 @@ public class CardFragment extends Fragment {
         placeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeFragment(course, index);
+                activity.changeToPlaceFragment(course, index);
             }
         });
 

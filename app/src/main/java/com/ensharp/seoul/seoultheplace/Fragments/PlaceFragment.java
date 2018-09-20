@@ -240,28 +240,28 @@ public class PlaceFragment extends Fragment {
         previousImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseVO, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1);
             }
         });
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseVO, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1);
             }
         });
 
         nextImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseVO, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1);
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeFragment(courseVO, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1);
             }
         });
 

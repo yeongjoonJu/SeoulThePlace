@@ -143,13 +143,16 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public float dpToPx(float valueInDp) {
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    public void changeToCourseFragment(CourseVO course) {
+        final Fragment fragment = new CourseFragment(course);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
-    public void changeFragment(CourseVO course, int index) {
+    public void changeToPlaceFragment(CourseVO course, int index) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                 .replace(R.id.fragment, new PlaceFragment(course, index))
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeFragment(String placeCode) {
+    public void changeToPlaceFragment(String placeCode) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                 .replace(R.id.fragment, new PlaceFragment(placeCode))
@@ -184,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
     }
-
     public void changeCourseViewFragment(List<PlaceVO> list){
         DeleteBackStack(); //뒤로가기하는거 다 없앰
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -218,25 +220,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==1) {
-            if(resultCode==RESULT_OK) {
-                String[] insertData = new String[]{null,null,null,null,null,null,null,null};
-                SharedPreferences sp = getSharedPreferences("data",0);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String[] insertData = new String[]{null, null, null, null, null, null, null, null};
+                SharedPreferences sp = getSharedPreferences("data", 0);
                 Log.e("SaveTest :", "onActivityResult");
-                Log.e("SaveTest : ","email " + sp.getString("email",""));
-                insertData[0] = sp.getString("email","");
-                insertData[1] = data.getStringExtra("title");;
+                Log.e("SaveTest : ", "email " + sp.getString("email", ""));
+                insertData[0] = sp.getString("email", "");
+                insertData[1] = data.getStringExtra("title");
+                ;
                 insertData[2] = data.getStringExtra("description");
-                for(int i = 0 ; i < data.getStringArrayExtra("codes").length;i++){
-                    if(data.getStringArrayExtra("codes")[i]!=null) {
-                        insertData[3+i]=data.getStringArrayExtra("codes")[i];
-                    }
-                    else{
-                        insertData[3+i] = null;
+                for (int i = 0; i < data.getStringArrayExtra("codes").length; i++) {
+                    if (data.getStringArrayExtra("codes")[i] != null) {
+                        insertData[3 + i] = data.getStringArrayExtra("codes")[i];
+                    } else {
+                        insertData[3 + i] = null;
                     }
                 }
-                DAO dao= new DAO();
-                Log.e("SaveTest : ",dao.insertMemberCourseData(insertData));
+                DAO dao = new DAO();
+                Log.e("SaveTest : ", dao.insertMemberCourseData(insertData));
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
                         .replace(R.id.fragment, new FavoriteFragment())
@@ -244,4 +246,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

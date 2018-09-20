@@ -30,9 +30,6 @@ import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -184,7 +181,7 @@ public class SearchFragment extends Fragment {
                 ArrayList<PlaceVO> placeData = dao.searchPlace(searchWord);
                 searchPlaceResult = placeData;
                 if(searchPlaceResult != null) {
-                    showPlaceCardView(searchPlaceResult, 0);
+//                    showPlaceCardView(searchPlaceResult, 0);
                 }
 
                 // 키보드 숨김
