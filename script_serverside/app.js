@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-var async = require('async');
 var sync = require('synchronize');
 var app = express();
 
@@ -143,7 +142,6 @@ app.post('/course/info', function(req, res) {
 
 //Main에서 type으로 코스 리스트로 띄울 때 필요한 정보 가져오기
 app.post('/main/course_info', function(req, res) {
-  console.log('메인에서 코스리스트로 띄울때 들어옴');
   var courseType = req.body.Type; //코스 타입
   var userID = req.body.Id; //로그인한 아이디
   //해당 타입에 맞는 코스 가져옴
@@ -238,18 +236,15 @@ app.post('/course/like', function(req, res) {
     var result = sync.await(con.query('SELECT Likes FROM COURSE WHERE Code = ?', courseCode, sync.defer()));
     courseLikes = result[0].Likes;
     courseLiked = isCourseLiked(courseCode, user_ID);
-console.log(courseLiked);
     if(courseLiked == 'true') {
       if(courseLikes > 0) {
         courseLikes = courseLikes - 1;
       }
-console.log('좋아요 버튼 눌러저 있어서 취소 되는 상황'+ courseLikes);
       res.json([ {isCourseLiked: 'true', Likes: courseLikes} ]);
       con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [courseCode, user_ID]);
       con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
     } else {
        courseLikes = courseLikes + 1;
-console.log('좋아요가 아닌 상태여서 하트가 되는 상황' + courseLikes);
        res.json([ {isCourseLiked: 'false', Likes: courseLikes} ]);
        con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
        con.query('UPDATE COURSE set Likes = ? WHERE Code = ?', [courseLikes, courseCode]);
@@ -305,8 +300,30 @@ app.post('/place/like/status', function(req, res) {
 	});
 });
 
+//코스 수정 할 때 이름과 아이디 중복체크
+app.post('/course/editted/duplicatecheck', function(req, res) {
+  var user_ID = req.body.Id;
+  var editedCourse_name = req.body.Name;
+
+  var selectQuery = 'SELECT Person, Name FROM EDITTEDCOURSE WHERE Person=? AND Name=?';
+  var params = [user_ID, editedCourse_name];
+
+  con.query(selectQuery, params, function(err, result) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(result.length === 0) {
+        res.json([ {success: 'true'} ]);
+      } else {
+        res.json([ {success: 'false'} ]);
+      }
+    }
+  });
+});
+
 //코스 수정 완료 후 입력
 app.post('/course/editted', function(req, res) {
+  var user_ID = req.body.Id;
   var edittedCourse_name = req.body.Name;
   var edittedCourse_description = req.body.Description;
   var placeCode1 = req.body.PlaceCode1;
@@ -315,8 +332,8 @@ app.post('/course/editted', function(req, res) {
   var placeCode4 = req.body.PlaceCode4;
   var placeCode5 = req.body.PlaceCode5;
 
-  var insertQuery = 'INSERT INTO EDITTEDCOURSE VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
-  var params = [null, edittedCourse_name, edittedCourse_description, placeCode1, placeCode2,
+  var insertQuery = 'INSERT INTO EDITTEDCOURSE VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  var params = [null, user_ID, edittedCourse_name, edittedCourse_description, placeCode1, placeCode2,
                 placeCode3, placeCode4, placeCode5];
 
   con.query(insertQuery, params, function(err, rows, fields) {
@@ -331,7 +348,6 @@ app.post('/course/editted', function(req, res) {
 
 //거리계산을 위한 모든 Place 리스트 다 받아오기
 app.post('/place/all', function(req, res) {
-  console.log
   jsonArray = initJsonArray(jsonArray);
   var query = 'SELECT Code, Name, Image1, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code NOT IN("PLACEdefault")';
   sync.fiber(function() {
@@ -405,7 +421,7 @@ app.post('/edited_course/info', function(req, res) {
 });
 
 //커스텀 코스 지우면
-app.post('/editted_course/delete', function(req, res) {
+app.post('/edited_course/delete', function(req, res) {
 	var userID = req.body.Id;
 	var edittedCourse_code = req.body.Code;
 
