@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,9 +49,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        Log.e("TEST_TEST_ :","onBindViewHolder in Recycleradapter");
         final PlaceVO item = items.get(position);
         SetImageBox(holder,position);
-        String ImageURL = item.getImageURL()[0];
         new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
@@ -58,8 +59,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
                 choosedMember = position;
                 NotifyDataSetChanged(position);
-                fragment.setItemData(item);
-                Toast.makeText(context, item.getName()+"  "+choosedMember, Toast.LENGTH_SHORT).show();
+                if(item.getName().equals("+")) {
+                    fragment.setItemData(null);
+                    fragment.ChangeItemData();
+                }
+                else{
+                    fragment.setItemData(item);
+                }
             }
         });
     }
@@ -88,7 +94,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         CardView cardview;
         RelativeLayout.LayoutParams params1;
         RelativeLayout.LayoutParams params2;
-        RecyclerView recyclerView;
 
         public ViewHolder(View itemView) {
             super(itemView);

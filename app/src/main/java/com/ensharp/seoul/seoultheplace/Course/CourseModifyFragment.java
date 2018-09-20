@@ -43,12 +43,12 @@ public class CourseModifyFragment extends Fragment {
     private ItemAdapter iadapter;
     RecyclerView recyclerView;
     RecyclerView itemview;
-    Button saveBtn ;
+    Button saveBtn;
     MainActivity mActivity;
     EditText searchData;
 
     @SuppressLint("ValidFragment")
-    public CourseModifyFragment(List<PlaceVO> list){
+    public CourseModifyFragment(List<PlaceVO> list) {
         this.datas = list;
     }
 
@@ -59,7 +59,8 @@ public class CourseModifyFragment extends Fragment {
         setItemData(null);
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.modify_course, container, false);
         initView();
 
@@ -67,11 +68,11 @@ public class CourseModifyFragment extends Fragment {
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                CheckData("TouchDataName : "+viewHolder.getAdapterPosition());
+                CheckData("TouchDataName : " + viewHolder.getAdapterPosition());
                 PlaceVO item = datas.get(viewHolder.getAdapterPosition());
                 int swipeFlags = 0;
-                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN ;
-                if(ITEM_SIZE > 0 &&!item.getName().equals("+")) { //+++밖에 안남았을때를 뺀다.
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                if (ITEM_SIZE > 0 && !item.getName().equals("+")) { //+++밖에 안남았을때를 뺀다.
                     swipeFlags = ItemTouchHelper.LEFT;
                 }
                 return makeMovementFlags(dragFlags, swipeFlags);
@@ -88,13 +89,13 @@ public class CourseModifyFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if(viewHolder.getAdapterPosition()!=adapter.getItemCount()) { //itemCount 는 +++까지 합친 갯수. ITEM_SIZE는 +++뺀 갯수
+                if (viewHolder.getAdapterPosition() != adapter.getItemCount()) { //itemCount 는 +++까지 합친 갯수. ITEM_SIZE는 +++뺀 갯수
                     datas.remove(viewHolder.getAdapterPosition());
                     adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                     ITEM_SIZE -= 1; //1개 이상 남아있어서 하나를 삭제했기에 하나 지움.
                     adapter.choosedMember -= 1;
                     Log.d("Move : ", "onSwiped, ITEM_SIZE : " + ITEM_SIZE);
-                    if (ITEM_SIZE < 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
+                    if (ITEM_SIZE == 4) { //+++가 2개가 생김 아놔 ㅡㅡ;;
                         AddPlusBox();
                     }
                     //}
@@ -102,17 +103,18 @@ public class CourseModifyFragment extends Fragment {
                         adapter.choosedMember = viewHolder.getAdapterPosition() - 1;
                     }
                     adapter.NotifyDataSetChanged(adapter.choosedMember);
-                    if(adapter.choosedMember < 0) { //음수로 가는걸 막기위해
+                    if (adapter.choosedMember < 0) { //음수로 가는걸 막기위해
                         adapter.choosedMember = 0;
                     }
-                    if(ITEM_SIZE < 0){ //음수로 가는걸 막기위해
+                    if (ITEM_SIZE < 0) { //음수로 가는걸 막기위해
                         ITEM_SIZE = 0;
                     }
-                    if(ITEM_SIZE == 0){ //다 지우고 +++만 남았을때에
+                    if (ITEM_SIZE == 0) { //다 지우고 +++만 남았을때에
                         adapter.choosedMember = 0;
                         adapter.NotifyDataSetChanged(adapter.choosedMember);
                     }
-
+                    setItemData(null);
+                    ChangeItemData();
                 }
                 CheckData("SwipeDATA");
             }
@@ -151,19 +153,15 @@ public class CourseModifyFragment extends Fragment {
             }
         });
         helpers.attachToRecyclerView(itemview);
-        return  view;
+        return view;
     }
 
-
-        public void ChangeData(PlaceVO item){
-        if(adapter.choosedMember == datas.size()-1&&datas.size()<5){ //5개가 아직 아닐경우 위치에다가 추가만함.
-            adapter.choosedMember+=1; //새로추가하면서 +++로 가게하기 위해
-            ITEM_SIZE +=1;
-            addData(item);
-        }
-        else { //5개일경우 자리만 바꿈
-            if(datas.size()<adapter.choosedMember){ //하다보니 계산이 안맞아서 추가.
-                adapter.choosedMember-=1;
+    public void ChangeData(PlaceVO item) {
+        if(datas.get(adapter.choosedMember).getName().equals("+")){
+            addData(item,adapter.choosedMember); //+ 있는 자리에 추가하기위해
+        } else { //5개일경우 자리만 바꿈
+            if (datas.size() < adapter.choosedMember) { //하다보니 계산이 안맞아서 추가.
+                adapter.choosedMember -= 1;
             }
             datas.remove(adapter.choosedMember);
             adapter.notifyItemRemoved(adapter.choosedMember);
@@ -173,13 +171,16 @@ public class CourseModifyFragment extends Fragment {
         CheckData("ChangeData");
     }
 
-    public void addData(PlaceVO item){
-        datas.add(ITEM_SIZE,item);
+    public void addData(PlaceVO item,int position) {
+        datas.add(position,item);
         adapter.notifyItemInserted(ITEM_SIZE);
         ITEM_SIZE += 1;
-        if(datas.size() == 6){
+        if (datas.size() == 6) { //5개가 넘어서 +를 삭제
             datas.remove(5);
             adapter.notifyItemRemoved(5);
+        }
+        else{
+            adapter.choosedMember +=1; //focus를 +로 넘기기 위해
         }
     }
 
@@ -201,10 +202,12 @@ public class CourseModifyFragment extends Fragment {
         items = new ArrayList<PlaceVO>();
         DAO dao = new DAO();
         JSONArray jsonArray = dao.AllPlaceDownload();
-        if(item==null) {
+        if(item==null) { //그냥 생성할때
             try {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     PlaceVO mplace = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
+                    if(CheckInData(mplace))
+                        continue;
                     items.add(mplace);
                 }
             } catch (JSONException e) {
@@ -213,18 +216,10 @@ public class CourseModifyFragment extends Fragment {
         }
         else{
             for(int i = 0; i<jsonArray.length(); i++){
-                JSONObject jsonObject;
                 boolean setData = false;
                 try {
-/*                  jsonObject = jsonArray.getJSONObject(i);  //dao 에서 이미지 url을 하나만 줘서 무의함..
-                    String coordinate_x = jsonObject.getString("Coordinate_X");
-                    String coordinate_y = jsonObject.getString("Coordinate_Y");
-                    String name = jsonObject.getString("Name");
-                    String code = jsonObject.getString("Code");
-                    String url = jsonObject.getString("Image1");
-                    PlaceVO instantVO = new PlaceVO(code,name,url,coordinate_x,coordinate_y);*/
                     PlaceVO instantVO = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
-                    if(item.getName().equals(instantVO.getName())) //이미 있는곳은 안만듬
+                    if(CheckInData(instantVO)) //이미 있는곳은 안만듬
                         continue;
                     instantVO.setDistance(LocationDistance.distance(instantVO.getCoordinate_x()
                             ,instantVO.getCoordinate_y()
@@ -252,6 +247,15 @@ public class CourseModifyFragment extends Fragment {
             }
             ChangeItemData();
         }
+    }
+
+    //이미 데이터에 넣어놓은 것들은 뜨지않게 하기 위해.
+    public boolean CheckInData(PlaceVO insertItemVO){
+        for(int i = 0; i<datas.size();i++){
+            if(datas.get(i).getName().equals(insertItemVO.getName()))
+                return true;
+        }
+        return false;
     }
 
     private void initView(){
