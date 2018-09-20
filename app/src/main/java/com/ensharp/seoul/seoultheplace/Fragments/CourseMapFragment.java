@@ -3,6 +3,7 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,18 +51,19 @@ public class CourseMapFragment extends NMapFragment{
 
     public void changeMapCenter(int position) {
         if (position == 0) {
-            poIdataOverlay.showAllPOIdata(8);
+            poIdataOverlay.showAllPOIdata(7);
             adjustLatitude();
             return;
         }
 
-        //NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
-        //NGeoPoint point = item.getPoint();
-        //NGeoPoint pointToCenter = new NGeoPoint();
-      //  pointToCenter.latitude = point.latitude;
-    //    pointToCenter.longitude = point.longitude;
-  //      pointToCenter.latitude -= 0.01;
-//        mapController.setMapCenter(pointToCenter, 10);
+        NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
+        NGeoPoint point = item.getPoint();
+        NGeoPoint pointToCenter = new NGeoPoint();
+        pointToCenter.latitude = point.latitude;
+        pointToCenter.longitude = point.longitude;
+        pointToCenter.latitude -= 0.005;
+        mapController.setMapCenter(pointToCenter, 10);
+
     }
 
     public void adjustLatitude() {
@@ -69,19 +71,13 @@ public class CourseMapFragment extends NMapFragment{
 
         switch (mapController.getZoomLevel()) {
             case 6:
-                center.latitude -= 0.2;
-                break;
-            case 7:
                 center.latitude -= 0.1;
                 break;
+            case 7:
+                center.latitude -= 0.047;
+                break;
             case 8:
-                center.latitude -= 0.05;
-                break;
-            case 9:
-                center.latitude -= 0.025;
-                break;
-            case 10:
-                center.latitude -= 0.006;
+                center.latitude -= 0.01;
                 break;
             default:
                 break;
@@ -119,6 +115,7 @@ public class CourseMapFragment extends NMapFragment{
 
         mapView.setClickable(true);
         mapView.setBuiltInZoomControls(false, null);
+        mapView.setScalingFactor(2.5f, false);
         mapView.setOnMapViewTouchEventListener(onMapViewTouchEventListener);
 
         NGeoPoint currentPoint = new NGeoPoint();
@@ -140,12 +137,15 @@ public class CourseMapFragment extends NMapFragment{
         poIData.endPOIdata();
 
         poIdataOverlay = overlayManager.createPOIdataOverlay(poIData, null);
-        poIdataOverlay.showAllPOIdata(8);
+        poIdataOverlay.showAllPOIdata(7);
         poIdataOverlay.setOnStateChangeListener(onPOIDataStateChangeListener);
 
         adjustLatitude();
 
         mapContext.onStart();
+
+        CourseFragment fragment = (CourseFragment) getParentFragment();
+        if (fragment.getIndex() != 0) changeMapCenter(fragment.getIndex());
     }
 
     @Override
@@ -217,9 +217,9 @@ public class CourseMapFragment extends NMapFragment{
             fragment.setPageritem(position);
 
             NGeoPoint point = nMapPOIitem.getPoint();
-            point.latitude -= 0.001;
+            point.latitude -= 0.0025;
 
-            mapController.setMapCenter(point, 14);
+            mapController.setMapCenter(point, 11);
         }
 
         @Override

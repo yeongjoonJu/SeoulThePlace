@@ -100,7 +100,8 @@ public class CourseFragment extends Fragment {
 
         @Override
         public void onPageSelected(int position) {
-            //courseMapFragment.changeMapCenter(position);
+            courseMapFragment.changeMapCenter(position);
+            index = position;
         }
 
         @Override
@@ -109,4 +110,7 @@ public class CourseFragment extends Fragment {
         }
     };
 
+    public int getIndex() {
+        return index;
+    }
 }

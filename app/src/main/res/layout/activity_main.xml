@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,58 +9,64 @@
     android:id="@+id/linear_wrapper"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment"
-        android:background="#EBE7E6"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="11">
-    </FrameLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:background="#FFFFFF">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/homeButton"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
+        <FrameLayout
+            android:id="@+id/fragment"
+            android:background="#EBE7E6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="11">
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/home_icon" />
-        <ImageButton
-            android:id="@+id/searchButton"
-            android:layout_weight="1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:src="@drawable/search_icon"/>
-        <ImageButton
-            android:id="@+id/bookmarkButton"
-            android:layout_weight="1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:src="@drawable/bookmark_icon"/>
-        <ImageButton
-            android:id="@+id/mypageButton"
-            android:layout_weight="1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:padding="12dp"
-            android:background="@android:color/white"
-            android:src="@drawable/mypage_icon"/>
+            android:orientation="horizontal"
+            android:background="#FFFFFF">
+
+            <ImageButton
+                android:id="@+id/homeButton"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/home_icon" />
+            <ImageButton
+                android:id="@+id/searchButton"
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:background="@android:color/white"
+                android:padding="12dp"
+                android:src="@drawable/search_icon"/>
+            <ImageButton
+                android:id="@+id/bookmarkButton"
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:background="@android:color/white"
+                android:padding="12dp"
+                android:src="@drawable/bookmark_icon"/>
+            <ImageButton
+                android:id="@+id/mypageButton"
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:src="@drawable/mypage_icon"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

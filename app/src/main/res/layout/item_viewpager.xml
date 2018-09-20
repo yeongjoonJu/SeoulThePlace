@@ -4,27 +4,28 @@
     android:id="@+id/cardView"
     app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="3"
+        android:layout_height="match_parent"
         android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:weightSum="3"
             android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.4"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/non_active_dot">
+
                 <ImageView
                     android:id="@+id/placeImage"
                     android:layout_width="match_parent"
@@ -40,21 +41,28 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="1dp"
                 android:layout_weight="1.6"
                 android:orientation="vertical"
                 android:gravity="center|top"
+                android:weightSum="3"
                 android:padding="10dp"
                 android:background="@color/white">
 
-                <TextView
-                    android:id="@+id/title"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_marginTop="15dp"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:layout_height="1dp"
+                    android:layout_weight="2.1"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:paddingTop="15dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/card_title_size"/>
                 <TextView
                     android:id="@+id/address"
                     style="@style/TextAppearance.AppCompat.Body2"
@@ -71,14 +79,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
+                </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/place"
+                <FrameLayout
+                    android:id="@+id/place_layout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:src="@drawable/item_angle"/>
+                    android:layout_height="1dp"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="bottom|center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp" >
+
+                    <ImageButton
+                        android:id="@+id/place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@null"
+                        android:src="@drawable/item_angle"/>
+
+                </FrameLayout>
 
             </LinearLayout>
 

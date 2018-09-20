@@ -1,7 +1,7 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.Manifest;
-import android.app.FragmentManager;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.LinearLayout;
 
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.DimFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new CourseFragment("c001"), new SettingFragment()
+                new MainFragment(), new SearchFragment(), new FavoriteFragment(), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -103,27 +107,26 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment, fragments[0])
                 .commit();
 
-        rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
-        rootLayout.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        int rootViewHeight = rootLayout.getRootView().getHeight();
-                        int linearWrapperHeight = rootLayout.getHeight();
-                        int diff = rootViewHeight - linearWrapperHeight;
-                        // 키보드가 내려간 상태면
-                        if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
-                            ((SearchFragment)fragments[1]).viewVisible();
-                        }
-                        else {
-                            ((SearchFragment)fragments[1]).viewInvisible();
-                        }
-                    }
-                });
+//        rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
+//        rootLayout.getViewTreeObserver()
+//                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        int rootViewHeight = rootLayout.getRootView().getHeight();
+//                        int linearWrapperHeight = rootLayout.getHeight();
+//                        int diff = rootViewHeight - linearWrapperHeight;
+//                        // 키보드가 내려간 상태면
+//                        if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
+//                            ((SearchFragment)fragments[1]).viewVisible();
+//                        }
+//                        else {
+//                            ((SearchFragment)fragments[1]).viewInvisible();
+//                        }
+//                    }
+//                });
         String[] neededPermissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CALL_PHONE
+                Manifest.permission.ACCESS_COARSE_LOCATION
         };
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment, "WEB_FRAGMENT")
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
