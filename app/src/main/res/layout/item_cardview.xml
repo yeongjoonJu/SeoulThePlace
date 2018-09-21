@@ -14,6 +14,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:foregroundGravity="center"
+        android:background="@drawable/item_unchoicedtag"
         android:stateListAnimator="@anim/lift_on_touch">
 
         <ImageView
@@ -34,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#66000000"
-            android:gravity="center"
+            android:gravity="center_vertical|center_horizontal"
             android:padding="10dp"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />

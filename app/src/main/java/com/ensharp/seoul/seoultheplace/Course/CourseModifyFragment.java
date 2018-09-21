@@ -43,6 +43,7 @@ public class CourseModifyFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView itemview;
     Button saveBtn;
+    Button searchBtn;
     MainActivity mActivity;
     EditText searchData;
 
@@ -281,18 +282,28 @@ public class CourseModifyFragment extends Fragment {
             }
         });
         searchData = (EditText)view.findViewById(R.id.search_Place);
-        searchData.addTextChangedListener(new TextWatcher() {
+        searchBtn = (Button)view.findViewById(R.id.saveSearch);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //여기다가 넣으면 됨.
+            public void onClick(View v) {
+                if(searchData.getText().length()<2){
+                    Toast.makeText(getContext(),"검색어가 너무 짧습니다.",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(searchData.getText().length()>20){
+                    Toast.makeText(getContext(),"검색어가 너무 깁니다.",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    DAO dao = new DAO();
+                    items = dao.searchPlace(String.valueOf(searchData.getText()));
+                    if(items == null){
+                        Toast.makeText(getContext(),"검색된 플레이스가 없습니다.",Toast.LENGTH_LONG).show();
+                        setItemData(null);
+                    }
+                    else{
+                        ChangeItemData();
+                    }
+                }
             }
         });
     }
