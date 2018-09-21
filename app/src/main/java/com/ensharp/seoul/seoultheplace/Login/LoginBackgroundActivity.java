@@ -142,6 +142,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
             try {
                 editor.putString("email", jsonObject.getString("Id"));
                 editor.putString("name", jsonObject.getString("Name"));
+                editor.apply();
                 Log.d(TAG,"Login Success");
                 return true;
             } catch (JSONException e) {

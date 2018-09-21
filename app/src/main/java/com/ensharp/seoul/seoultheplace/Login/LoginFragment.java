@@ -14,7 +14,6 @@ import android.widget.Button;
 
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.GlobalApplication;
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.SessionCallback;
-import com.ensharp.seoul.seoultheplace.Login.NaverLogin.NaverHandler;
 import com.ensharp.seoul.seoultheplace.R;
 
 import com.google.android.gms.auth.api.Auth;
@@ -74,7 +73,6 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
         editor = LActivity.getSharedPreferences("data",0).edit();
         editor.clear();
         editor.apply();
-        setNaver();
 
         globalApplication = new GlobalApplication();
         sessionCallback = new SessionCallback();
@@ -169,13 +167,6 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             }
             LActivity.NextActivity();
         }
-    }
-
-    private void setNaver() {
-        mOAuthLoginModule = OAuthLogin.getInstance();
-        mOAuthLoginModule.init(getActivity(), "pGzToR98qOhD0UYuOZZx", "E3W6V6G3Ve", "서울더플레이스");
-        mOAuthLoginButton = view.findViewById(R.id.button_naverlogin);
-        mOAuthLoginButton.setOAuthLoginHandler(new NaverHandler(getContext(),mOAuthLoginModule,LActivity));
     }
 
     //연결이 끊겼을때 토스트 메세지로 표시해 줍니다.

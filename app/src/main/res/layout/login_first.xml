@@ -7,19 +7,6 @@
     android:layout_height="match_parent"
     android:id = "@+id/parentView">
 
-    <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
-        android:id="@+id/button_naverlogin"
-        android:layout_width="220dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/google_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
-
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login"

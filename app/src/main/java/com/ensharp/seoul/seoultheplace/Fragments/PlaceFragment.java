@@ -122,7 +122,6 @@ public class PlaceFragment extends Fragment {
         phone.setText(place.getPhone());
         description.setText("");
         detail.setText(place.getDetails());
-        detail.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
 
         phone.setOnClickListener(new View.OnClickListener() {
             @Override

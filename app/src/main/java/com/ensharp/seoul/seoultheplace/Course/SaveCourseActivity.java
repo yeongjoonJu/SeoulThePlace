@@ -40,7 +40,7 @@ public class SaveCourseActivity extends Activity {
                 String mDecription = String.valueOf(description.getText());
                 Log.e("SaveTest :", mtitle);
                 Log.e("SaveTest :", mDecription);
-                if (mtitle.length()>0 && mDecription.length()>0&&CheckDuplicate(mtitle)) {
+                if (CheckTooMuchLongTitle() && CheckTooMuchLongDescription() &&CheckDuplicate(mtitle)) {
                     Intent newIntent = new Intent();
                     newIntent.putExtra("codes", intent.getStringArrayExtra("codes"));
                     newIntent.putExtra("title", mtitle);
@@ -66,6 +66,24 @@ public class SaveCourseActivity extends Activity {
         return false;
     }
 
+    public boolean CheckTooMuchLongTitle(){
+        String titles = String.valueOf(title.getText());
+        if(titles.length()>0&&titles.length()<20){
+            return true;
+        }
+        Toast.makeText(getApplicationContext(),"제목이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
+        return false;
+    }
+
+    public boolean CheckTooMuchLongDescription(){
+        String titles = String.valueOf(description.getText());
+        if(titles.length()>0&&titles.length()<150){
+            return true;
+        }
+        Toast.makeText(getApplicationContext(),"설명이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
+        return false;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //바깥레이어 클릭시 안닫히게
@@ -74,11 +92,5 @@ public class SaveCourseActivity extends Activity {
         }
         return true;
     }
-/*
-    @Override
-    public void onBackPressed() {
-        //안드로이드 백버튼 막기
-        return;
-    }*/
 }
 

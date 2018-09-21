@@ -22,6 +22,7 @@ import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -271,7 +272,7 @@ public class CourseModifyFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ITEM_SIZE > 0&&ITEM_SIZE<=5){
+                if(ITEM_SIZE > 0&&ITEM_SIZE<=5){ //아이템이 있을경우.
                     mActivity.SetSaveData(GetPlaceCode(datas));
                 }
                 else{ //아무것도 없음.
