@@ -7,7 +7,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 public class PlaceCardFragment extends Fragment {
 
     private CardView cardView;
-    private ImageButton placeButton;
+    private FrameLayout placeButton;
     private int position;
     private PlaceVO place;
 
@@ -34,8 +34,6 @@ public class PlaceCardFragment extends Fragment {
     public void setPosition(int position) {
         this.position = position;
     }
-
-    public ImageButton getPlaceButton() { return placeButton;}
 
     public CardView getCardView() {
         return cardView;
@@ -81,7 +79,7 @@ public class PlaceCardFragment extends Fragment {
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        placeButton = (ImageButton) view.findViewById(R.id.place);
+        placeButton = (FrameLayout) view.findViewById(R.id.place);
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

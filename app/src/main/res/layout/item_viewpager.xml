@@ -12,6 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/place"
         android:background="@color/white">
 
         <LinearLayout
@@ -82,6 +83,7 @@
                         android:layout_marginBottom="2dp"
                         android:textColor="@color/black"/>
 
+                <!--
                 <ImageButton
                         android:id="@+id/place"
                         android:layout_width="wrap_content"
@@ -89,7 +91,7 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:scaleType="fitXY"
-                        android:src="@drawable/item_angle"/>
+                        android:src="@drawable/item_angle"/>-->
 
             </LinearLayout>
 
