@@ -4,23 +4,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
-import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.*;
 import com.squareup.picasso.Picasso;
-import org.w3c.dom.Text;
 
 public class CourseCardFragment extends Fragment {
     public static final int HEART_BUTTON = 0;
