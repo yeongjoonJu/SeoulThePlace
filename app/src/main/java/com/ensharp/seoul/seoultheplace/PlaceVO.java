@@ -1,9 +1,5 @@
 package com.ensharp.seoul.seoultheplace;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +50,7 @@ public class PlaceVO {
             this.coordinate_x = jsonObject.getString("Coordinate_X");
             this.coordinate_y = jsonObject.getString("Coordinate_Y");
             this.distance = 0;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

@@ -466,4 +466,63 @@ public class DAO {
         }
         return false;
     }
+
+    public ArrayList<CourseVO> getLikedCourseList(String id) {
+        ArrayList<CourseVO> courseData = null;
+        Log.i("yeong", "코스 " + id);
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/likedcourses");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            Log.i("yeong", resultData.toString());
+
+            courseData = new ArrayList<>();
+            JSONArray jsonArray = resultData.getJSONObject(0).getJSONArray("jsonArr");
+
+            for(int i=0; i < jsonArray.length(); i++)
+                courseData.add(new CourseVO(jsonArray.getJSONObject(i)));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return courseData;
+    }
+
+    public ArrayList<PlaceVO> getLikedPlaceList(String id) {
+        ArrayList<PlaceVO> placeData = null;
+        Log.i("yeong", "플레이스 " + id);
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/likedplaces");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            Log.i("yeong", resultData.toString());
+
+            placeData = new ArrayList<>();
+            JSONArray jsonArray = resultData.getJSONObject(0).getJSONArray("jsonArr");
+
+            for(int i=0; i < jsonArray.length(); i++)
+                placeData.add(new PlaceVO(jsonArray.getJSONObject(i)));
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return placeData;
+    }
+
 }
