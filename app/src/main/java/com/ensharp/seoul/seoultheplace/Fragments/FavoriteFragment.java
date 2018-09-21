@@ -109,6 +109,8 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initFragments() {
+        mFragments.clear();
+
         // test fragment
         TestFragment testFragment = new TestFragment();
         Bundle bundle = new Bundle();
@@ -151,7 +153,7 @@ public class FavoriteFragment extends Fragment {
     private FloatingActionButton.OnClickListener onCreateCourseListener = new FloatingActionButton.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(getContext(), "actionB clicked", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "actionB clicked", Toast.LENGTH_SHORT).show();
             mActivity.changeModifyFragment(new ArrayList<PlaceVO>());
         }
     };
