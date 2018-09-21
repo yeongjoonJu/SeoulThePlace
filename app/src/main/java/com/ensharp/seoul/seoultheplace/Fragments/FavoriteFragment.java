@@ -109,6 +109,8 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initFragments() {
+        mFragments.clear();
+
         // test fragment
         TestFragment testFragment = new TestFragment();
         Bundle bundle = new Bundle();
