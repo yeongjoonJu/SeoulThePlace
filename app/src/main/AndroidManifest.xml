@@ -5,6 +5,13 @@
     <!-- 인터넷 연결 허용하는 퍼미션 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- for naver api -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- for make phone call -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,25 +28,13 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".MainActivity">
-        </activity>
-
-        <activity android:name=".Login.LoginBackgroundActivity">
+        <activity android:name=".Login.LoginBackgroundActivity"
+            android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -51,6 +46,8 @@
             <data android:scheme="@string/fb_login_protocol_scheme" />
         </intent-filter>
         </activity>
+        <activity android:name=".Course.SaveCourseActivity"
+            android:theme="@android:style/Theme.Dialog"/>
 
     </application>
 
