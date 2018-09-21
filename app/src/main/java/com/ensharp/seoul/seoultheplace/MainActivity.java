@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -13,6 +15,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -21,13 +25,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Course.SaveCourseActivity;
-import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.WebViewFragment;
+import com.ensharp.seoul.seoultheplace.Fragments.*;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] fragments;
     private Fragment currentFragment;
     private LinearLayout rootLayout;
-    private DAO dao;
     private int currentFragmentNumber = 0;
 
     @Override
@@ -48,6 +48,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.ensharp.seoul.seoultheplace", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         // course, place 초기화
         setContentView(R.layout.activity_main);

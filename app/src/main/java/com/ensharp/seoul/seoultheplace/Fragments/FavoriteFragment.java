@@ -8,9 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -30,7 +28,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPa
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
-import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.AddFloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionsMenu;
 
@@ -94,7 +91,10 @@ public class FavoriteFragment extends Fragment {
         for (int i = 0; i < mFragments.size(); i++) {
             if (i == index) continue;
             fragment = mFragments.get(i);
-            if (fragment.isAdded()) fragmentTransaction.hide(fragment);
+            if(i==0)
+                ((LikeFragment)fragment).renew();
+            if (fragment.isAdded())
+                fragmentTransaction.hide(fragment);
         }
 
         fragment = mFragments.get(index);
@@ -112,11 +112,8 @@ public class FavoriteFragment extends Fragment {
         mFragments.clear();
 
         // test fragment
-        TestFragment testFragment = new TestFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(TestFragment.EXTRA_TEXT, CHANNELS[0]);
-        testFragment.setArguments(bundle);
-        mFragments.add(testFragment);
+        LikeFragment likeFragment = new LikeFragment();
+        mFragments.add(likeFragment);
 
         // user customized course fragment
         customizedFragment = new CustomizedFragment();

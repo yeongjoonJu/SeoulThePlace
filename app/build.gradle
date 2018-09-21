@@ -39,6 +39,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:+'//원래 16.0.1
     implementation 'com.google.android.gms:play-services-auth:+'
+    //네이버로그인
+    implementation ('com.naver.nid:naveridlogin-android-sdk:4.2.0')
+    implementation 'com.naver.maps.open:naver-map-api:2.1.2@aar'
     //Cardview
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation'com.android.support:recyclerview-v7:27.1.1'
