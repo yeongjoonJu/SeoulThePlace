@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         Log.e("TEST_TEST_ :","onBindViewHolder in Recycleradapter");
         final PlaceVO item = items.get(position);
         SetImageBox(holder,position);
-        new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
+        Picasso.get().load(item.getImageURL()[0]).into(holder.image);
+
         holder.title.setText(item.getName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -181,7 +181,7 @@ public class SearchFragment extends Fragment {
                 ArrayList<PlaceVO> placeData = dao.searchPlace(searchWord);
                 searchPlaceResult = placeData;
                 if(searchPlaceResult != null) {
-//                    showPlaceCardView(searchPlaceResult, 0);
+                    showPlaceCardView(searchPlaceResult, 0);
                 }
 
                 // 키보드 숨김

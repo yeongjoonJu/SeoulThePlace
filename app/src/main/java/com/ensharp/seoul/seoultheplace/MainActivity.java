@@ -7,18 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
@@ -26,7 +19,6 @@ import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Course.SaveCourseActivity;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
-import com.ensharp.seoul.seoultheplace.Fragments.DimFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.SearchFragment;
@@ -35,12 +27,6 @@ import com.ensharp.seoul.seoultheplace.Fragments.SettingFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.WebViewFragment;
 
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton[] bottomButtons;
