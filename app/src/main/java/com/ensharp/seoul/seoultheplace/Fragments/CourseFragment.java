@@ -100,6 +100,11 @@ public class CourseFragment extends Fragment {
         viewPager.setCurrentItem(index);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

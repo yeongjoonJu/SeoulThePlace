@@ -2,6 +2,7 @@
 <com.yalantis.phoenix.PullToRefreshView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pull_to_destroy"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -75,7 +76,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginBottom="30dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp">
@@ -86,17 +87,6 @@
                     android:background="#A8A8A8"/>
 
             </FrameLayout>
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginBottom="15dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:textColor="@color/place_description"
-                android:textSize="@dimen/place_description_size"/>
 
             <TextView
                 android:id="@+id/detail"
@@ -115,19 +105,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="40dp"
                 android:scrollbars="none"
                 android:overScrollMode="never">
             </ListView>
 
             <FrameLayout
-                android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="@color/non_active_dot" />
+                android:layout_height="200dp">
+                <FrameLayout
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/non_active_dot" />
+            </FrameLayout>
+
+            <com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton
+                android:id="@+id/create_course_using_this"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="30dp"
+                fab:fab_colorNormal="@color/non_active_dot"
+                fab:fab_colorPressed="@color/place_changing"
+                fab:fab_icon="@drawable/item_pencil"
+                fab:fab_title="이 플레이스로 코스 만들기"
+                />
 
             <FrameLayout
                 android:id="@+id/buttons"

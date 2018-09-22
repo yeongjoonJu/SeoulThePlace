@@ -75,17 +75,17 @@ public class CourseVO {
         }
     }
 
-    public CourseVO(EdittedCourseVO edittedCourse) {
+    public CourseVO(EdittedCourseVO edittedCourse, PlaceVO place) {
         name = edittedCourse.getName();
         type = "";
         likes = -1;
         details = edittedCourse.getDescription();
         placeCode = edittedCourse.getPlaceCode();
-        x = Double.parseDouble(edittedCourse.getPlaceCoordinateX().get(0));
-        y = Double.parseDouble(edittedCourse.getPlaceCoordinateY().get(0));
-        image = edittedCourse.getPlaceImage(0);
+        x = Double.parseDouble(place.getCoordinate_x());
+        y = Double.parseDouble(place.getCoordinate_y());
+        image = place.getImageURL()[0];
         liked = false;
-        location = edittedCourse.getPlaceLocation(0);
+        location = place.getLocation();
     }
 
     public CourseVO() {

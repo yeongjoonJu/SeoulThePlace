@@ -91,7 +91,9 @@ public class CustomizedFragment extends Fragment {
 
             Object object = listView.getItemAtPosition(position);
             EdittedCourseVO edittedCourseVO = (EdittedCourseVO) object;
-            changeToCourseFragment(new CourseVO(edittedCourseVO));
+            PlaceVO place = dao.getPlaceData(edittedCourseVO.getPlaceCode().get(0));
+
+            changeToCourseFragment(new CourseVO(edittedCourseVO, place));
         }
     };
 

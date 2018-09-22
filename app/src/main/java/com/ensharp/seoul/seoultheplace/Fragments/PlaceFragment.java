@@ -2,6 +2,8 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +38,21 @@ import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.DetailInformationAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.PlaceViewPagerAdapter;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class PlaceFragment extends Fragment {
+    public static final int VIA_SEARCH = 0;
+    public static final int VIA_COURSE = 1;
+    public static final int DURING_EDITTING_COURSE = 2;
 
+    private int enterRoute;
     private String courseCode;
     private int index;
     private PlaceVO place;
@@ -52,11 +61,13 @@ public class PlaceFragment extends Fragment {
     private ImageView[] dots;
     private int dotCount;
     private CourseVO courseVO;
+    private FloatingActionButton createCourse;
 
     private PullToRefreshView destroyView;
 
     @SuppressLint("ValidFragment")
-    public PlaceFragment(String placeCode) {
+    public PlaceFragment(String placeCode, int enterRoute) {
+        this.enterRoute = enterRoute;
         courseCode = "";
         index = 0;
         DAO dao = new DAO();
@@ -64,7 +75,8 @@ public class PlaceFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public PlaceFragment(CourseVO course, int index) {
+    public PlaceFragment(CourseVO course, int index, int enterRoute) {
+        this.enterRoute = enterRoute;
         this.courseCode = courseCode;
         this.index = index;
         DAO dao = new DAO();
@@ -88,13 +100,23 @@ public class PlaceFragment extends Fragment {
 
         final MainActivity activity = (MainActivity)getActivity();
 
+        if (enterRoute != VIA_COURSE)
+        {
+            destroyView.setRefreshing(false);
+            destroyView.setEnabled(false);
+        }
+
         destroyView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 destroyView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        activity.chagneCourseFragment(index);
+                        int i = 0;
+                        while (getFragmentManager().getBackStackEntryAt(i).getName() != "FRAGMENT") {
+                            getFragmentManager().popBackStack();
+                            i++;
+                        }
                     }
                 }, 1000);
             }
@@ -107,12 +129,20 @@ public class PlaceFragment extends Fragment {
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView address = (TextView) rootView.findViewById(R.id.address);
         TextView phone = (TextView) rootView.findViewById(R.id.phone);
-        TextView description = (TextView) rootView.findViewById(R.id.description);
         TextView detail = (TextView) rootView.findViewById(R.id.detail);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.map, new MapFragment(place.getCoordinate_x(), place.getCoordinate_y(), place.getName()));
         transaction.commit();
+
+        if (enterRoute == DURING_EDITTING_COURSE)
+        {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.setMargins(30, 0, 30, 150);
+            FrameLayout mapLayout = (FrameLayout) rootView.findViewById(R.id.map);
+            mapLayout.setLayoutParams(params);
+            Log.e("abcd", "okokok");
+        }
 
         String parking = place.getParking();
         if(!parking.equals("없음")) parking = place.getParkFee();
@@ -120,23 +150,16 @@ public class PlaceFragment extends Fragment {
         title.setText(place.getName());
         address.setText(place.getLocation());
         phone.setText(place.getPhone());
-        description.setText("");
         detail.setText(place.getDetails());
+
+        createCourse = (FloatingActionButton) rootView.findViewById(R.id.create_course_using_this);
+        if (enterRoute == DURING_EDITTING_COURSE) createCourse.setVisibility(View.GONE);
+        createCourse.setOnClickListener(onCreateCourseListener);
 
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CALL_PHONE}, 0);
-                }
-
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-
-                    intent.setData(Uri.parse("tel:" + place.getPhone()));
-                    getContext().startActivity(intent);
-                }
+                makeCall();
             }
         });
 
@@ -148,6 +171,7 @@ public class PlaceFragment extends Fragment {
                     new DetailInformationVO("item_parking", "주차", parking),
                     new DetailInformationVO("item_tip", "팁", place.getTip()),
                     new DetailInformationVO("item_tag", "tag", place.getType()),
+                    new DetailInformationVO("item_liked", "이 플레이스를 좋아한 사람들", place.getLikes()+"명")
                 }));
 
         adapter = new DetailInformationAdapter(getContext(), detailInformation);
@@ -156,6 +180,29 @@ public class PlaceFragment extends Fragment {
         getTotalHeightOfListView(information);
 
         return rootView;
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int userAnswer) {
+            if (userAnswer == DialogInterface.BUTTON_NEGATIVE) return;
+
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CALL_PHONE}, 0);
+            }
+
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + place.getPhone()));
+                getContext().startActivity(intent);
+            }
+        }
+    };
+
+    private void makeCall() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("전화를 거시겠습니까?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
     private void setPlaceImages(String[] images) {
@@ -209,7 +256,7 @@ public class PlaceFragment extends Fragment {
         TextView indexInImage = (TextView) numberIndicator.findViewById(R.id.index);
         indexInImage.setText(Integer.toString(index));
 
-        if (index != 0)
+        if (index != 0 || enterRoute != DURING_EDITTING_COURSE)
             numberIndicator.setVisibility(View.VISIBLE);
         else
             numberIndicator.setVisibility(View.GONE);
@@ -239,32 +286,50 @@ public class PlaceFragment extends Fragment {
         previousImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeToPlaceFragment(courseVO, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1, VIA_COURSE);
             }
         });
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeToPlaceFragment(courseVO, index - 1);
+                activity.changeToPlaceFragment(courseVO, index - 1, VIA_COURSE);
             }
         });
 
         nextImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeToPlaceFragment(courseVO, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1, VIA_COURSE);
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.changeToPlaceFragment(courseVO, index + 1);
+                activity.changeToPlaceFragment(courseVO, index + 1, VIA_COURSE);
             }
         });
 
         layout.setVisibility(View.VISIBLE);
+    }
+
+    private FloatingActionButton.OnClickListener onCreateCourseListener = new FloatingActionButton.OnClickListener() {
+        MainActivity activity = (MainActivity) getActivity();
+
+        @Override
+        public void onClick(View view) {
+            List<PlaceVO> places = new ArrayList<PlaceVO>();
+            places.add(place);
+
+            changeModifyFragment(places);
+        }
+    };
+
+    public void changeModifyFragment(List<PlaceVO> places) {
+        MainActivity activity = (MainActivity) getActivity();
+
+        activity.changeModifyFragment(places);
     }
 
     public void getTotalHeightOfListView(ListView listView) {

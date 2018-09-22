@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.EdittedCourseVO;
+import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
 
@@ -18,6 +20,7 @@ import java.util.List;
 
 public class CustomizedCourseAdapter extends ArrayAdapter<EdittedCourseVO> {
 
+    private DAO dao = new DAO();
     private Context context;
     private List<EdittedCourseVO> customizedCourseList;
     private ImageView image;
@@ -43,9 +46,11 @@ public class CustomizedCourseAdapter extends ArrayAdapter<EdittedCourseVO> {
         name = (TextView) listItem.findViewById(R.id.customized_course_name);
         location = (TextView) listItem.findViewById(R.id.customized_course_location);
 
-        Picasso.get().load(currentInformation.getPlaceImage(0)).into(image);
+        PlaceVO place = dao.getPlaceData(currentInformation.getPlaceCode().get(0));
+
+        Picasso.get().load(place.getImageURL()[0]).into(image);
         name.setText(currentInformation.getName());
-        location.setText(currentInformation.getPlaceLocation(0));
+        location.setText(place.getLocation());
 
         return listItem;
     }

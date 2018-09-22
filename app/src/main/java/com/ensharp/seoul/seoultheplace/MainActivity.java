@@ -147,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
     public void changeToWebFragment(String link) {
         final Fragment fragment = new WebViewFragment(link);
 
+        Log.e("web/MainActivity", "came here");
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment, "WEB_FRAGMENT")
                 .addToBackStack(null)
@@ -164,20 +166,34 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeToPlaceFragment(CourseVO course, int index) {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
-                .replace(R.id.fragment, new PlaceFragment(course, index))
-                .addToBackStack(null)
-                .commit();
+    public void changeToPlaceFragment(CourseVO course, int index, int enterRoute) {
+        if (enterRoute == PlaceFragment.VIA_COURSE)
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                    .replace(R.id.fragment, new PlaceFragment(course, index, enterRoute))
+                    .addToBackStack("PLACE_FRAGMENT")
+                    .commit();
+        else
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                    .replace(R.id.fragment, new PlaceFragment(course, index, enterRoute))
+                    .addToBackStack(null)
+                    .commit();
     }
 
-    public void changeToPlaceFragment(String placeCode) {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
-                .replace(R.id.fragment, new PlaceFragment(placeCode))
-                .addToBackStack(null)
-                .commit();
+    public void changeToPlaceFragment(String placeCode, int enterRoute) {
+        if (enterRoute == PlaceFragment.VIA_COURSE)
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                    .replace(R.id.fragment, new PlaceFragment(placeCode, enterRoute))
+                    .addToBackStack("PLACE_FRAGMENT")
+                    .commit();
+        else
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
+                    .replace(R.id.fragment, new PlaceFragment(placeCode, enterRoute))
+                    .addToBackStack(null)
+                    .commit();
     }
 
     public void changeModifyFragment(List<PlaceVO> list){
@@ -192,13 +208,6 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
-    public void chagneCourseFragment(int index) {
-        final Fragment fragment = new CourseFragment("c001");
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
     public void changeCourseViewFragment(List<PlaceVO> list){
         DeleteBackStack(); //뒤로가기하는거 다 없앰
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

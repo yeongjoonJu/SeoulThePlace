@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -49,7 +50,7 @@ public class PlaceViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.item_place_image, null);
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.imageView)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,images[position]);
+        Picasso.get().load(images[position]).into((ImageView) view.findViewById(R.id.imageView));
 
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view, 0);
