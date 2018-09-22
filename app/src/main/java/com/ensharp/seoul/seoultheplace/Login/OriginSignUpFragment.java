@@ -101,9 +101,16 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
         return true;
     }
     public boolean CheckPasswd(){
-        if(!passwd.equals(passwd1)&&passwd.length()<8){
-            Toast.makeText(getActivity(), "비밀번호가 서로 다르거나 8자 이하입니다.", Toast.LENGTH_LONG).show();
-            passwd.setFocusable(true);
+        String passwd = this.passwd.getText().toString();
+        String passwd1 = this.passwd1.getText().toString();
+        if(!passwd.equals(passwd1)){
+            Toast.makeText(getActivity(), "비밀번호가 서로 다릅니다.", Toast.LENGTH_LONG).show();
+            this.passwd.setFocusable(true);
+            return false;
+        }
+        else if (passwd.length()<8){
+            Toast.makeText(getActivity(), "비밀번호가 너무 짧습니다.", Toast.LENGTH_LONG).show();
+            this.passwd.setFocusable(true);
             return false;
         }
         return true;

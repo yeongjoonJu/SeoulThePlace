@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void chagneCourseFragment(int index) {
-        final Fragment fragment = new CourseFragment("c001");
+        final Fragment fragment = new CourseFragment(String.valueOf(index));
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
                 .addToBackStack(null)
@@ -258,5 +258,19 @@ public class MainActivity extends AppCompatActivity {
 
     public String getUserID() {
         return getSharedPreferences("data", 0).getString("email","");
+    }
+
+    public void ChangeMakersFragment(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, new MakersFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void ChangeSettingFragment(){
+        DeleteBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragments[3])
+                .commit();
     }
 }

@@ -56,7 +56,7 @@ public class CustomizedFragment extends Fragment {
 
         final MainActivity activity = (MainActivity) getActivity();
 
-        customizedCourses = dao.getCustomizedCourses(getUserID());
+//        customizedCourses = dao.getCustomizedCourses(getUserID());
 
         Log.e("editted_course/CustomizedFragment", String.format("is costomizedCourses null? %s", customizedCourses == null));
         Log.e("editted_course/CustomizedFragment", String.format("length of customizedCourses = %d", customizedCourses.size()));
