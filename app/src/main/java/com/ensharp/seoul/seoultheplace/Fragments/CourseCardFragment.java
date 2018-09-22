@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,8 @@ public class CourseCardFragment extends Fragment {
     private Drawable unchoicedHeart;
     private Drawable choicedHeart;
     private int position;
+    private DAO dao;
+    private String useremail;
 
     private ImageButton image;
     private TextView name;
@@ -39,6 +42,9 @@ public class CourseCardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dao = new DAO();
+        SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
+        useremail = preferences.getString("email", null);
         choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
         unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
@@ -67,6 +73,12 @@ public class CourseCardFragment extends Fragment {
         name = (TextView) view.findViewById(R.id.course_name);
         location = (TextView) view.findViewById(R.id.course_location);
         heartButton = (ImageButton) view.findViewById(R.id.like_button);
+        if(course != null) {
+            if(dao.checkLikedCourse(course.getCode(), useremail).equals("true"))
+                heartButton.setImageDrawable(choicedHeart);
+            else
+                heartButton.setImageDrawable(unchoicedHeart);
+        }
 
         setElements();
 
@@ -105,6 +117,7 @@ public class CourseCardFragment extends Fragment {
                 heartButton.setImageDrawable(unchoicedHeart);
             else
                 heartButton.setImageDrawable(choicedHeart);
+            dao.likeCourse(course.getCode(), useremail);
         }
     };
 }
