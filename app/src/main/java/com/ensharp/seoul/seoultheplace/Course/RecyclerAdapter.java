@@ -1,12 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Course;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ensharp.seoul.seoultheplace.DownloadImageTask;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
@@ -25,15 +19,15 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     Context context;
-    List<PlaceVO> items;
+    List<PlaceVO> datas;
     int item_layout;
     CourseModifyFragment fragment;
     public int choosedMember = 0;
 
 
-    public RecyclerAdapter(Context context, List<PlaceVO> items, int item_layout,CourseModifyFragment fragment) {
+    public RecyclerAdapter(Context context, List<PlaceVO> datas, int item_layout, CourseModifyFragment fragment) {
         this.context = context;
-        this.items = items;
+        this.datas = datas;
         this.item_layout = item_layout;
         this.fragment = fragment;
     }
@@ -50,25 +44,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final PlaceVO item = items.get(position);
+        final PlaceVO data = datas.get(position);
         SetImageBox(holder,position);
-        Picasso.get().load(item.getImageURL()[0]).into(holder.image);
-        holder.title.setText(item.getName());
+        Picasso.get().load(data.getImageURL()[0]).into(holder.image);
+        holder.title.setText(data.getName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 choosedMember = position;
                 NotifyDataSetChanged(position);
-                if(item.getName().equals("+")) {
-                    if(choosedMember>0)
-                        fragment.setItemData(items.get(position-1));
-                    else
-                        fragment.setItemData(null);
-                    fragment.ChangeItemData();
+                if(choosedMember>0){ //맨앞이 아니면
+                    if(!datas.get(position-1).getName().equals("+")) { //선택된거 앞에가 +가 아니면
+                        fragment.setItemData(datas.get(position - 1)); //앞에것과의 거리를 넣는다.
+                        return ;
+                    }
+                    else //선택된거 앞이 + 면
+                        fragment.setItemData(null); //그냥 데이터를 넣는다.
                 }
-                else{
-                    fragment.setItemData(item);
+                else{ //맨앞인경우
+                    fragment.setItemData(null);
                 }
+                fragment.ChangeItemData();
             }
         });
     }
@@ -88,7 +84,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.datas.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
