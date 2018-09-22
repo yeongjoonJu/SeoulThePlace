@@ -12,10 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
@@ -25,6 +22,7 @@ import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
+import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -69,6 +67,11 @@ public class MainFragment extends Fragment {
     ImageButton searchButton;
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
+    // 최근 검색
+    LinearLayout recentList;
+    ListView recentListView;
+    RecentSearchAdapter listAdapter = null;
+    ArrayList<String> recentSearchList = null;
 
     int currentPlacePosition = 0;
     int currentCoursePosition = 0;
@@ -123,6 +126,32 @@ public class MainFragment extends Fragment {
         }
     };
 
+    public void viewVisible() {
+        if(recentList != null)
+            recentList.setVisibility(View.GONE);
+        if(searchPlaceResult != null) {
+            placeText.setVisibility(View.VISIBLE);
+            placeViewPager.setVisibility(View.VISIBLE);
+        }
+        if(searchCourseResult != null) {
+            courseText.setVisibility(View.VISIBLE);
+            courseViewPager.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void viewInvisible() {
+        if(recentList != null)
+            recentList.setVisibility(View.VISIBLE);
+        if(searchPlaceResult != null) {
+            placeText.setVisibility(View.INVISIBLE);
+            placeViewPager.setVisibility(View.INVISIBLE);
+        }
+        if(searchCourseResult != null) {
+            courseText.setVisibility(View.INVISIBLE);
+            courseViewPager.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public MainFragment() {
     }
 
@@ -157,10 +186,21 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dao = new DAO();
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
         useremail = preferences.getString("email", null);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // 최근 검색어 SharedPreference에서 가져온다
+        if(recentSearchList == null)
+            recentSearchList = new ArrayList<>();
+        preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+        for(int i=0; i < 6; i++) {
+            String word = preferences.getString("RecentSearch" + i, null);
+            if(word != null)
+                recentSearchList.add(word);
+        }
+        listAdapter = new RecentSearchAdapter(getActivity(), recentSearchList);
     }
 
     @Override
@@ -178,6 +218,11 @@ public class MainFragment extends Fragment {
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
+        // 최근 검색
+        listAdapter.setEditText(searchEditText);
+        recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
+        recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
+        recentListView.setAdapter(listAdapter);
 
         // 플레이스 카드 뷰
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
@@ -201,7 +246,7 @@ public class MainFragment extends Fragment {
                 placeViewPager.setVisibility(View.VISIBLE);
 
                 String searchWord = String.valueOf(searchEditText.getText());
-                //listAdapter.insert(searchWord, 0);
+                listAdapter.insert(searchWord, 0);
 
                 // 코스 검색
                 showCourseCardView(searchWord);
