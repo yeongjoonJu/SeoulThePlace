@@ -112,11 +112,12 @@ public class PlaceFragment extends Fragment {
                 destroyView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        int i = 0;
-                        while (getFragmentManager().getBackStackEntryAt(i).getName() != "FRAGMENT") {
-                            getFragmentManager().popBackStack();
-                            i++;
-                        }
+                        Log.e("abcd",getFragmentManager().getBackStackEntryAt(0).getName());
+//                        int i = 0;
+//                        while (getFragmentManager().getBackStackEntryAt(i).getName() == "PLACE_FRAGMENT") {
+//                            getFragmentManager().popBackStack();
+//                            i++;
+//                        }
                     }
                 }, 1000);
             }
@@ -135,13 +136,10 @@ public class PlaceFragment extends Fragment {
         transaction.add(R.id.map, new MapFragment(place.getCoordinate_x(), place.getCoordinate_y(), place.getName()));
         transaction.commit();
 
-        if (enterRoute == DURING_EDITTING_COURSE)
+        if (enterRoute != DURING_EDITTING_COURSE)
         {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(30, 0, 30, 150);
-            FrameLayout mapLayout = (FrameLayout) rootView.findViewById(R.id.map);
-            mapLayout.setLayoutParams(params);
-            Log.e("abcd", "okokok");
+            FrameLayout space = rootView.findViewById(R.id.space);
+            space.setVisibility(View.GONE);
         }
 
         String parking = place.getParking();

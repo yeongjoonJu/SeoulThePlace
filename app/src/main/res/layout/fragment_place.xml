@@ -123,6 +123,11 @@
                     android:background="@color/non_active_dot" />
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
             <com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton
                 android:id="@+id/create_course_using_this"
                 android:layout_width="wrap_content"
