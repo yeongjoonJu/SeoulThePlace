@@ -46,7 +46,8 @@ public class CustomizedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_customized, container, false);
         listView = (ListView) rootView.findViewById(R.id.customized_list);
-        
+
+
         customizedCourses = dao.getCustomizedCourses(getUserID());
 
 

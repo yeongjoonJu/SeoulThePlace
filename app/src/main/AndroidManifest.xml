@@ -36,19 +36,23 @@
         <activity android:name=".Login.LoginBackgroundActivity"
             android:screenOrientation="portrait">
         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        <intent-filter>
             <action android:name="android.intent.action.VIEW"/>
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="@string/fb_login_protocol_scheme" />
         </intent-filter>
         </activity>
+
+        <activity android:name=".UIElement.SplashActivity"
+            android:theme="@style/SplashTheme">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
         <activity android:name=".Course.SaveCourseActivity"
             android:theme="@android:style/Theme.Dialog"/>
-
     </application>
 
 </manifest>
