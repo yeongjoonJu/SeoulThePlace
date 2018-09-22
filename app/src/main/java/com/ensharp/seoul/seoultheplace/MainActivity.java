@@ -5,19 +5,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-
-import android.util.Log;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -26,10 +21,8 @@ import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Course.SaveCourseActivity;
 import com.ensharp.seoul.seoultheplace.Fragments.*;
+import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,26 +35,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
     }
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.ensharp.seoul.seoultheplace", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
 
         // course, place 초기화
         setContentView(R.layout.activity_main);
@@ -84,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             bottomButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentFragment = fragment;
+
                     if(currentFragmentNumber <= nextFragmentNumber) {
                         getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
@@ -98,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                                 .commit();
                     }
                     DeleteBackStack();
+                    currentFragment = fragment;
                     currentFragmentNumber = nextFragmentNumber;
                 }
             });
@@ -119,14 +99,12 @@ public class MainActivity extends AppCompatActivity {
                         int linearWrapperHeight = rootLayout.getHeight();
                         int diff = rootViewHeight - linearWrapperHeight;
                         // 키보드가 내려간 상태면
-//                        if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
-//                            ((SearchFragment)fragments[1]).viewVisible();
-//                            Log.i("yeongjoon", "키보드 내려감");
-//                        }
-//                        else {
-//                            ((SearchFragment)fragments[1]).viewInvisible();
-//                            Log.i("yeongjoon", "키보드 올라감");
-//                        }
+                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(50)) {
+                            ((MainFragment)fragments[0]).viewVisible();
+                        }
+                        else {
+                            ((MainFragment)fragments[0]).viewInvisible();
+                        }
                     }
                 });
 
@@ -226,8 +204,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        try {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void SetSaveData(String[] datas){

@@ -15,7 +15,6 @@ public class CustomAnimationDialog extends ProgressDialog {
     private ImageView imgLogo;
     public CustomAnimationDialog(Context context) {
         super(context);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         setCanceledOnTouchOutside(false);
