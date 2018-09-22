@@ -50,7 +50,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Log.e("TEST_TEST_ :","onBindViewHolder in Recycleradapter");
         final PlaceVO item = items.get(position);
         SetImageBox(holder,position);
         Picasso.get().load(item.getImageURL()[0]).into(holder.image);
@@ -61,7 +60,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 choosedMember = position;
                 NotifyDataSetChanged(position);
                 if(item.getName().equals("+")) {
-                    fragment.setItemData(null);
+                    if(choosedMember>0)
+                        fragment.setItemData(items.get(position-1));
+                    else
+                        fragment.setItemData(null);
                     fragment.ChangeItemData();
                 }
                 else{

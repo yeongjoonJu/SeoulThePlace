@@ -14,12 +14,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
-import android.view.MotionEvent;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +24,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ensharp.seoul.seoultheplace.Fragments.FavoriteFragment;
 import com.ensharp.seoul.seoultheplace.R;
-
-import java.util.List;
 
 public class FloatingActionsMenu extends ViewGroup {
   public static final int EXPAND_UP = 0;
@@ -72,7 +65,7 @@ public class FloatingActionsMenu extends ViewGroup {
   private int mButtonsCount;
 
   private FrameLayout actionMenuLayout;
-  private FavoriteFragment favoriteFragment;
+//  private FavoriteFragment favoriteFragment;
 
   private TouchDelegateGroup mTouchDelegateGroup;
 
@@ -101,13 +94,13 @@ public class FloatingActionsMenu extends ViewGroup {
     init(context, attrs);
   }
 
-  public void passParentLayout(FrameLayout actionMenuLayout) {
-        this.actionMenuLayout = actionMenuLayout;
-  }
-
-  public void passFragment(FavoriteFragment favoriteFragment) {
-        this.favoriteFragment = favoriteFragment;
-  }
+//  public void passParentLayout(FrameLayout actionMenuLayout) {
+//        this.actionMenuLayout = actionMenuLayout;
+//  }
+//
+//  public void passFragment(FavoriteFragment favoriteFragment) {
+//        this.favoriteFragment = favoriteFragment;
+//  }
 
   public void init(Context context, AttributeSet attributeSet) {
     mButtonSpacing = (int) (getResources().getDimension(R.dimen.fab_actions_spacing) - getResources().getDimension(R.dimen.fab_shadow_radius) - getResources().getDimension(R.dimen.fab_shadow_offset));
@@ -581,11 +574,11 @@ public class FloatingActionsMenu extends ViewGroup {
     if (mExpanded) {
       collapse();
       actionMenuLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-      favoriteFragment.setIsExpanded(false);
+//      favoriteFragment.setIsExpanded(false);
     } else {
       expand();
       actionMenuLayout.setBackgroundColor(getResources().getColor(R.color.black_background_opacity));
-      favoriteFragment.setIsExpanded(true);
+//      favoriteFragment.setIsExpanded(true);
     }
   }
 

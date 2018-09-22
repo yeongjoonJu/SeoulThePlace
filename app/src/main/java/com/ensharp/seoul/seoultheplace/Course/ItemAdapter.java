@@ -49,7 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         String ImageURL = item.getImageURL()[0];
         new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
-        holder.distance.setText(String.valueOf(item.getDistance()));
+        holder.distance.setText(String.valueOf(item.getDistance())+"m");
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

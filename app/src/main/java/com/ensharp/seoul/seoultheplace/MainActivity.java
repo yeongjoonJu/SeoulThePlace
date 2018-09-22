@@ -29,6 +29,7 @@ import com.ensharp.seoul.seoultheplace.Fragments.*;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragments = new Fragment[]{
-                new MainFragment(), new SearchFragment(), new FavoriteFragment(), new SettingFragment()
+                new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
         };
 
         // 하단 버튼 객체 초기화
@@ -118,14 +119,14 @@ public class MainActivity extends AppCompatActivity {
                         int linearWrapperHeight = rootLayout.getHeight();
                         int diff = rootViewHeight - linearWrapperHeight;
                         // 키보드가 내려간 상태면
-                        if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
-                            ((SearchFragment)fragments[1]).viewVisible();
-                            Log.i("yeongjoon", "키보드 내려감");
-                        }
-                        else {
-                            ((SearchFragment)fragments[1]).viewInvisible();
-                            Log.i("yeongjoon", "키보드 올라감");
-                        }
+//                        if(currentFragment.equals(fragments[1]) && diff < dpToPx(50)) {
+//                            ((SearchFragment)fragments[1]).viewVisible();
+//                            Log.i("yeongjoon", "키보드 내려감");
+//                        }
+//                        else {
+//                            ((SearchFragment)fragments[1]).viewInvisible();
+//                            Log.i("yeongjoon", "키보드 올라감");
+//                        }
                     }
                 });
 
@@ -154,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToCourseFragment(CourseVO course) {
         final Fragment fragment = new CourseFragment(course);
+
+        Log.e("editted_course/MainActivity", "came here");
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
@@ -204,14 +207,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void ChangeFavoriteFragment(){
-        DeleteBackStack();
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
-                .replace(R.id.fragment, new FavoriteFragment())
-                .commit();
-    }
-
     public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -250,9 +245,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("SaveTest : ", dao.insertMemberCourseData(insertData));
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
-                        .replace(R.id.fragment, new FavoriteFragment())
+                        .replace(R.id.fragment, new CustomizedFragment())
                         .commit();
             }
         }
+    }
+
+    public String getUserID() {
+        return getSharedPreferences("data", 0).getString("email","");
     }
 }

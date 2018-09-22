@@ -3,26 +3,24 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
 import com.ensharp.seoul.seoultheplace.R;
-import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
-import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
     public SettingFragment() {
-
     }
+
+    Button[] Btn;
+    Button logoutBtn;
+    Button introduceBtn;
+    Button makersBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
@@ -32,8 +30,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        Button btn = (Button)rootView.findViewById(R.id.logout);
-        btn.setOnClickListener(this);
+        logoutBtn = (Button)rootView.findViewById(R.id.logout);
+        introduceBtn = (Button)rootView.findViewById(R.id.introduceApps);
+        makersBtn = (Button)rootView.findViewById(R.id.makers);
+        Btn = new Button[]{logoutBtn,introduceBtn,makersBtn};
+        for(int i = 0 ; i < Btn.length;i++){
+            Btn[i].setOnClickListener(this);
+        }
 
         return rootView;
     }
@@ -49,6 +52,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(),LoginBackgroundActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+                break;
+            case R.id.introduceApps:
+                Toast.makeText(getContext(),"얍얍얍",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.makers:
+                Toast.makeText(getContext(),"얍얍얍스",Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
 import org.json.JSONException;
@@ -51,6 +52,15 @@ public class CourseAdapter extends ArrayAdapter<CourseVO> {
         title.setText(course.getName());
         location.setText(course.getLocation());
         Picasso.get().load(course.getImage()).into(representImage);
+
+        representImage.setOnClickListener(new View.OnClickListener() {
+            MainActivity activity = (MainActivity) getContext();
+
+            @Override
+            public void onClick(View view) {
+                activity.changeToCourseFragment(dao.getCourseData(course.getCode()));
+            }
+        });
 
         // 좋아요 되어있으면
         if (dao.checkLikedCourse(getItem(position).getCode(), useremail).equals("true")) {

@@ -75,6 +75,19 @@ public class CourseVO {
         }
     }
 
+    public CourseVO(EdittedCourseVO edittedCourse) {
+        name = edittedCourse.getName();
+        type = "";
+        likes = -1;
+        details = edittedCourse.getDescription();
+        placeCode = edittedCourse.getPlaceCode();
+        x = Double.parseDouble(edittedCourse.getPlaceCoordinateX().get(0));
+        y = Double.parseDouble(edittedCourse.getPlaceCoordinateY().get(0));
+        image = edittedCourse.getPlaceImage(0);
+        liked = false;
+        location = edittedCourse.getPlaceLocation(0);
+    }
+
     public CourseVO() {
 
     }
