@@ -2,6 +2,8 @@ package com.ensharp.seoul.seoultheplace.Login;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.R;
 
-public class EmailLoginFragment extends Fragment implements View.OnClickListener {
+public class EmailLoginFragment extends Fragment implements View.OnClickListener, TextWatcher {
     private View view;
 
     String TAG = "LoginEmail";
@@ -32,6 +34,7 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
         LActivity = (LoginBackgroundActivity)getActivity();
 
         email = (EditText)view.findViewById(R.id.emailloginEditText);
+        email.addTextChangedListener(this);
         password=(EditText)view.findViewById(R.id.passwdloginEditText);
         Login = (Button)view.findViewById(R.id.emailloginbtn);
         Login.setOnClickListener(this);
@@ -54,5 +57,20 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
         Log.d(TAG,"Fail Email Login");
         Toast.makeText(getActivity(),"이메일이나 비밀번호가 틀렸습니다.",Toast.LENGTH_LONG).show();
         return false;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

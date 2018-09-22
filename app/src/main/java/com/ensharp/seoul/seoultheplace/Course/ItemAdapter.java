@@ -54,8 +54,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 courseModifyFragment.ChangeData(item);
-                courseModifyFragment.setItemData(null);
-                courseModifyFragment.ChangeItemData();
             }
         });
     }

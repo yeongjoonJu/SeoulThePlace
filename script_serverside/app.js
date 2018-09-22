@@ -163,6 +163,7 @@ app.post('/main/course_pushed', function(req, res) {
 //플레이스 검색
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
+console.log('플레이스 검색 키워드 : ' + keyword);
    con.query('SELECT * FROM PLACE WHERE Name LIKE ? OR Location LIKE ? OR Type LIKE ?',
  ["%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
      if(err) {
@@ -180,6 +181,7 @@ app.post('/search/place', function(req, res) {
 //코스 검색
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
+console.log('코스 검색 키워드 : ' + keyword);
   con.query('SELECT * FROM COURSE WHERE Name LIKE ? OR Type LIKE ?',
 ["%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
     if(err) {
@@ -197,7 +199,6 @@ app.post('/search/course', function(req, res) {
 //PLACE 정보 가져오기
 app.post('/place/info', function(req, res) {
   var code = req.body.Code;
-  console.log(code);
   con.query('SELECT * FROM PLACE WHERE Code = ?', code, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
@@ -352,10 +353,7 @@ app.post('/place/all', function(req, res) {
 app.post('/edited_course/info', function(req, res) {
 	var user_ID = req.body.Id;
 	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE WHERE Person = ?';
-	var query_place = 'SELECT Name, Image1, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?';
-
 	jsonArray = initJsonArray(jsonArray);
-	var jsonArray2 = new Array();
 	sync.fiber(function() {
 		//edittedcourse 정보 받아오기
 		var query_edittedCourse_result = sync.await(con.query(query_edittedCourse, user_ID, sync.defer()));
@@ -369,46 +367,9 @@ app.post('/edited_course/info', function(req, res) {
 			jsonResult.edittedCourse_PlaceCode3 = query_edittedCourse_result[i].PlaceCode3;
 			jsonResult.edittedCourse_PlaceCode4 = query_edittedCourse_result[i].PlaceCode4;
 			jsonResult.edittedCourse_PlaceCode5 = query_edittedCourse_result[i].PlaceCode5;
-
-			//place 정보 받아오기
-			jsonArray2 = initJsonArray(jsonArray2);
-			var query_place_result = [];
-			if(jsonResult.edittedCourse_PlaceCode1 != null) {
-			   query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
-			}
-			if(jsonResult.edittedCourse_PlaceCode2 != null) {
-			   query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
-			}
-			if(jsonResult.edittedCourse_PlaceCode3 != null) {
-			   query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
-			}
-			if(jsonResult.edittedCourse_PlaceCode4 != null) {
-			   query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
-			}
-			if(jsonResult.edittedCourse_PlaceCode5 != null) {
-			   query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
-			}
-			//query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
-			//query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
-			//query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
-			//query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
-			//query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
-			for(var k = 0; k < 5; k++) {
-				if(query_place_result[k] === undefined) {
-					break;
-				}
-				var jsonResult2 = new Object();
-				jsonResult2.Image = query_place_result[k][0].Image1;
-				jsonResult2.Name = query_place_result[k][0].Name;
-				jsonResult2.Location = query_place_result[k][0].Location;
-				jsonResult2.Details = query_place_result[k][0].Details;
-				jsonResult2.Coordinate_X = query_place_result[k][0].Coordinate_X;
-				jsonResult2.Coordinate_Y = query_place_result[k][0].Coordinate_Y;
-				jsonArray2.push(jsonResult2);
-			}
-			jsonResult.placeInfoArray = jsonArray2;
 			jsonArray.push(jsonResult);
 		}
+console.log(jsonArray);
 	res.json([ {jsonArr: jsonArray} ]);
 	});
 });
@@ -638,6 +599,11 @@ function sendCourseInfo(res, rows) {
   Details: rows[0].Details, PlaceCode1: rows[0].PlaceCode1,  PlaceCode2: rows[0].PlaceCode2,
   PlaceCode3: rows[0].PlaceCode3, PlaceCode4: rows[0].PlaceCode4, PlaceCode5: rows[0].PlaceCode5} ]);
 }
+
+app.get('/member', function(req, res) {
+	res.send('테스트용');
+	console.log('테스트용');
+});
 
 app.listen(9000, function(){
 	console.log('Connected 9000 port!');
