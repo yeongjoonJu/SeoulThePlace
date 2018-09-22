@@ -205,7 +205,6 @@ public class MainFragment extends Fragment {
 
                 // 코스 검색
                 showCourseCardView(searchWord);
-
                 // 플레이스 검색
                 showPlaceCardView(searchWord);
 
@@ -238,8 +237,10 @@ public class MainFragment extends Fragment {
     // 플레이스 카드 뷰
     protected void showPlaceCardView(String word) {
         ArrayList<PlaceVO> places = dao.searchPlace(word);
-        if(places == null || places.size() == 0)
+        if(places == null || places.size() == 0) {
+            placeViewPager.setVisibility(View.INVISIBLE);
             return;
+        }
         placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         placeViewAdapter.setPlaceData(places);
         ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
@@ -258,8 +259,10 @@ public class MainFragment extends Fragment {
 
     protected void showCourseCardView(String word) {
         ArrayList<CourseVO> courses = dao.searchCourse(word);
-        if(courses == null || courses.size() == 0)
+        if(courses == null || courses.size() == 0) {
+            courseViewPager.setVisibility(View.INVISIBLE);
             return;
+        }
         courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         courseViewAdapter.setCourseData(courses);
         ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
