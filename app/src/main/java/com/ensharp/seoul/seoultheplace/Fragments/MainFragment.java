@@ -43,11 +43,14 @@ import java.util.Arrays;
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class MainFragment extends Fragment {
+    ArrayList<String> tags = new ArrayList<String>(
+            Arrays.asList(new String[]{"친구끼리", "가족끼리", "혼자서", "커플데이트", "힐링"}));
     private static final String[] CHANNELS = new String[]{"타입별", "검색"};
     private MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;
     private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
     private boolean isPlusButtonExpanded = false;
+    private MainFragment mainFragment;
 
     InputMethodManager inputMethodManager;
     private CustomAnimationDialog customAnimationDialog;
@@ -98,6 +101,9 @@ public class MainFragment extends Fragment {
                             tagListView.setVisibility(View.VISIBLE);
                             courseViewPager.setVisibility(View.VISIBLE);
                             placeViewPager.setVisibility(View.VISIBLE);
+                            TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
+                            tagAdapter.setMainFragment(mainFragment);
+                            tagListView.setAdapter(tagAdapter);
                         }
                         else {
                             searchEditText.setText("");
@@ -185,6 +191,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainFragment = this;
         dao = new DAO();
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
@@ -229,8 +236,7 @@ public class MainFragment extends Fragment {
         // 코스 카드 뷰
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
-        ArrayList<String> tags = new ArrayList<String>(
-                Arrays.asList(new String[]{"친구끼리", "가족끼리", "혼자서", "커플데이트", "힐링"}));
+
 
         TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
         tagAdapter.setMainFragment(this);
