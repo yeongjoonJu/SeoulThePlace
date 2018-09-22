@@ -255,4 +255,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public String getUserID() {
+        return getSharedPreferences("data", 0).getString("email","");
+    }
 }

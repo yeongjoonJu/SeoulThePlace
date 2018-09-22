@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class DAO {
@@ -150,6 +151,37 @@ public class DAO {
             e.printStackTrace();
         }
         return courseData;
+    }
+
+    public List<EdittedCourseVO> getCustomizedCourses(String userID) {
+        JSONObject jsonObject = new JSONObject();
+        List<EdittedCourseVO> edittedCourses = new ArrayList<EdittedCourseVO>();
+
+        try {
+            jsonObject.accumulate("Id", userID);
+            jsonObject.accumulate("url", BASE_URL + "/edited_course/info");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과처리
+            if (resultData == null)
+                return null;
+            jsonObject = resultData.getJSONObject(0);
+            JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
+
+            Log.e("editted_course/DAO", String.format("%s", jsonArray));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                edittedCourses.add(new EdittedCourseVO((JSONObject)jsonArray.get(i)));
+            }
+
+            return edittedCourses;
+
+        } catch(JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public PlaceVO getPlaceData(String key) {
@@ -406,7 +438,36 @@ public class DAO {
         return null;
     }
 
-    // 회원가입
+    public String deleteEdittedCourse(String userID, String courseCode) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("url", BASE_URL + "/edited_course/delete");
+            jsonObject.accumulate("Id", userID);
+            jsonObject.accumulate("Code", courseCode);
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if (resultData == null)
+                return "incomplete network";
+            else {
+                jsonObject = resultData.getJSONObject(0);
+                if (jsonObject.getString("success").equals("false"))
+                    return "error";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "json error";
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return "success";
+    }
+
+    // 편집한 코스 수정 완료 후 입력
     public String insertMemberCourseData(String[] information) {
         Log.v("test", "insertMemberData");
         // 처리 설정
