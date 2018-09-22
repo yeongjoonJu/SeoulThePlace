@@ -30,7 +30,6 @@ var course_code = new Array();
 
 //회원가입
 app.post('/user/register', function(req, res) {
-	console.log('request has come!');
 	var id = req.body.Id;
 	var password = req.body.Password;
 	var name = req.body.Name;
@@ -55,24 +54,18 @@ app.post('/user/register', function(req, res) {
 
 //로그인
 app.post('/login', function(req, res) {
-  console.log('로그인 들어옴');
   var id = req.body.Id;
   var password = req.body.Password;
-  console.log(id);
-  console.log(password);
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
   } else {
     if(rows.length === 0) {
-	console.log('1');
       res.json([ {success: 'false', msg: '해당 유저가 존재하지 않습니다.'} ]);
     } else {
       if(password != rows[0].Password) {
-	console.log('2');
         res.json([ {success: 'false', msg: '비밀번호가 일치하지 않습니다.'} ]);
       } else {
-	console.log('3');
         sendUserInfo(res, rows);
       }
     }
@@ -83,7 +76,6 @@ app.post('/login', function(req, res) {
 //SNS 로그인시에 이미 있는 이메일이면 거기로 로그인
 app.post('/login/bysns', function(req, res) {
   var id = req.body.Id;
-console.log('asdf');
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
@@ -99,7 +91,6 @@ console.log('asdf');
 
 //id 중복체크
 app.post('/user/register/id_duplicatecheck', function(req, res) {
-  console.log('아이디 중복 확인 체크 들어옴');
   var id = req.body.Id;
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, result) {
     if(err) {
@@ -150,7 +141,6 @@ app.post('/main/course_info', function(req, res) {
       console.log('메인에서 코스 리스트err: ' + err);
     } else {
       if(rows.length === 0) {
-	console.log('값 없음');
       } else {
         mainCourseListInfo(res, rows, userID);
       }
@@ -172,19 +162,15 @@ app.post('/main/course_pushed', function(req, res) {
 
 //플레이스 검색
 app.post('/search/place', function(req, res) {
-   console.log('place search! router!');
    var keyword = req.body.keyword;
-   console.log('place search! keyword: ' + keyword);
    con.query('SELECT * FROM PLACE WHERE Name LIKE ? OR Location LIKE ? OR Type LIKE ?',
  ["%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
      if(err) {
        console.log('라우터err : ' + err);
      } else {
        if(rows.length === 0) {
-	 console.log('null 날림 플레이스');
          res.json(null);
        } else {
-	 console.log('플레이스 결과 보냄');
 	 res.json(getInfoToArray(rows, 'PLACE'));
        }
      }
@@ -194,17 +180,14 @@ app.post('/search/place', function(req, res) {
 //코스 검색
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
-  console.log('course search! keyword: ' + keyword);
   con.query('SELECT * FROM COURSE WHERE Name LIKE ? OR Type LIKE ?',
 ["%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
     } else {
       if(rows.length === 0) {
-	console.log('null 날림 코스');
         res.json(null);
       } else {
-	console.log('코스 결과 보냄');
 	res.json(getInfoToArray(rows, 'COURSE'));
       }
     }
@@ -361,10 +344,6 @@ app.post('/place/all', function(req, res) {
       jsonResult.Coordinate_Y = result[i].Coordinate_Y;
       jsonArray.push(jsonResult);
     }
-    console.log(jsonArray[0]);
-    console.log(jsonArray[1]);
-    console.log(jsonArray[2]);
-    console.log(jsonArray.length);
     res.json([ {jsonArr: jsonArray} ]);
   });
 });
@@ -372,15 +351,14 @@ app.post('/place/all', function(req, res) {
 //커스텀 코스 띄울 때
 app.post('/edited_course/info', function(req, res) {
 	var user_ID = req.body.Id;
-	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE';
-	var query_place = 'SELECT Name, Image1, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE = ?';
+	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE WHERE Person = ?';
+	var query_place = 'SELECT Name, Image1, Location, Details, Coordinate_X, Coordinate_Y FROM PLACE WHERE Code = ?';
 
 	jsonArray = initJsonArray(jsonArray);
 	var jsonArray2 = new Array();
-
 	sync.fiber(function() {
 		//edittedcourse 정보 받아오기
-		var query_edittedCourse_result = sync.await(con.query(query_edittedCourse_result, sync.defer()));
+		var query_edittedCourse_result = sync.await(con.query(query_edittedCourse, user_ID, sync.defer()));
 		for(var i = 0; i < query_edittedCourse_result.length; i++) {
 			jsonResult = new Object();
 			jsonResult.edittedCourse_Code = query_edittedCourse_result[i].Code;
@@ -395,29 +373,44 @@ app.post('/edited_course/info', function(req, res) {
 			//place 정보 받아오기
 			jsonArray2 = initJsonArray(jsonArray2);
 			var query_place_result = [];
-			query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
-			query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
-			query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
-			query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
-			query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
-			for(var i = 0; i < 5; i++) {
-				if(query_place_result[i] == undefined) {
+			if(jsonResult.edittedCourse_PlaceCode1 != null) {
+			   query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
+			}
+			if(jsonResult.edittedCourse_PlaceCode2 != null) {
+			   query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
+			}
+			if(jsonResult.edittedCourse_PlaceCode3 != null) {
+			   query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
+			}
+			if(jsonResult.edittedCourse_PlaceCode4 != null) {
+			   query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
+			}
+			if(jsonResult.edittedCourse_PlaceCode5 != null) {
+			   query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
+			}
+			//query_place_result[0] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode1, sync.defer()));
+			//query_place_result[1] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode2, sync.defer()));
+			//query_place_result[2] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode3, sync.defer()));
+			//query_place_result[3] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode4, sync.defer()));
+			//query_place_result[4] = sync.await(con.query(query_place, jsonResult.edittedCourse_PlaceCode5, sync.defer()));
+			for(var k = 0; k < 5; k++) {
+				if(query_place_result[k] === undefined) {
 					break;
 				}
 				var jsonResult2 = new Object();
-				jsonResult2.Image = query_place_result[i].Image1;
-				jsonResult2.Name = query_place_result[i].Name;
-				jsonResult2.Location = query_place_result[i].Location;
-				jsonResult2.Details = query_place_result[i].Details;
-				jsonResult2.Coordinate_X = query_place_result[i].Coordinate_X;
-				jsonResult2.Coordinate_Y = query_place_result[i].Coordinate_Y;
+				jsonResult2.Image = query_place_result[k][0].Image1;
+				jsonResult2.Name = query_place_result[k][0].Name;
+				jsonResult2.Location = query_place_result[k][0].Location;
+				jsonResult2.Details = query_place_result[k][0].Details;
+				jsonResult2.Coordinate_X = query_place_result[k][0].Coordinate_X;
+				jsonResult2.Coordinate_Y = query_place_result[k][0].Coordinate_Y;
 				jsonArray2.push(jsonResult2);
 			}
 			jsonResult.placeInfoArray = jsonArray2;
 			jsonArray.push(jsonResult);
 		}
-	});
 	res.json([ {jsonArr: jsonArray} ]);
+	});
 });
 
 //커스텀 코스 지우면
@@ -447,23 +440,22 @@ app.post('/likedcourses', function(req, res) {
 	sync.fiber(function() {
 		var courseCodeList = sync.await(con.query(selectQuery, userID, sync.defer()));
 		for(var i = 0; i < courseCodeList.length; i++) {
-			var result = sync.await(con.query(selectQuery2, courseCodeList[i], sync.defer()));
+			var result = sync.await(con.query(selectQuery2, courseCodeList[i].CourseCode, sync.defer()));
 			jsonResult = new Object();
-			jsonResult.Code = result[i].Code;
-			jsonResult.Name = result[i].Name;
-			jsonResult.Type = result[i].Type;
-			jsonResult.Likes = result[i].Likes;
-			jsonResult.Details = result[i].Details;
-			jsonResult.PlaceCode1 = result[i].PlaceCode1;
-			jsonResult.PlaceCode2 = result[i].PlaceCode2;
-			jsonResult.PlaceCode3 = result[i].PlaceCode3;
-			jsonResult.PlaceCode4 = result[i].PlaceCode4;
-			jsonResult.PlaceCode5 = result[i].PlaceCode5;
+			jsonResult.Code = result[0].Code;
+			jsonResult.Name = result[0].Name;
+			jsonResult.Type = result[0].Type;
+			jsonResult.Likes = result[0].Likes;
+			jsonResult.Details = result[0].Details;
+			jsonResult.PlaceCode1 = result[0].PlaceCode1;
+			jsonResult.PlaceCode2 = result[0].PlaceCode2;
+			jsonResult.PlaceCode3 = result[0].PlaceCode3;
+			jsonResult.PlaceCode4 = result[0].PlaceCode4;
+			jsonResult.PlaceCode5 = result[0].PlaceCode5;
 			var result = sync.await(con.query(selectQuery3, jsonResult.PlaceCode1, sync.defer()));
 			jsonResult.Image = result[0].Image1;
 			jsonArray.push(jsonResult);
 		}
-
 		res.json([ {jsonArr: jsonArray}]);
 	});
 });
@@ -477,25 +469,25 @@ app.post('/likedplaces', function(req, res) {
 	jsonArray = initJsonArray(jsonArray);
 	sync.fiber(function() {
 		var placeCodeList = sync.await(con.query(selectQuery, userID, sync.defer()));
-		for(var i = 0; i < courseCodeList.length; i++) {
-			var result = sync.await(con.query(selectQuery2, placeCodeList[i], sync.defer()));
+		for(var i = 0; i < placeCodeList.length; i++) {
+			var result = sync.await(con.query(selectQuery2, placeCodeList[i].Code, sync.defer()));
 			jsonResult = new Object();
-			jsonResult.Code = result[i].Code;
-			jsonResult.Name = result[i].Name;
-			jsonResult.Location = result[i].Location;
-			jsonResult.Type = result[i].Type;
-			jsonResult.Likes = result[i].Likes;
-			jsonResult.Details = result[i].Details;
-			jsonResult.Phone = result[i].Phone;
-			jsonResult.Parking = result[i].Parking;
-			jsonResult.Image1 = result[i].Image1;
-			jsonResult.Image2 = result[i].Image2;
-			jsonResult.Image3 = result[i].Image3;
-			jsonResult.BusinessHours = result[i].BusinessHours;
-			jsonResult.Fee = result[i].Fee;
-			jsonResult.Tip = result[i].Tip;
-			jsonResult.Coordinate_X = result[i].Coordinate_X;
-			jsonResult.Coordinate_Y = result[i].Coordinate_Y;
+			jsonResult.Code = result[0].Code;
+			jsonResult.Name = result[0].Name;
+			jsonResult.Location = result[0].Location;
+			jsonResult.Type = result[0].Type;
+			jsonResult.Likes = result[0].Likes;
+			jsonResult.Details = result[0].Details;
+			jsonResult.Phone = result[0].Phone;
+			jsonResult.Parking = result[0].Parking;
+			jsonResult.Image1 = result[0].Image1;
+			jsonResult.Image2 = result[0].Image2;
+			jsonResult.Image3 = result[0].Image3;
+			jsonResult.BusinessHours = result[0].BusinessHours;
+			jsonResult.Fee = result[0].Fee;
+			jsonResult.Tip = result[0].Tip;
+			jsonResult.Coordinate_X = result[0].Coordinate_X;
+			jsonResult.Coordinate_Y = result[0].Coordinate_Y;
 			jsonArray.push(jsonResult);
 		}
 
@@ -545,7 +537,6 @@ function getInfoToArray(rows, table) {
       jsonArray.push(jsonResult);
     }
   }
-  console.log(jsonArray.length);
   return jsonArray;
 }
 
@@ -599,7 +590,6 @@ function pushedCourseListInfo(res, rows) {
       jsonResult.Coordinate_Y = result[0].Coordinate_Y;
       jsonArray.push(jsonResult);
     }
-    console.log(jsonArray.length);
     res.json([ {CourseDetails: rows[0].Details, jsonArr: jsonArray} ]);
   });
 }
@@ -648,11 +638,6 @@ function sendCourseInfo(res, rows) {
   Details: rows[0].Details, PlaceCode1: rows[0].PlaceCode1,  PlaceCode2: rows[0].PlaceCode2,
   PlaceCode3: rows[0].PlaceCode3, PlaceCode4: rows[0].PlaceCode4, PlaceCode5: rows[0].PlaceCode5} ]);
 }
-
-app.get('/member', function(req, res) {
-	res.send('테스트용');
-	console.log('테스트용');
-});
 
 app.listen(9000, function(){
 	console.log('Connected 9000 port!');
