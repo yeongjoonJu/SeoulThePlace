@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.EdittedCourseVO;
 import com.ensharp.seoul.seoultheplace.FavoriteVO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
@@ -24,14 +28,18 @@ import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionBu
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionsMenu;
 import com.ensharp.seoul.seoultheplace.UIElement.SwipeDismissListViewTouchListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomizedFragment extends Fragment {
 
+    private DAO dao = new DAO();
     private View rootView;
     private ListView listView;
-    private List<FavoriteVO> favorites = new ArrayList<FavoriteVO>();
+    private List<EdittedCourseVO> customizedCourses = new ArrayList<EdittedCourseVO>();
     private CustomizedCourseAdapter adapter;
     private boolean isExpanded = false;
 
@@ -48,8 +56,12 @@ public class CustomizedFragment extends Fragment {
 
         final MainActivity activity = (MainActivity) getActivity();
 
-        initFavorites();
-        adapter = new CustomizedCourseAdapter(getContext(), 0, favorites);
+        customizedCourses = dao.getCustomizedCourses(getUserID());
+
+        Log.e("editted_course/CustomizedFragment", String.format("is costomizedCourses null? %s", customizedCourses == null));
+        Log.e("editted_course/CustomizedFragment", String.format("length of customizedCourses = %d", customizedCourses.size()));
+
+        adapter = new CustomizedCourseAdapter(getContext(), 0, customizedCourses);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickListener);
         SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -65,7 +77,8 @@ public class CustomizedFragment extends Fragment {
                 if (isExpanded) return;
 
                 for (int position : reverseSortedPositions) {
-                    favorites.remove(position);
+                    dao.deleteEdittedCourse(getUserID(), customizedCourses.get(position).getCode());
+                    customizedCourses.remove(position);
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -76,10 +89,8 @@ public class CustomizedFragment extends Fragment {
         return rootView;
     }
 
-    public void initFavorites() {
-        favorites.add(new FavoriteVO("http://mblogthumb4.phinf.naver.net/20160517_63/rudekf007_1463467183216LiA4r_JPEG/KakaoTalk_20160517_100111254.jpg?type=w2", "정국", "서울특별시 강남구 도산대로16길 13-20"));
-        favorites.add(new FavoriteVO("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3xSg6WMNXG19Fd1p_ivl4AR7dPnbthyzKCmykBEytSECSGMNN", "백현", "서울 강남구 선릉로190길 114"));
-        favorites.add(new FavoriteVO("http://news.kbs.co.kr/data/news/2018/03/04/3613494_pc3.jpg", "김태리", "서울특별시 강남구 학동로28길 23"));
+    public void initCustomizedCourses() {
+
     }
 
     public ListView getListView() {
@@ -96,5 +107,11 @@ public class CustomizedFragment extends Fragment {
             Toast.makeText(getContext(), ((FavoriteVO) object).getName(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    public String getUserID () {
+        MainActivity activity = (MainActivity) getActivity();
+
+        return activity.getUserID();
+    }
 
 }
