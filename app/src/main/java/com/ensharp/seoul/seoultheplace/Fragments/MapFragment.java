@@ -96,13 +96,13 @@ public class MapFragment extends NMapFragment {
 
         String newCurrent = current.replace(" ", "%20");
         String newDestination = destination.replace(" ", "%20");
-        StringBuilder link = new StringBuilder("http://m.map.naver.com/route.nhn?menu=route&sname=");
-        link.append(current).append("&sx=").append(currentX).append("&sy=").append(currentY).append("&ename=").append(newDestination)
+        StringBuilder url = new StringBuilder("http://m.map.naver.com/route.nhn?menu=route&sname=");
+        url.append(current).append("&sx=").append(currentX).append("&sy=").append(currentY).append("&ename=").append(newDestination)
                 .append("&ex=").append(x).append("&ey=").append(y).append("&pathType=0&showMap=true");
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        activity.changeToWebFragment(link.toString());
+        activity.changeToWebFragment(url.toString());
     }
 
     @Nullable

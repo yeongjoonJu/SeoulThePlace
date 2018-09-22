@@ -170,8 +170,6 @@ public class DAO {
             jsonObject = resultData.getJSONObject(0);
             JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
 
-            Log.e("editted_course/DAO", "look:" + jsonArray.toString());
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 edittedCourses.add(new EdittedCourseVO((JSONObject)jsonArray.get(i)));
             }

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
@@ -132,7 +133,7 @@ public class CourseModifyFragment extends Fragment {
                 PlaceVO item = items.get(viewHolder.getAdapterPosition());
                 int dragFlags = 0;
                 int swipeFlags = 0;
-                mActivity.changeToPlaceFragment(item.getCode());
+                mActivity.changeToPlaceFragment(item.getCode(), PlaceFragment.DURING_EDITTING_COURSE);
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 

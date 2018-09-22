@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
+import com.squareup.picasso.Picasso;
 
 @SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
@@ -69,7 +70,8 @@ public class CardFragment extends Fragment {
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        new DownloadImageTask(image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,place.getImageURL());
+        Picasso.get().load(place.getImageURL()[0]).into(image);
+
         title.setText(place.getName());
         address.setText(place.getLocation());
         placeIndex.setText(Integer.toString(index));
@@ -80,7 +82,7 @@ public class CardFragment extends Fragment {
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.changeToPlaceFragment(course, index);
+                activity.changeToPlaceFragment(course, index, PlaceFragment.VIA_COURSE);
             }
         });
 
