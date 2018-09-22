@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             bottomButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentFragment = fragment;
+
                     if(currentFragmentNumber <= nextFragmentNumber) {
                         getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
                                 .replace(R.id.fragment, fragment)
                                 .commit();
                     }
+
                     DeleteBackStack();
+                    currentFragment = fragment;
                     currentFragmentNumber = nextFragmentNumber;
                 }
             });
@@ -193,8 +195,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        try {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void SetSaveData(String[] datas){

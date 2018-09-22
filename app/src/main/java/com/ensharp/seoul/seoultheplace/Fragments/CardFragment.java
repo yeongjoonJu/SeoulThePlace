@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class CardFragment extends Fragment {
 
         final MainActivity activity = (MainActivity)getActivity();
 
-        ImageButton placeButton = (ImageButton) view.findViewById(R.id.place);
+        FrameLayout placeButton = (FrameLayout) view.findViewById(R.id.place);
         placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
