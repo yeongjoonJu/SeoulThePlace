@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EdittedCourseVO {
-    private String code;
+    private int code;
     private String name;
     private String description;
     private List<String> placeCode;
     JSONArray placeInformation;
-    private List<String> placeImages;
-    private List<String> placeNames;
-    private List<String> placeLocations;
-    private List<String> placeCoordinateX;
-    private List<String> placeCoordinateY;
+    private List<String> placeImages = new ArrayList<String>();
+    private List<String> placeNames = new ArrayList<String>();
+    private List<String> placeLocations = new ArrayList<String>();
+    private List<String> placeCoordinateX = new ArrayList<String>();
+    private List<String> placeCoordinateY = new ArrayList<String>();
 
-    public EdittedCourseVO(String code, String name, String description, List<String> placeCode, JSONArray placeInformation) {
+    public EdittedCourseVO(int code, String name, String description, List<String> placeCode, JSONArray placeInformation) {
         this.code = code;
         this.name = name;
         this.description = description;
@@ -31,10 +31,10 @@ public class EdittedCourseVO {
 
     public EdittedCourseVO(JSONObject jsonObject) {
 
-        Log.e("editted_course/EdittedCourseVO", jsonObject.toString());
+        Log.e("editted_course/EdittedCourseVO", "look:" + jsonObject.toString());
 
         try {
-            code = jsonObject.getString("edittedCourse_Code");
+            code = jsonObject.getInt("edittedCourse_Code");
             name = jsonObject.getString("edittedCourse_Name");
             description = jsonObject.getString("edittedCourse_Description");
             placeCode = new ArrayList<String>();
@@ -54,11 +54,13 @@ public class EdittedCourseVO {
         for (int i = 0; i <= placeInformation.length(); i++) {
             try {
                 JSONObject jsonObject = placeInformation.getJSONObject(i);
+
                 if (jsonObject.getString("Image") != null)
                     placeImages.add(jsonObject.getString("Image"));
                 else
                     return;
-                placeLocations.add(jsonObject.getString("Name"));
+                placeNames.add(jsonObject.getString("Name"));
+                placeLocations.add(jsonObject.getString("Location"));
                 placeCoordinateX.add(jsonObject.getString("Coordinate_X"));
                 placeCoordinateY.add(jsonObject.getString("Coordinate_Y"));
             } catch (JSONException e) {
@@ -67,7 +69,7 @@ public class EdittedCourseVO {
         }
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 

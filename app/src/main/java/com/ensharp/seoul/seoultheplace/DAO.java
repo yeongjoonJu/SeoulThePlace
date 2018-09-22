@@ -170,7 +170,7 @@ public class DAO {
             jsonObject = resultData.getJSONObject(0);
             JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
 
-            Log.e("editted_course/DAO", String.format("%s", jsonArray));
+            Log.e("editted_course/DAO", "look:" + jsonArray.toString());
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 edittedCourses.add(new EdittedCourseVO((JSONObject)jsonArray.get(i)));
@@ -438,7 +438,7 @@ public class DAO {
         return null;
     }
 
-    public String deleteEdittedCourse(String userID, String courseCode) {
+    public String deleteEdittedCourse(String userID, int courseCode) {
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -455,7 +455,7 @@ public class DAO {
             else {
                 jsonObject = resultData.getJSONObject(0);
                 if (jsonObject.getString("success").equals("false"))
-                    return "error";
+                    return jsonObject.getString("success");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -464,7 +464,7 @@ public class DAO {
             e.printStackTrace();
         }
 
-        return "success";
+        return "true";
     }
 
     // 편집한 코스 수정 완료 후 입력
