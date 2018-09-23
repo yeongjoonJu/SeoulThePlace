@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeToCourseFragment(CourseVO course) {
-        final Fragment fragment = new CourseFragment(course);
+    public void changeToCourseFragment(CourseVO course, int enterRoute) {
+        final Fragment fragment = new CourseFragment(course, enterRoute);
 
         Log.e("editted_course/MainActivity", "came here");
 
@@ -239,14 +239,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static float dpToPixels(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);
-    }
-
-    public void changeCourseViewFragment(List<PlaceVO> list){
-        DeleteBackStack(); //뒤로가기하는거 다 없앰
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
-        fragmentTransaction.replace(R.id.fragment, new CourseFragment("c001"));
-        fragmentTransaction.commit();
     }
 
     public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X

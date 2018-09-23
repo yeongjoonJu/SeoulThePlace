@@ -83,14 +83,14 @@ public class CourseCardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final MainActivity activity = (MainActivity)getActivity();
-                activity.changeToCourseFragment(course);
+                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
             }
         });
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final MainActivity activity = (MainActivity)getActivity();
-                activity.changeToCourseFragment(course);
+                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
             }
         });
 

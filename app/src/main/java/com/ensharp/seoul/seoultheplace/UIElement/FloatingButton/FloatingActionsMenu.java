@@ -64,7 +64,7 @@ public class FloatingActionsMenu extends ViewGroup {
   private int mLabelsPosition;
   private int mButtonsCount;
 
-  private FrameLayout actionMenuLayout;
+//  private FrameLayout actionMenuLayout;
 //  private FavoriteFragment favoriteFragment;
 
   private TouchDelegateGroup mTouchDelegateGroup;
@@ -573,11 +573,11 @@ public class FloatingActionsMenu extends ViewGroup {
   public void toggle() {
     if (mExpanded) {
       collapse();
-      actionMenuLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+//      actionMenuLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 //      favoriteFragment.setIsExpanded(false);
     } else {
       expand();
-      actionMenuLayout.setBackgroundColor(getResources().getColor(R.color.black_background_opacity));
+//      actionMenuLayout.setBackgroundColor(getResources().getColor(R.color.black_background_opacity));
 //      favoriteFragment.setIsExpanded(true);
     }
   }
