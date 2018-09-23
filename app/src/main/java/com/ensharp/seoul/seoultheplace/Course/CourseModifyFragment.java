@@ -175,6 +175,7 @@ public class CourseModifyFragment extends Fragment {
     public void addData(PlaceVO item,int position) {
         datas.add(position,item);
         adapter.notifyItemInserted(ITEM_SIZE);
+        setItemData(item);
         ITEM_SIZE += 1;
         if (datas.size() == 6) { //5개가 넘어서 +를 삭제
             datas.remove(5);
@@ -200,6 +201,8 @@ public class CourseModifyFragment extends Fragment {
     }
 
     public void setItemData(PlaceVO item){
+        CustomAnimationDialog ca = new CustomAnimationDialog(getActivity());
+        ca.show();
         items = new ArrayList<PlaceVO>();
         DAO dao = new DAO();
         JSONArray jsonArray = dao.AllPlaceDownload();
@@ -209,6 +212,7 @@ public class CourseModifyFragment extends Fragment {
                     PlaceVO mplace = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
                     if(CheckInData(mplace))
                         continue;
+                    mplace.setDistance(0);
                     items.add(mplace);
                 }
             } catch (JSONException e) {
@@ -248,6 +252,7 @@ public class CourseModifyFragment extends Fragment {
             }
             ChangeItemData();
         }
+        ca.dismiss();
     }
 
     //이미 데이터에 넣어놓은 것들은 뜨지않게 하기 위해.
@@ -300,6 +305,7 @@ public class CourseModifyFragment extends Fragment {
                     if(items == null){
                         Toast.makeText(getContext(),"검색된 플레이스가 없습니다.",Toast.LENGTH_LONG).show();
                         setItemData(null);
+                        ChangeItemData();
                     }
                     else{
                         ChangeItemData();

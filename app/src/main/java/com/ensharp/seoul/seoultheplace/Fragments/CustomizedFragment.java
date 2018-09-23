@@ -47,7 +47,9 @@ public class CustomizedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_customized, container, false);
         listView = (ListView) rootView.findViewById(R.id.customized_list);
 
+
         customizedCourses = dao.getCustomizedCourses(getUserID());
+
 
         adapter = new CustomizedCourseAdapter(getContext(), 0, customizedCourses);
         listView.setAdapter(adapter);
