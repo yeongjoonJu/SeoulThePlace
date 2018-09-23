@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private LinearLayout rootLayout;
     private int currentFragmentNumber = 0;
+    private Fragment fragmentToChange;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -70,44 +71,33 @@ public class MainActivity extends AppCompatActivity {
                 new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
         };
 
+        ImageButton homeButton = findViewById(R.id.homeButton);
+        ImageButton searchButton = findViewById(R.id.searchButton);
+        ImageButton bookMarkButton = findViewById(R.id.bookmarkButton);
+        ImageButton myPageButton = findViewById(R.id.mypageButton);
+
+        homeButton.setTag("home");
+        searchButton.setTag("search");
+        bookMarkButton.setTag("bookmark");
+        myPageButton.setTag("mypage");
+
         // 하단 버튼 객체 초기화
         bottomButtons = new ImageButton[] {
-                (ImageButton) findViewById(R.id.homeButton),
-                (ImageButton) findViewById(R.id.searchButton),
-                (ImageButton) findViewById(R.id.bookmarkButton),
-                (ImageButton) findViewById(R.id.mypageButton)
+                homeButton,
+                searchButton,
+                bookMarkButton,
+                myPageButton
         };
 
         for(int i=0; i<fragments.length; i++) {
-            final Fragment fragment = fragments[i];
-            final int nextFragmentNumber = i;
-            bottomButtons[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentFragment = fragment;
-                    if(currentFragmentNumber <= nextFragmentNumber) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
-                                .replace(R.id.fragment, fragment)
-                                .commit();
-                    }
-                    else{
-                        getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
-                                .replace(R.id.fragment, fragment)
-                                .commit();
-                    }
-                    DeleteBackStack();
-                    currentFragmentNumber = nextFragmentNumber;
-                }
-            });
+            bottomButtons[i].setOnClickListener(bottomButtonOnClickListener);
         }
 
         // 메인 fragment
         currentFragment = fragments[0];
         currentFragmentNumber = 0;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragments[0])
+                .replace(R.id.fragment, fragments[0], "MainFragment")
                 .commit();
 
         rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
@@ -137,6 +127,49 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
     }
+
+    private View.OnClickListener bottomButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Fragment fragment = fragments[0];
+            int nextFragmentNumber = 0;
+
+            switch ((String) view.getTag()) {
+                case "home":
+                    fragment = fragments[0];
+                    nextFragmentNumber = 0;
+                    break;
+                case "search":
+                    fragment = fragments[1];
+                    nextFragmentNumber = 1;
+                    break;
+                case "bookmark":
+                    fragment = fragments[2];
+                    nextFragmentNumber = 2;
+                    break;
+                case "mypage":
+                    fragment = fragments[3];
+                    nextFragmentNumber = 3;
+                    break;
+            }
+
+            currentFragment = fragment;
+            if(currentFragmentNumber <= nextFragmentNumber) {
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                        .replace(R.id.fragment, fragment, "")
+                        .commit();
+            }
+            else{
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        .replace(R.id.fragment, fragment)
+                        .commit();
+            }
+            DeleteBackStack();
+            currentFragmentNumber = nextFragmentNumber;
+        }
+    };
 
     public float dpToPx(float valueInDp) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
