@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
 import com.ensharp.seoul.seoultheplace.Course.SaveCourseActivity;
 import com.ensharp.seoul.seoultheplace.Fragments.*;
-import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                                 .replace(R.id.fragment, fragment)
                                 .commit();
                     }
-                    DeleteBackStack();
+                    DeleteBackStack(fragment);
                     currentFragment = fragment;
                     currentFragmentNumber = nextFragmentNumber;
                 }
@@ -196,18 +195,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void changeCourseViewFragment(List<PlaceVO> list){
-        DeleteBackStack(); //뒤로가기하는거 다 없앰
+        DeleteBackStack(null); //뒤로가기하는거 다 없앰
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
         fragmentTransaction.replace(R.id.fragment, new CourseFragment("c001"));
         fragmentTransaction.commit();
     }
 
-    public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
+    public void DeleteBackStack(Fragment fragment) { // 뒤로가기 눌렀을시 전 프래그먼트로 이동 X
         try {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }catch (Exception e) {
+            if(fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)) {
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        .replace(R.id.fragment, fragment)
+                        .commit();
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -263,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ChangeSettingFragment(){
-        DeleteBackStack();
+        DeleteBackStack(null);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[3])
                 .commit();

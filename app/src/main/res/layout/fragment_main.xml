@@ -21,7 +21,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
+                <!--
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -29,17 +31,21 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textAlignment="center"
-                    android:text="서울 더 플레이스"/>
+                    android:text="서울 더 플레이스"/>-->
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_launcher_round"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp">
+                    android:padding="3dp"
+                    android:layout_gravity="center_vertical|end">
                     <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_gravity="right" />
+                        android:layout_height="36dp"/>
                 </LinearLayout>
             </LinearLayout>
             

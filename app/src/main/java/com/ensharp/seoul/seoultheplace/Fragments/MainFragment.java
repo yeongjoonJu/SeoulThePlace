@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +32,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +54,7 @@ public class MainFragment extends Fragment {
     private String useremail;
     LinearLayout searchBar;
     HorizontalListView tagListView;
+    TagAdapter tagAdapter;
     TextView courseText;
     TextView placeText;
     ViewPager courseViewPager;
@@ -172,22 +169,6 @@ public class MainFragment extends Fragment {
         mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
     }
 
-    public ArrayList<CourseVO> getCourseByType(String type, String user) {
-        JSONObject jsonObject = dao.getUserCourseData(type, user);
-        if (jsonObject == null)
-            return null;
-        ArrayList<CourseVO> courses = new ArrayList<CourseVO>();
-        Log.i("yeongjoon",  "서버 코스 로드");
-        try {
-            JSONArray jsonArray = jsonObject.getJSONArray("jsonArr");
-            for(int i=0; i<jsonArray.length(); i++)
-                courses.add(new CourseVO(jsonArray.getJSONObject(i)));
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return courses;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,10 +217,9 @@ public class MainFragment extends Fragment {
         // 코스 카드 뷰
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
-
-
-        TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
+        tagAdapter = new TagAdapter(getActivity(), tags);
         tagAdapter.setMainFragment(this);
+
         tagListView.setAdapter(tagAdapter);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -308,7 +288,7 @@ public class MainFragment extends Fragment {
             placeViewAdapter.setPlaceData(places);
         }
         placeViewPager.setOffscreenPageLimit(3);
-        placeViewPager.setCurrentItem(currentPlacePosition);
+        //placeViewPager.setCurrentItem(currentPlacePosition);
         placeCardShadowTransformer.enableScaling(true);
     }
 
@@ -330,7 +310,7 @@ public class MainFragment extends Fragment {
             courseViewAdapter.setCourseData(courses);
         }
         courseViewPager.setOffscreenPageLimit(3);
-        courseViewPager.setCurrentItem(currentCoursePosition);
+        //courseViewPager.setCurrentItem(currentCoursePosition);
         courseCardShadowTransformer.enableScaling(true);
     }
 }

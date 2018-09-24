@@ -27,6 +27,10 @@ public class TagAdapter extends ArrayAdapter<String> {
         mainFragment.renewCardView(getItem(0));
     }
 
+    public Button getTagButton() {
+        return preChoicedButton;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
