@@ -48,7 +48,7 @@ public class TagAdapter extends ArrayAdapter<String> {
         // 아무 것도 선택 안 되어 있을 때
         if(preChoicedButton == null && position == 0) {
             tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
-            tagButton.setTextColor(Color.WHITE);
+            tagButton.setTextColor(Color.BLACK);
             preChoicedButton = tagButton;
         }
 
@@ -60,7 +60,7 @@ public class TagAdapter extends ArrayAdapter<String> {
                     return;
 
                 tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
-                tagButton.setTextColor(Color.WHITE);
+                tagButton.setTextColor(Color.BLACK);
 
                 //이전에 선택되어있던 버튼의 색을 변경
                 if(preChoicedButton != null) {
