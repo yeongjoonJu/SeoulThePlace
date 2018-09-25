@@ -26,7 +26,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="서울 더 플레이스"
             android:textColor="#ffffff"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText1"
@@ -36,7 +37,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="Captain : Yejin Kim"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText2"
@@ -44,9 +46,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Surver : Suckho Lim"
+            android:text="Surver : Sukho Lim"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText3"
@@ -56,7 +59,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="Engineer : Yeongjun Joo"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText4"
@@ -66,7 +70,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="Tester : Jaesung Choi"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText5"
@@ -76,7 +81,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="도움을 주신분들"
             android:textColor="#ffffff"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText6"
@@ -86,7 +92,8 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="Taegyun Kim"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/makersText7"
@@ -96,6 +103,7 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="hyowan Park"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
     </LinearLayout>
 </RelativeLayout>

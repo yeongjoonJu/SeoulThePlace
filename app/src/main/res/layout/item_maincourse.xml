@@ -27,6 +27,7 @@
                 android:layout_height="200dp"
                 android:focusable="false"
                 android:clickable="false"
+                android:fontFamily="@font/font_family"
                 android:background="#00000000"/>
 
     </LinearLayout>
@@ -47,6 +48,7 @@
             android:layout_margin="2dp"
             android:singleLine="true"
             android:text="서촌, 감성을 깨우다"
+            android:fontFamily="@font/font_family"
             android:layout_gravity="center_vertical"
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -59,6 +61,7 @@
             android:padding="3dp"
             android:scaleType="centerInside"
             android:background="#FFFFFFFF"
+            android:fontFamily="@font/font_family"
             android:src="@drawable/unchoiced_heart" />
     </LinearLayout>
 
@@ -74,6 +77,7 @@
         android:padding="2dp"
         android:singleLine="true"
         android:layout_marginBottom="4dp"
-        android:text="서울특별시 종로구 청운효자동"/>
+        android:text="서울특별시 종로구 청운효자동"
+        android:fontFamily="@font/font_family"/>
 
 </LinearLayout>

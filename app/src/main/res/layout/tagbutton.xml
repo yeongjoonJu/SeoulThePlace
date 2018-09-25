@@ -12,4 +12,5 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     style="?android:attr/borderlessButtonStyle"
-    android:background="@drawable/item_unchoicedtag"/>
+    android:background="@drawable/item_unchoicedtag"
+    android:fontFamily="@font/font_family"/>

@@ -36,34 +36,34 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/white"
-                android:padding="12dp"
-                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/home_colored" />
             <ImageButton
                 android:id="@+id/searchButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:padding="12dp"
                 android:src="@drawable/notebook"/>
             <ImageButton
                 android:id="@+id/bookmarkButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:padding="12dp"
                 android:src="@drawable/heart"/>
             <ImageButton
                 android:id="@+id/mypageButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:padding="12dp"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
                 android:src="@drawable/user"/>
         </LinearLayout>

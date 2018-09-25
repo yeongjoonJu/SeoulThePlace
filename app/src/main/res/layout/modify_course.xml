@@ -36,6 +36,7 @@
                 android:background="@null"
                 android:hint="검색"
                 android:inputType="text"
+                android:fontFamily="@font/font_family"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 

@@ -37,6 +37,7 @@
                         android:textColor="@color/white"
                         android:background="@drawable/item_maintransform"
                         android:layout_margin="4dp"
+                        android:fontFamily="@font/font_family"
                         android:textSize="16sp"/>
             </RelativeLayout>
 

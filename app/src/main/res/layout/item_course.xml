@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:text="서촌, 감성을 깨우다"
+                android:fontFamily="@font/font_family"
                 android:layout_gravity="center_vertical"
                 android:textColor="#A9A9A9"
                 android:textSize="16sp" />
@@ -65,6 +66,7 @@
             android:padding="2dp"
             android:singleLine="true"
             android:text="서울특별시 종로구 청운효자동"
+            android:fontFamily="@font/font_family"
             android:layout_weight="1"/>
 
     </LinearLayout>

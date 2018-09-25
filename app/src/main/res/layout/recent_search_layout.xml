@@ -14,7 +14,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:singleLine="true"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:fontFamily="@font/font_family"/>
 
     <View
         android:layout_width="match_parent"
