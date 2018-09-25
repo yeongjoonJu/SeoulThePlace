@@ -79,8 +79,6 @@ public class MapFragment extends NMapFragment {
             startActivity(goToSettings);
         }
 
-        Log.e("abcd", String.format("탐색 되었는지? %s", mapLocationManager.isMyLocationFixed()));
-
         NGeoPoint currentLocation = mapLocationManager.getMyLocation();
 
         if (currentLocation != null) {
@@ -89,10 +87,6 @@ public class MapFragment extends NMapFragment {
         } else {
             current = "알 수 없음";
         }
-
-
-        Log.e("abcd", Double.toString(currentX));
-        Log.e("abcd", Double.toString(currentY));
 
         String newCurrent = current.replace(" ", "%20");
         String newDestination = destination.replace(" ", "%20");
@@ -146,7 +140,7 @@ public class MapFragment extends NMapFragment {
         overlayManager = new NMapOverlayManager(getActivity(), mapView, mapViewerResourceProvider);
         overlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
 
-        int markedID = NMapPOIflagType.PIN;
+        int markedID = NMapPOIflagType.MIN_PIN;
         NMapPOIdata poIData = new NMapPOIdata(2, mapViewerResourceProvider);
         poIData.beginPOIdata(2);
 

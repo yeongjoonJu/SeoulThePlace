@@ -58,7 +58,9 @@ public class CourseMapFragment extends NMapFragment{
         }
 
         NMapPOIitem item = poIdataOverlay.getPOIitemAtIndex(position - 1);
+
         NGeoPoint point = item.getPoint();
+        poIdataOverlay.selectPOIitem(position - 1, false);
         NGeoPoint pointToCenter = new NGeoPoint();
         pointToCenter.latitude = point.latitude;
         pointToCenter.longitude = point.longitude;
@@ -127,12 +129,12 @@ public class CourseMapFragment extends NMapFragment{
         mapViewerResourceProvider = new NMapViewerResourceProvider(getActivity());
         overlayManager = new NMapOverlayManager(getActivity(), mapView, mapViewerResourceProvider);
 
-        int markedID = NMapPOIflagType.PIN;
+        int markedID = NMapPOIflagType.PIN1;
         NMapPOIdata poIData = new NMapPOIdata(longitudes.size(), mapViewerResourceProvider);
         poIData.beginPOIdata(longitudes.size());
 
         for (int i = 0; i < longitudes.size(); i++) {
-            poIData.addPOIitem(Double.parseDouble(longitudes.get(i)), Double.parseDouble(latitudes.get(i)), "", markedID, i);
+            poIData.addPOIitem(Double.parseDouble(longitudes.get(i)), Double.parseDouble(latitudes.get(i)), "", markedID + i, i);
         }
 
         poIData.endPOIdata();
@@ -218,9 +220,10 @@ public class CourseMapFragment extends NMapFragment{
             fragment.setPageritem(position);
 
             NGeoPoint point = nMapPOIitem.getPoint();
-            point.latitude -= 0.0025;
+            NGeoPoint newPoint = new NGeoPoint(point.longitude, point.latitude);
+            newPoint.latitude -= 0.0025;
 
-            mapController.setMapCenter(point, 11);
+            mapController.setMapCenter(newPoint, 11);
         }
 
         @Override
