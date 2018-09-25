@@ -342,6 +342,7 @@ public class DAO {
     //  플레이스 좋아요 확인
     // Key : isPlaceLiked(String)
     public String checkLikedPlace(String code, String id) {
+        Log.i("yeong", code + " " + id);
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
@@ -558,7 +559,6 @@ public class DAO {
 
     public ArrayList<CourseVO> getLikedCourseList(String id) {
         ArrayList<CourseVO> courseData = null;
-        Log.i("yeong", "코스 " + id);
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
@@ -587,7 +587,6 @@ public class DAO {
 
     public ArrayList<PlaceVO> getLikedPlaceList(String id) {
         ArrayList<PlaceVO> placeData = null;
-        Log.i("yeong", "플레이스 " + id);
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
@@ -599,8 +598,6 @@ public class DAO {
 
             if(resultData == null)
                 return null;
-
-            Log.i("yeong", resultData.toString());
 
             placeData = new ArrayList<>();
             JSONArray jsonArray = resultData.getJSONObject(0).getJSONArray("jsonArr");

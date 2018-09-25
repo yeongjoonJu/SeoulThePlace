@@ -92,17 +92,26 @@ public class PlaceCardFragment extends Fragment {
 
         heartButton.setOnClickListener(onHeartButtonClickListener);
 
-        try {
-            Picasso.get().load(place.getImageURL()[0]).into(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
+        if(place.getImageURL() != null) {
             try {
-                Picasso.get().load(place.getImageURL()[1]).into(image);
-            }catch (Exception e) {
+                Picasso.get().load(place.getImageURL()[0]).into(image);
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
-                Picasso.get().load(place.getImageURL()[2]).into(image);
+            } finally {
+                try {
+                    if (place.getImageURL().length >= 2)
+                        Picasso.get().load(place.getImageURL()[1]).into(image);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (place.getImageURL().length >= 3)
+                            Picasso.get().load(place.getImageURL()[2]).into(image);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
             }
         }
 
