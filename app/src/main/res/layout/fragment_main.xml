@@ -69,7 +69,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerInside"
                         android:background="@color/white"
                         android:src="@drawable/search_icon"/>
             </LinearLayout>
