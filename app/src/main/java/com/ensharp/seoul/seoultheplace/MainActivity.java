@@ -49,33 +49,47 @@ public class MainActivity extends AppCompatActivity {
                 new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
         };
 
-        ImageButton homeButton = findViewById(R.id.homeButton);
-        ImageButton searchButton = findViewById(R.id.searchButton);
-        ImageButton bookMarkButton = findViewById(R.id.bookmarkButton);
-        ImageButton myPageButton = findViewById(R.id.mypageButton);
-
-        homeButton.setTag("home");
-        searchButton.setTag("search");
-        bookMarkButton.setTag("bookmark");
-        myPageButton.setTag("mypage");
-
         // 하단 버튼 객체 초기화
         bottomButtons = new ImageButton[] {
-                homeButton,
-                searchButton,
-                bookMarkButton,
-                myPageButton
+                (ImageButton) findViewById(R.id.homeButton),
+                (ImageButton) findViewById(R.id.searchButton),
+                (ImageButton) findViewById(R.id.bookmarkButton),
+                (ImageButton) findViewById(R.id.mypageButton)
         };
 
         for(int i=0; i<fragments.length; i++) {
-            bottomButtons[i].setOnClickListener(bottomButtonOnClickListener);
+            final Fragment fragment = fragments[i];
+            final int nextFragmentNumber = i;
+            bottomButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentFragmentNumber <= nextFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                                .replace(R.id.fragment, fragment)
+                                .commit();
+                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
+                    }
+                    else{
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                                .replace(R.id.fragment, fragment)
+                                .commit();
+                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
+                    }
+                    DeleteBackStack(fragment);
+                    currentFragment = fragment;
+                    currentFragmentNumber = nextFragmentNumber;
+
+                }
+            });
         }
 
         // 메인 fragment
         currentFragment = fragments[0];
         currentFragmentNumber = 0;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragments[0], "MainFragment")
+                .replace(R.id.fragment, fragments[0])
                 .commit();
 
         rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
@@ -103,6 +117,70 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
     }
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        // course, place 초기화
+//        setContentView(R.layout.activity_main);
+//
+//        fragments = new Fragment[]{
+//                new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
+//        };
+//
+//        ImageButton homeButton = findViewById(R.id.homeButton);
+//        ImageButton searchButton = findViewById(R.id.searchButton);
+//        ImageButton bookMarkButton = findViewById(R.id.bookmarkButton);
+//        ImageButton myPageButton = findViewById(R.id.mypageButton);
+//
+//        homeButton.setTag("home");
+//        searchButton.setTag("search");
+//        bookMarkButton.setTag("bookmark");
+//        myPageButton.setTag("mypage");
+//
+//        // 하단 버튼 객체 초기화
+//        bottomButtons = new ImageButton[] {
+//                homeButton,
+//                searchButton,
+//                bookMarkButton,
+//                myPageButton
+//        };
+//
+//        for(int i=0; i<fragments.length; i++) {
+//            bottomButtons[i].setOnClickListener(bottomButtonOnClickListener);
+//        }
+//
+//        // 메인 fragment
+//        currentFragment = fragments[0];
+//        currentFragmentNumber = 0;
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment, fragments[0], "MainFragment")
+//                .commit();
+//
+//        rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
+//        rootLayout.getViewTreeObserver()
+//                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        int rootViewHeight = rootLayout.getRootView().getHeight();
+//                        int linearWrapperHeight = rootLayout.getHeight();
+//                        int diff = rootViewHeight - linearWrapperHeight;
+//                        // 키보드가 내려간 상태면
+//                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(50)) {
+//                            ((MainFragment)fragments[0]).viewVisible();
+//                        }
+//                        else {
+//                            ((MainFragment)fragments[0]).viewInvisible();
+//                        }
+//                    }
+//                });
+//
+//        String[] neededPermissions = {
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//        };
+//
+//        ActivityCompat.requestPermissions(this, neededPermissions,0);
+//    }
 
     //0번째가 홈, 1번째가 내가만든 코스, 2번째가 좋아요 코스, 3번째가 좋아요 코스
     public void setBottomButtons(int currentFragment, int nextFragment) {
@@ -189,13 +267,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            DeleteBackStack();
+            //DeleteBackStack();
             currentFragment = fragment;
             if(currentFragmentNumber <= nextFragmentNumber) {
                 Log.e("home_tag_error/MainActivity", "came here1");
-
                 getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                        .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right)
                         .replace(R.id.fragment, fragment, "")
                         .addToBackStack(null)
                         .commit();
@@ -203,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left)
                         .replace(R.id.fragment, fragment)
                         .addToBackStack(null)
                         .commit();
@@ -284,9 +361,18 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
-    public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    public void DeleteBackStack(Fragment fragment) { // 뒤로가기 눌렀을시 전 프래그먼트로 이동 X
+        try {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            if(fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment, fragment)
+                        .commit();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void SetSaveData(String[] datas){
@@ -339,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ChangeSettingFragment(){
-        DeleteBackStack();
+        DeleteBackStack(new SettingFragment());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[3])
                 .commit();
