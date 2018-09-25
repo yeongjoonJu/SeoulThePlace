@@ -62,22 +62,24 @@ public class MainActivity extends AppCompatActivity {
             bottomButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if(currentFragmentNumber <= nextFragmentNumber) {
                         getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
                                 .replace(R.id.fragment, fragment)
                                 .commit();
+                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
                     }
                     else{
                         getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
                                 .replace(R.id.fragment, fragment)
                                 .commit();
+                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
                     }
                     DeleteBackStack(fragment);
                     currentFragment = fragment;
                     currentFragmentNumber = nextFragmentNumber;
+
                 }
             });
         }
@@ -113,6 +115,66 @@ public class MainActivity extends AppCompatActivity {
         };
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
+    }
+
+
+    //0번째가 홈, 1번째가 내가만든 코스, 2번째가 좋아요 코스, 3번째가 좋아요 코스
+    public void setBottomButtons(int currentFragment, int nextFragment) {
+
+        //현재 프레그먼트가 홈
+        if(currentFragment == 0) {
+            bottomButtons[currentFragment].setImageResource(R.drawable.home);
+            //다음 프레그먼트가 홈
+           if(nextFragment == 0) {
+              bottomButtons[currentFragment].setImageResource(R.drawable.home_colored);
+           } else if(nextFragment == 1) { //다음 프레그먼트가 내가 편집한 프레그먼트
+               bottomButtons[nextFragment].setImageResource(R.drawable.notebook_colored);
+           } else if(nextFragment == 2) { //다음 프레그먼트가 좋아요 프레그먼트
+               bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
+           } else if(nextFragment == 3) { //다음 프레그먼트가 내정보 프레그먼트
+               bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+           }
+        }
+        //현재 프레그먼트가 내가만든 코스
+        else if(currentFragment == 1) {
+            bottomButtons[currentFragment].setImageResource(R.drawable.notebook);
+            //다음 프레그먼트가 홈
+            if(nextFragment == 0) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.home_colored);
+            } else if(nextFragment == 1) {
+                bottomButtons[currentFragment].setImageResource(R.drawable.notebook_colored);
+            } else if(nextFragment == 2) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
+            } else if(nextFragment == 3) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+            }
+        }
+        //현재 프레그먼트가 좋아요
+        else if(currentFragment == 2) {
+            bottomButtons[currentFragment].setImageResource(R.drawable.heart);
+            //다음 프레그먼트가 홈
+            if(nextFragment == 0) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.home_colored);
+            } else if(nextFragment == 1) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.notebook_colored);
+            } else if(nextFragment == 2) {
+                bottomButtons[currentFragment].setImageResource(R.drawable.heart_colored);
+            } else if(nextFragment == 3) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+            }
+        }
+        else {
+            bottomButtons[currentFragment].setImageResource(R.drawable.user);
+            if(nextFragment == 0) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.home_colored);
+            } else if(nextFragment == 1) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.notebook_colored);
+            } else if(nextFragment == 2) {
+                bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
+            } else if(nextFragment == 3) {
+                bottomButtons[currentFragment].setImageResource(R.drawable.user_colored);
+            }
+        }
     }
 
     public float dpToPx(float valueInDp) {
@@ -237,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("SaveTest : ", "email " + sp.getString("email", ""));
                 insertData[0] = sp.getString("email", "");
                 insertData[1] = data.getStringExtra("title");
-                ;
                 insertData[2] = data.getStringExtra("description");
                 for (int i = 0; i < data.getStringArrayExtra("codes").length; i++) {
                     if (data.getStringArrayExtra("codes")[i] != null) {

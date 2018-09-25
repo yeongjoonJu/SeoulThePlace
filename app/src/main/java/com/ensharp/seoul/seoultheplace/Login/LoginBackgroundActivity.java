@@ -41,7 +41,6 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_background);
         CheckAlreadyLogin();
-
         dao = new DAO();
 
         loginFragment = new LoginFragment();

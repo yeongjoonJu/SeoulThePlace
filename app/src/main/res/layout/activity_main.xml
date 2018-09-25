@@ -37,7 +37,7 @@
                 android:background="@android:color/white"
                 android:padding="12dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/home_icon" />
+                android:src="@drawable/home_colored" />
             <ImageButton
                 android:id="@+id/searchButton"
                 android:layout_weight="1"
@@ -46,7 +46,7 @@
                 android:scaleType="centerInside"
                 android:background="@android:color/white"
                 android:padding="12dp"
-                android:src="@drawable/search_icon"/>
+                android:src="@drawable/notebook"/>
             <ImageButton
                 android:id="@+id/bookmarkButton"
                 android:layout_weight="1"
@@ -55,7 +55,7 @@
                 android:scaleType="centerInside"
                 android:background="@android:color/white"
                 android:padding="12dp"
-                android:src="@drawable/bookmark_icon"/>
+                android:src="@drawable/heart"/>
             <ImageButton
                 android:id="@+id/mypageButton"
                 android:layout_weight="1"
@@ -64,7 +64,7 @@
                 android:scaleType="centerInside"
                 android:padding="12dp"
                 android:background="@android:color/white"
-                android:src="@drawable/mypage_icon"/>
+                android:src="@drawable/user"/>
         </LinearLayout>
 
     </LinearLayout>

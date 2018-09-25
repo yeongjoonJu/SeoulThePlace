@@ -29,5 +29,5 @@
     <color name="plus_color">#000000</color>
     <color name="plus_color_normal">#FFFFFF</color>
     <color name="plus_pressed">#F1F1F1</color>
-
+    <color name="theme">#FF00BCFE</color>
 </resources>
