@@ -30,6 +30,7 @@ var course_code = new Array();
 
 //회원가입
 app.post('/user/register', function(req, res) {
+console.log('회원가입 라우터');
 	var id = req.body.Id;
 	var password = req.body.Password;
 	var name = req.body.Name;
@@ -56,6 +57,7 @@ app.post('/user/register', function(req, res) {
 app.post('/login', function(req, res) {
   var id = req.body.Id;
   var password = req.body.Password;
+console.log('로그인 들어옴 Id : ' + id);
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
@@ -76,6 +78,7 @@ app.post('/login', function(req, res) {
 //SNS 로그인시에 이미 있는 이메일이면 거기로 로그인
 app.post('/login/bysns', function(req, res) {
   var id = req.body.Id;
+console.log('SNS 로그인 들어옴 Id : ' + id);
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows) {
   if(err) {
     console.log('err: ' + err);
@@ -108,6 +111,7 @@ app.post('/user/register/id_duplicatecheck', function(req, res) {
 //회원 정보 가져오기
 app.post('/user/info', function(req, res) {
   var id = req.body.Id;
+console.log('\n회원 정보 가져오기 라우터 : ' + id);
   con.query('SELECT * FROM USER WHERE Id = ?', id, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
@@ -121,6 +125,7 @@ app.post('/user/info', function(req, res) {
 //COURSE 정보 가져오기
 app.post('/course/info', function(req, res) {
   var code = req.body.Code;
+console.log('\n코스 정보 가져오기 라우터 : ' + code);
   con.query('SELECT * FROM COURSE WHERE Code = ?', code, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
@@ -135,6 +140,8 @@ app.post('/course/info', function(req, res) {
 app.post('/main/course_info', function(req, res) {
   var courseType = req.body.Type; //코스 타입
   var userID = req.body.Id; //로그인한 아이디
+console.log('\n메인에서 type으로 코스 리스트 띄울 때 필요한 정보 라우터 : ' + userID);
+
   //해당 타입에 맞는 코스 가져옴
   con.query('SELECT * FROM COURSE WHERE Type LIKE ?', ["%" + courseType + "%"], function(err, rows, fields) {
     if(err) {
@@ -151,6 +158,7 @@ app.post('/main/course_info', function(req, res) {
 //Main에서 해당 코스 눌렀을 때 필요한 정보 가져오기
 app.post('/main/course_pushed', function(req, res) {
 	var courseCode = req.body.Code;
+console.log('\n메인에서 해당 코스 눌렀을 때 라우터 : ' + courseCode);
 	con.query('SELECT * FROM COURSE WHERE Code = ?', courseCode, function(err, rows, fields) {
 		if(err) {
 			console.log('main에서 해당 코스눌렀을 때 err: ' + err)
@@ -163,7 +171,7 @@ app.post('/main/course_pushed', function(req, res) {
 //플레이스 검색
 app.post('/search/place', function(req, res) {
    var keyword = req.body.keyword;
-console.log('플레이스 검색 키워드 : ' + keyword);
+console.log('\n플레이스 검색 키워드 : ' + keyword);
    con.query('SELECT * FROM PLACE WHERE Name LIKE ? OR Location LIKE ? OR Type LIKE ?',
  ["%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
      if(err) {
@@ -181,7 +189,7 @@ console.log('플레이스 검색 키워드 : ' + keyword);
 //코스 검색
 app.post('/search/course', function(req, res) {
   var keyword = req.body.keyword;
-console.log('코스 검색 키워드 : ' + keyword);
+console.log('\n코스 검색 키워드 : ' + keyword);
   con.query('SELECT * FROM COURSE WHERE Name LIKE ? OR Type LIKE ?',
 ["%"+keyword+"%", "%"+keyword+"%"], function(err, rows, fields) {
     if(err) {
@@ -199,6 +207,7 @@ console.log('코스 검색 키워드 : ' + keyword);
 //PLACE 정보 가져오기
 app.post('/place/info', function(req, res) {
   var code = req.body.Code;
+console.log('\n플레이스 정보 가져오기 : ' + code);
   con.query('SELECT * FROM PLACE WHERE Code = ?', code, function(err, rows, fields) {
     if(err) {
       console.log('err : ' + err);
@@ -252,12 +261,12 @@ app.post('/place/like', function(req, res) {
         placeLikes = placeLikes - 1;
       }
       res.json([ {isPlaceLiked: 'true', Likes: placeLikes} ]);
-      con.query('DELETE FROM COURSELIKE WHERE CourseCode = ? AND Person = ?', [placeCode, user_ID]);
+      con.query('DELETE FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?', [placeCode, user_ID]);
       con.query('UPDATE PLACE set Likes = ? WHERE Code = ?', [placeLikes, placeCode]);
     } else {
        placeLikes = placeLikes + 1;
        res.json([ {isPlaceLiked: 'false', Likes: placeLikes} ]);
-       con.query('INSERT INTO COURSELIKE VALUES(?, ?)', [courseCode, user_ID]);
+       con.query('INSERT INTO PLACELIKE VALUES(?, ?)', [placeCode, user_ID]);
        con.query('UPDATE PLACE set Likes = ? WHERE Code = ?', [placeLikes, placeCode]);
       }
   });
@@ -278,6 +287,7 @@ app.post('/course/like/status', function(req, res) {
 app.post('/place/like/status', function(req, res) {
 	var placeCode = req.body.Code;
 	var user_ID = req.body.Id;
+
 	sync.fiber(function() {
 	  var isPlaceLike = isPlaceLiked(placeCode, user_ID);
 	  res.json([ {isPlaceLiked: isPlaceLike} ]);
@@ -369,7 +379,6 @@ app.post('/edited_course/info', function(req, res) {
 			jsonResult.edittedCourse_PlaceCode5 = query_edittedCourse_result[i].PlaceCode5;
 			jsonArray.push(jsonResult);
 		}
-console.log(jsonArray);
 	res.json([ {jsonArr: jsonArray} ]);
 	});
 });
@@ -426,16 +435,15 @@ app.post('/likedplaces', function(req, res) {
 	var userID = req.body.Id;
 	var selectQuery = 'SELECT PlaceCode FROM PLACELIKE WHERE Person = ?';
 	var selectQuery2 = 'SELECT * FROM PLACE WHERE Code=?';
-
 	jsonArray = initJsonArray(jsonArray);
 	sync.fiber(function() {
 		var placeCodeList = sync.await(con.query(selectQuery, userID, sync.defer()));
 		for(var i = 0; i < placeCodeList.length; i++) {
-			var result = sync.await(con.query(selectQuery2, placeCodeList[i].Code, sync.defer()));
+			var result = sync.await(con.query(selectQuery2, placeCodeList[i].PlaceCode, sync.defer()));
 			jsonResult = new Object();
 			jsonResult.Code = result[0].Code;
 			jsonResult.Name = result[0].Name;
-			jsonResult.Location = result[0].Location;
+			jsonResult.location = result[0].Location;
 			jsonResult.Type = result[0].Type;
 			jsonResult.Likes = result[0].Likes;
 			jsonResult.Details = result[0].Details;
@@ -451,7 +459,6 @@ app.post('/likedplaces', function(req, res) {
 			jsonResult.Coordinate_Y = result[0].Coordinate_Y;
 			jsonArray.push(jsonResult);
 		}
-
 		res.json([ {jsonArr: jsonArray}]);
 	});
 });
@@ -545,7 +552,7 @@ function pushedCourseListInfo(res, rows) {
       jsonResult = new Object();
       jsonResult.Image1 = result[0].Image1;
       jsonResult.Name = result[0].Name;
-      jsonResult.Location = result[0].Location;
+      jsonResult.location = result[0].Location;
       jsonResult.Details = result[0].Details;
       jsonResult.Coordinate_X = result[0].Coordinate_X;
       jsonResult.Coordinate_Y = result[0].Coordinate_Y;
@@ -568,7 +575,7 @@ function isCourseLiked(courseID, userID) {
 //user가 해당 플레이스 좋아요 눌렀는지 여부
 function isPlaceLiked(placeID, userID) {
    var result = sync.await(con.query('SELECT * FROM PLACELIKE WHERE PlaceCode = ? AND Person = ?',[placeID, userID], sync.defer()));
-   if(result.lenth === 0) {
+   if(result.length === 0) {
      return 'false';
    } else {
      return 'true';
