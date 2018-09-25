@@ -49,7 +49,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/searchbtn"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:scaleType="centerInside"
+                />
 
             <Button
                 android:id="@+id/modify_save"
@@ -61,7 +63,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/savebtn"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:scaleType="fitCenter"
+                />
 
         </LinearLayout>
 

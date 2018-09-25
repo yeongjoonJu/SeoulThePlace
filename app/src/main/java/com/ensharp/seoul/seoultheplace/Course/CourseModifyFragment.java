@@ -162,7 +162,7 @@ public class CourseModifyFragment extends Fragment {
     public void ChangeData(PlaceVO item) {
         if(datas.get(adapter.choosedMember).getName().equals("+")){
             addData(item,adapter.choosedMember); //+ 있는 자리에 추가하기위해
-        } else { //5개일경우 자리만 바꿈
+        } else { //플레이스 일경우 자리만 바꿈
             if (datas.size() < adapter.choosedMember) { //하다보니 계산이 안맞아서 추가.
                 adapter.choosedMember -= 1;
             }
@@ -228,6 +228,7 @@ public class CourseModifyFragment extends Fragment {
             }
         }
         else{
+            SetTouchName(item.getName()+"에서");
             for(int i = 0; i<originDatas.size(); i++) {
                 boolean setData = false;
                 if (CheckInData(originDatas.get(i))) //이미 있는곳은 안만듬

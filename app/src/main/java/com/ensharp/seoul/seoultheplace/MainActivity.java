@@ -269,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             if(fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)) {
                 getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
                         .replace(R.id.fragment, fragment)
                         .commit();
             }
