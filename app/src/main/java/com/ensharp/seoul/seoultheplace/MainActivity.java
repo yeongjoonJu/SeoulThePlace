@@ -117,70 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
     }
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        // course, place 초기화
-//        setContentView(R.layout.activity_main);
-//
-//        fragments = new Fragment[]{
-//                new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
-//        };
-//
-//        ImageButton homeButton = findViewById(R.id.homeButton);
-//        ImageButton searchButton = findViewById(R.id.searchButton);
-//        ImageButton bookMarkButton = findViewById(R.id.bookmarkButton);
-//        ImageButton myPageButton = findViewById(R.id.mypageButton);
-//
-//        homeButton.setTag("home");
-//        searchButton.setTag("search");
-//        bookMarkButton.setTag("bookmark");
-//        myPageButton.setTag("mypage");
-//
-//        // 하단 버튼 객체 초기화
-//        bottomButtons = new ImageButton[] {
-//                homeButton,
-//                searchButton,
-//                bookMarkButton,
-//                myPageButton
-//        };
-//
-//        for(int i=0; i<fragments.length; i++) {
-//            bottomButtons[i].setOnClickListener(bottomButtonOnClickListener);
-//        }
-//
-//        // 메인 fragment
-//        currentFragment = fragments[0];
-//        currentFragmentNumber = 0;
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragment, fragments[0], "MainFragment")
-//                .commit();
-//
-//        rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
-//        rootLayout.getViewTreeObserver()
-//                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                    @Override
-//                    public void onGlobalLayout() {
-//                        int rootViewHeight = rootLayout.getRootView().getHeight();
-//                        int linearWrapperHeight = rootLayout.getHeight();
-//                        int diff = rootViewHeight - linearWrapperHeight;
-//                        // 키보드가 내려간 상태면
-//                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(50)) {
-//                            ((MainFragment)fragments[0]).viewVisible();
-//                        }
-//                        else {
-//                            ((MainFragment)fragments[0]).viewInvisible();
-//                        }
-//                    }
-//                });
-//
-//        String[] neededPermissions = {
-//                Manifest.permission.ACCESS_FINE_LOCATION,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//        };
-//
-//        ActivityCompat.requestPermissions(this, neededPermissions,0);
-//    }
 
     //0번째가 홈, 1번째가 내가만든 코스, 2번째가 좋아요 코스, 3번째가 좋아요 코스
     public void setBottomButtons(int currentFragment, int nextFragment) {
@@ -240,56 +176,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private View.OnClickListener bottomButtonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Fragment fragment = fragments[0];
-            int nextFragmentNumber = 0;
-
-            switch ((String) view.getTag()) {
-                case "home":
-                    Log.e("home_tag_error/MainActivity", "came here");
-                    fragment = fragments[0];
-                    nextFragmentNumber = 0;
-                    break;
-                case "search":
-                    fragment = fragments[1];
-                    nextFragmentNumber = 1;
-                    break;
-                case "bookmark":
-                    fragment = fragments[2];
-                    nextFragmentNumber = 2;
-                    break;
-                case "mypage":
-                    fragment = fragments[3];
-                    nextFragmentNumber = 3;
-                    break;
-            }
-
-            //DeleteBackStack();
-            currentFragment = fragment;
-            if(currentFragmentNumber <= nextFragmentNumber) {
-                Log.e("home_tag_error/MainActivity", "came here1");
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right)
-                        .replace(R.id.fragment, fragment, "")
-                        .addToBackStack(null)
-                        .commit();
-                setBottomButtons(currentFragmentNumber, nextFragmentNumber);
-            }
-            else{
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left)
-                        .replace(R.id.fragment, fragment)
-                        .addToBackStack(null)
-                        .commit();
-                setBottomButtons(currentFragmentNumber, nextFragmentNumber);
-            }
-
-            currentFragmentNumber = nextFragmentNumber;
-        }
-    };
 
     public float dpToPx(float valueInDp) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
