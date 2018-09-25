@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -288,7 +290,7 @@ public class CourseModifyFragment extends Fragment {
                     mActivity.SetSaveData(GetPlaceCode(datas));
                 }
                 else{ //아무것도 없음.
-                    mActivity.changeCourseViewFragment(datas);
+                    mActivity.getSupportFragmentManager().popBackStackImmediate();
                 }
             }
         });

@@ -114,7 +114,7 @@ public class CustomizedFragment extends Fragment {
 
     public void changeToCourseFragment(CourseVO course) {
         MainActivity activity = (MainActivity) getActivity();
-        activity.changeToCourseFragment(course);
+        activity.changeToCourseFragment(course, CourseFragment.VIA_CUSTOMIZED_COURSE);
     }
 
     public void changeModifyFragment(List<PlaceVO> places) {

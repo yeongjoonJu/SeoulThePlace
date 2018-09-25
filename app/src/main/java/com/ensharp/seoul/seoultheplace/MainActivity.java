@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private LinearLayout rootLayout;
     private int currentFragmentNumber = 0;
+    private Fragment fragmentToChange;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -48,47 +49,33 @@ public class MainActivity extends AppCompatActivity {
                 new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
         };
 
+        ImageButton homeButton = findViewById(R.id.homeButton);
+        ImageButton searchButton = findViewById(R.id.searchButton);
+        ImageButton bookMarkButton = findViewById(R.id.bookmarkButton);
+        ImageButton myPageButton = findViewById(R.id.mypageButton);
+
+        homeButton.setTag("home");
+        searchButton.setTag("search");
+        bookMarkButton.setTag("bookmark");
+        myPageButton.setTag("mypage");
+
         // 하단 버튼 객체 초기화
         bottomButtons = new ImageButton[] {
-                (ImageButton) findViewById(R.id.homeButton),
-                (ImageButton) findViewById(R.id.searchButton),
-                (ImageButton) findViewById(R.id.bookmarkButton),
-                (ImageButton) findViewById(R.id.mypageButton)
+                homeButton,
+                searchButton,
+                bookMarkButton,
+                myPageButton
         };
 
         for(int i=0; i<fragments.length; i++) {
-            final Fragment fragment = fragments[i];
-            final int nextFragmentNumber = i;
-            bottomButtons[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(currentFragmentNumber <= nextFragmentNumber) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
-                                .replace(R.id.fragment, fragment)
-                                .commit();
-                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
-                    }
-                    else{
-                        getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
-                                .replace(R.id.fragment, fragment)
-                                .commit();
-                        setBottomButtons(currentFragmentNumber, nextFragmentNumber);
-                    }
-                    DeleteBackStack(fragment);
-                    currentFragment = fragment;
-                    currentFragmentNumber = nextFragmentNumber;
-
-                }
-            });
+            bottomButtons[i].setOnClickListener(bottomButtonOnClickListener);
         }
 
         // 메인 fragment
         currentFragment = fragments[0];
         currentFragmentNumber = 0;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragments[0])
+                .replace(R.id.fragment, fragments[0], "MainFragment")
                 .commit();
 
         rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
@@ -116,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
     }
-
 
     //0번째가 홈, 1번째가 내가만든 코스, 2번째가 좋아요 코스, 3번째가 좋아요 코스
     public void setBottomButtons(int currentFragment, int nextFragment) {
@@ -177,6 +163,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private View.OnClickListener bottomButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Fragment fragment = fragments[0];
+            int nextFragmentNumber = 0;
+
+            switch ((String) view.getTag()) {
+                case "home":
+                    fragment = fragments[0];
+                    nextFragmentNumber = 0;
+                    break;
+                case "search":
+                    fragment = fragments[1];
+                    nextFragmentNumber = 1;
+                    break;
+                case "bookmark":
+                    fragment = fragments[2];
+                    nextFragmentNumber = 2;
+                    break;
+                case "mypage":
+                    fragment = fragments[3];
+                    nextFragmentNumber = 3;
+                    break;
+            }
+
+            currentFragment = fragment;
+            if(currentFragmentNumber <= nextFragmentNumber) {
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                        .replace(R.id.fragment, fragment, "")
+                        .commit();
+            }
+            else{
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        .replace(R.id.fragment, fragment)
+                        .commit();
+            }
+            DeleteBackStack();
+            currentFragmentNumber = nextFragmentNumber;
+        }
+    };
+
     public float dpToPx(float valueInDp) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
@@ -194,8 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void changeToCourseFragment(CourseVO course) {
-        final Fragment fragment = new CourseFragment(course);
+    public void changeToCourseFragment(CourseVO course, int enterRoute) {
+        final Fragment fragment = new CourseFragment(course, enterRoute);
 
         Log.e("editted_course/MainActivity", "came here");
 
@@ -247,36 +276,9 @@ public class MainActivity extends AppCompatActivity {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 
-    public void chagneCourseFragment(int index) {
-        final Fragment fragment = new CourseFragment(String.valueOf(index));
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-
-    public void changeCourseViewFragment(List<PlaceVO> list){
-        DeleteBackStack(null); //뒤로가기하는거 다 없앰
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
-        fragmentTransaction.replace(R.id.fragment, new CourseFragment("c001"));
-        fragmentTransaction.commit();
-    }
-
-    public void DeleteBackStack(Fragment fragment) { // 뒤로가기 눌렀을시 전 프래그먼트로 이동 X
-        try {
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            if(fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)) {
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
-                        .replace(R.id.fragment, fragment)
-                        .commit();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void DeleteBackStack() { //뒤로가기 눌렀을시 전 프래그먼트로 이동 X
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public void SetSaveData(String[] datas){
@@ -329,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ChangeSettingFragment(){
-        DeleteBackStack(null);
+        DeleteBackStack();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[3])
                 .commit();
