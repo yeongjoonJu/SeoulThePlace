@@ -195,6 +195,8 @@ public class PlaceChildFragment extends Fragment {
         DetailInformationAdapter adapter = new DetailInformationAdapter(getContext(), detailInformation);
         information.setAdapter(adapter);
         getTotalHeightOfListView(information);
+        information.setDivider(null);
+        information.setDividerHeight(0);
     }
 
     private void setPlaceCountImage() {
