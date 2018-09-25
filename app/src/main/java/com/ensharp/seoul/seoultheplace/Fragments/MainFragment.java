@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,9 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.e("home_tag_error/MainFragment", "came here in MainFragment");
+
         mainFragment = this;
         dao = new DAO();
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -271,6 +275,8 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        Log.e("home_tag_error/MainFragment", "onDestroy");
+
         super.onDestroy();
         if(placeViewPager != null)
             currentPlacePosition = placeViewPager.getCurrentItem();

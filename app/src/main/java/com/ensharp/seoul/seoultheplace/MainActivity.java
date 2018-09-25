@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
             }
         }
-        else {
+        else if(currentFragment == 3) {
             bottomButtons[currentFragment].setImageResource(R.drawable.user);
             if(nextFragment == 0) {
                 bottomButtons[nextFragment].setImageResource(R.drawable.home_colored);
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch ((String) view.getTag()) {
                 case "home":
+                    Log.e("home_tag_error/MainActivity", "came here");
                     fragment = fragments[0];
                     nextFragmentNumber = 0;
                     break;
@@ -188,20 +189,27 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+            DeleteBackStack();
             currentFragment = fragment;
             if(currentFragmentNumber <= nextFragmentNumber) {
+                Log.e("home_tag_error/MainActivity", "came here1");
+
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
                         .replace(R.id.fragment, fragment, "")
+                        .addToBackStack(null)
                         .commit();
+                setBottomButtons(currentFragmentNumber, nextFragmentNumber);
             }
             else{
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
                         .replace(R.id.fragment, fragment)
+                        .addToBackStack(null)
                         .commit();
+                setBottomButtons(currentFragmentNumber, nextFragmentNumber);
             }
-            DeleteBackStack();
+
             currentFragmentNumber = nextFragmentNumber;
         }
     };
