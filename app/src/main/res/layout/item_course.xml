@@ -23,7 +23,6 @@
             android:layout_weight="8"
             android:layout_margin="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/item_place"
             android:background="@drawable/item_unchoicedtag"/>
 
         <LinearLayout

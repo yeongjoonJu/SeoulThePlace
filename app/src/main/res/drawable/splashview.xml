@@ -2,5 +2,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 배경 -->
     <item
-        android:drawable="@drawable/splash_image"/>
+        android:drawable="@drawable/splash2"/>
 </layer-list>

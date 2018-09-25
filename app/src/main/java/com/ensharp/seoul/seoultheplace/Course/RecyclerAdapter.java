@@ -53,6 +53,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
                 choosedMember = position;
                 NotifyDataSetChanged(position);
+                if(position>0&&!datas.get(position-1).getName().equals("+")) //앞에 선택한게 +가 아니고  0보다 빠르면
+                    fragment.SetTouchName(datas.get(position-1).getName() + "에서");
+                else{
+                    fragment.SetTouchName("");
+                }
                 if(choosedMember>0){ //맨앞이 아니면
                     if(!datas.get(position-1).getName().equals("+")) { //선택된거 앞에가 +가 아니면
                         fragment.setItemData(datas.get(position - 1)); //앞에것과의 거리를 넣는다.
