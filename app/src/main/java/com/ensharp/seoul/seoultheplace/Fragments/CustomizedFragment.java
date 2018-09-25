@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,20 +22,22 @@ import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomizedCourseAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.CustomizedCourseAdapter2;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.SwipeDismissListViewTouchListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CustomizedFragment extends Fragment {
 
     private DAO dao = new DAO();
     private View rootView;
-    private ListView listView;
+    private RecyclerView listView;
     private List<EdittedCourseVO> customizedCourses = new ArrayList<EdittedCourseVO>();
-    private CustomizedCourseAdapter adapter;
+    private CustomizedCourseAdapter2 adapter;
     private boolean isExpanded = false;
     private FloatingActionButton createCourse;
 
@@ -45,59 +50,48 @@ public class CustomizedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_customized, container, false);
-        listView = (ListView) rootView.findViewById(R.id.customized_list);
+        listView = (RecyclerView) rootView.findViewById(R.id.customized_list);
 
 
         customizedCourses = dao.getCustomizedCourses(getUserID());
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(layoutManager);
 
-        adapter = new CustomizedCourseAdapter(getContext(), 0, customizedCourses);
+        adapter = new CustomizedCourseAdapter2(getContext(), 0, customizedCourses,(MainActivity)getActivity());
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(onItemClickListener);
-        SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
-            public boolean canDismiss(int position) {
-                if (isExpanded) return false;
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int swipeFlags = ItemTouchHelper.LEFT;
+                int dragFlags = 0;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
 
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                EdittedCourseVO edittedCourseVO = customizedCourses.get(viewHolder.getAdapterPosition());
+                customizedCourses.remove(viewHolder.getAdapterPosition());
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                dao.deleteEdittedCourse(getUserID(),edittedCourseVO.getCode());
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
                 return true;
             }
-
-            @Override
-            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                if (isExpanded) return;
-
-                for (int position : reverseSortedPositions) {
-                    dao.deleteEdittedCourse(getUserID(), customizedCourses.get(position).getCode());
-                    customizedCourses.remove(position);
-                    adapter.notifyDataSetChanged();
-                }
-            }
         });
-
-        listView.setOnTouchListener(touchListener);
-
+        helper.attachToRecyclerView(listView);
         createCourse = (FloatingActionButton) rootView.findViewById(R.id.create_course);
         createCourse.setOnClickListener(onCreateCourseListener);
 
         return rootView;
     }
-
-    public ListView getListView() {
-        return listView;
-    }
-
-    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            if (isExpanded) return;
-
-            Object object = listView.getItemAtPosition(position);
-            EdittedCourseVO edittedCourseVO = (EdittedCourseVO) object;
-            PlaceVO place = dao.getPlaceData(edittedCourseVO.getPlaceCode().get(0));
-
-            changeToCourseFragment(new CourseVO(edittedCourseVO, place));
-        }
-    };
 
     private FloatingActionButton.OnClickListener onCreateCourseListener = new FloatingActionButton.OnClickListener() {
         @Override
@@ -108,14 +102,9 @@ public class CustomizedFragment extends Fragment {
 
     public String getUserID () {
         MainActivity activity = (MainActivity) getActivity();
-
         return activity.getUserID();
     }
 
-    public void changeToCourseFragment(CourseVO course) {
-        MainActivity activity = (MainActivity) getActivity();
-        activity.changeToCourseFragment(course, CourseFragment.VIA_CUSTOMIZED_COURSE);
-    }
 
     public void changeModifyFragment(List<PlaceVO> places) {
         MainActivity activity = (MainActivity) getActivity();

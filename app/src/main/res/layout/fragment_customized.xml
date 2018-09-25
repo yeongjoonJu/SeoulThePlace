@@ -5,7 +5,8 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.CustomizedFragment">
+    tools:context=".Fragments.CustomizedFragment"
+    android:background="#ffffff">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,16 +20,19 @@
             android:text="내가 만든 코스"
             android:textColor="#3B3B44"
             android:textSize="28sp"
-            android:fontFamily="@font/font_family"/>
+            android:fontFamily="@font/font_family"
+            android:textStyle="bold"
+            />
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/customized_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:paddingTop="5dp"
+            android:overScrollMode="never"
+            android:layout_marginHorizontal="40dp"
             android:paddingBottom="5dp"
-            android:overScrollMode="never" />
+            android:paddingTop="5dp" />
     </LinearLayout>
 
     <com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton
