@@ -19,7 +19,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="26dp"
             tools:layout_editor_absoluteY="41dp">
@@ -31,9 +32,11 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_weight="3"
+                android:layout_weight="5"
+                android:background="@null"
                 android:hint="검색"
                 android:inputType="text"
+                android:fontFamily="@font/font_family"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -41,13 +44,12 @@
                 android:id="@+id/saveSearch"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginBottom="8dp"
-  
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="검색"
-                android:textSize="20sp"/>
+                android:layout_weight="1"
+                android:background="@drawable/searchbtn"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/modify_save"
@@ -58,14 +60,15 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:text="저장"
+                android:background="@drawable/savebtn"
                 android:textSize="20sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="26dp"
             tools:layout_editor_absoluteY="41dp">

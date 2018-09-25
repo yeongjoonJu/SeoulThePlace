@@ -59,7 +59,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.login_first,null); //view를 불러온다.
+        view = inflater.inflate(R.layout.login_first2,null); //view를 불러온다.
 
         LActivity = (LoginBackgroundActivity) getActivity();
 

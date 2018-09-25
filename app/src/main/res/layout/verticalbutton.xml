@@ -3,4 +3,5 @@
     android:layout_width="15dp"
     android:layout_height="45dp"
     android:id="@+id/verticalButton"
-    android:layout_gravity="right"/>
+    android:layout_gravity="right"
+    android:fontFamily="@font/font_family"/>

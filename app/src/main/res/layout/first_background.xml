@@ -18,7 +18,8 @@
         android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#80000000"/>
+        android:background="#80000000"
+        android:fontFamily="@font/font_family"/>
     <!--80은 50% 66은 40% 99 는 60% B3 70%-->
 
 

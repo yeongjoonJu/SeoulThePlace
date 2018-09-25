@@ -50,6 +50,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         new DownloadImageTask(holder.image).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,item.getImageURL());
         holder.title.setText(item.getName());
         holder.distance.setText(String.valueOf(item.getDistance())+"m");
+        holder.Destination.setText(courseModifyFragment.getTouchName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView title;
         CardView cardview;
         TextView distance;
+        TextView Destination;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,6 +77,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             title = (TextView) itemView.findViewById(R.id.AddCardName);
             cardview = (CardView) itemView.findViewById(R.id.AddCardView);
             distance = (TextView)itemView.findViewById(R.id.addCardDistance);
+            Destination = (TextView)itemView.findViewById(R.id.addCardDestination);
         }
     }
 }

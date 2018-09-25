@@ -8,76 +8,76 @@
     android:id = "@+id/parentView">
 
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_login"
-        android:layout_width="230dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.574" />
+    <!--<com.google.android.gms.common.SignInButton-->
+        <!--android:id="@+id/google_login"-->
+        <!--android:layout_width="230dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:scaleType="fitXY"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.574" />-->
 
-    <com.kakao.usermgmt.LoginButton
-        android:id="@+id/kakao_login"
-        android:layout_width="220dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="4dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google_login"
-        app:layout_constraintVertical_bias="0.0" />
+    <!--<com.kakao.usermgmt.LoginButton-->
+        <!--android:id="@+id/kakao_login"-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height="55dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:scaleType="fitXY"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/google_login"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
 
-    <Button
-        android:id="@+id/newID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="MakeNewID"
-        android:text="회원 가입"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailLogin"
-        app:layout_constraintVertical_bias="0.529"
-        tools:ignore="MissingConstraints" />
+    <!--<Button-->
+        <!--android:id="@+id/newID"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:onClick="MakeNewID"-->
+        <!--android:text="회원 가입"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/EmailLogin"-->
+        <!--app:layout_constraintVertical_bias="0.529"-->
+        <!--tools:ignore="MissingConstraints" />-->
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="115dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149"
-        app:srcCompat="@drawable/title" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="219dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.149"-->
+        <!--app:srcCompat="@drawable/title2" />-->
 
-    <Button
-        android:id="@+id/EmailLogin"
-        android:layout_width="220dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/emaillogin"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kakao_login"
-        app:layout_constraintVertical_bias="0.0" />
+    <!--<Button-->
+        <!--android:id="@+id/EmailLogin"-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height="55dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@drawable/emaillogin"-->
+        <!--android:scaleType="fitXY"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/kakao_login"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
 
 </android.support.constraint.ConstraintLayout>

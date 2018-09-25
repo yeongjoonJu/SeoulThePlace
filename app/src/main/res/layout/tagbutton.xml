@@ -7,8 +7,10 @@
     android:textAlignment="center"
     android:textSize="14sp"
     android:textColor="#777788"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
-    android:background="@drawable/item_unchoicedtag"/>
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    style="?android:attr/borderlessButtonStyle"
+    android:background="@drawable/item_unchoicedtag"
+    android:fontFamily="@font/font_family"/>

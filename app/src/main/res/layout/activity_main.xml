@@ -19,13 +19,14 @@
             android:background="#EBE7E6"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:paddingTop="20dp"
             android:layout_weight="11">
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:orientation="horizontal"
             android:background="#FFFFFF">
 
@@ -35,36 +36,36 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/white"
-                android:padding="12dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/home_icon" />
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_colored" />
             <ImageButton
                 android:id="@+id/searchButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:padding="12dp"
-                android:src="@drawable/search_icon"/>
+                android:src="@drawable/notebook"/>
             <ImageButton
                 android:id="@+id/bookmarkButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:padding="12dp"
-                android:src="@drawable/bookmark_icon"/>
+                android:src="@drawable/heart"/>
             <ImageButton
                 android:id="@+id/mypageButton"
                 android:layout_weight="1"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:padding="12dp"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:src="@drawable/mypage_icon"/>
+                android:src="@drawable/user"/>
         </LinearLayout>
 
     </LinearLayout>

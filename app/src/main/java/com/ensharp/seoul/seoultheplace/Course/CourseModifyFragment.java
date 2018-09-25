@@ -39,6 +39,7 @@ public class CourseModifyFragment extends Fragment {
 
     View view;
     public int ITEM_SIZE = 0;
+    List<PlaceVO> originDatas = null;
     List<PlaceVO> datas;
     List<PlaceVO> items;
     private RecyclerAdapter adapter;
@@ -49,6 +50,7 @@ public class CourseModifyFragment extends Fragment {
     Button searchBtn;
     MainActivity mActivity;
     EditText searchData;
+    String touchName = "";
 
     @SuppressLint("ValidFragment")
     public CourseModifyFragment(List<PlaceVO> list) {
@@ -206,50 +208,53 @@ public class CourseModifyFragment extends Fragment {
         CustomAnimationDialog ca = new CustomAnimationDialog(getActivity());
         ca.show();
         items = new ArrayList<PlaceVO>();
-        DAO dao = new DAO();
-        JSONArray jsonArray = dao.AllPlaceDownload();
-        if(item==null) { //그냥 생성할때
-            try {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    PlaceVO mplace = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
-                    if(CheckInData(mplace))
-                        continue;
-                    mplace.setDistance(0);
-                    items.add(mplace);
+        if(originDatas == null) {
+            DAO dao = new DAO();
+            JSONArray jsonArray = dao.AllPlaceDownload();
+            originDatas = new ArrayList<PlaceVO>();
+            for(int i = 0 ; i < jsonArray.length();i++){
+                try {
+                    originDatas.add(dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }
+        }
+        if(item==null) { //그냥 생성할때
+            for (int i = 0; i < originDatas.size(); i++) {
+                if (CheckInData(originDatas.get(i)))
+                    continue;
+                originDatas.get(i).setDistance(0);
+                if (items.size() < 10)
+                    items.add(originDatas.get(i));
             }
         }
         else{
-            for(int i = 0; i<jsonArray.length(); i++){
+            for(int i = 0; i<originDatas.size(); i++) {
                 boolean setData = false;
-                try {
-                    PlaceVO instantVO = dao.getPlaceData(jsonArray.getJSONObject(i).getString("Code"));
-                    if(CheckInData(instantVO)) //이미 있는곳은 안만듬
-                        continue;
-                    instantVO.setDistance(LocationDistance.distance(instantVO.getCoordinate_x()
-                            ,instantVO.getCoordinate_y()
-                            ,item.getCoordinate_x()
-                            ,item.getCoordinate_y()
-                            ,"meter"));
-                    if(items.size() ==0) { //0이면 일단 넣어준다.
-                        items.add(instantVO);
-                    }
-                    else {
-                        for(int j = 0; j<items.size();j++){ //거리순으로 배열 생성
-                            if(items.get(j).getDistance() > instantVO.getDistance()){
-                                items.add(j,instantVO);
-                                setData = true;
-                                break;
-                            }
-                        }
-                        if(!setData && items.size()<=10){ //제일 사이즈가 큼 10개 이하일때만
-                            items.add(instantVO);
+                if (CheckInData(originDatas.get(i))) //이미 있는곳은 안만듬
+                    continue;
+                originDatas.get(i).setDistance(LocationDistance.distance(originDatas.get(i).getCoordinate_x()
+                        , originDatas.get(i).getCoordinate_y()
+                        , item.getCoordinate_x()
+                        , item.getCoordinate_y()
+                        , "meter"));
+                if (items.size() == 0) { //0이면 일단 넣어준다.
+                    items.add(originDatas.get(i));
+                } else {
+                    for (int j = 0; j < items.size(); j++) { //거리순으로 배열 생성
+                        if (items.get(j).getDistance() > originDatas.get(i).getDistance()) {
+                            items.add(j, originDatas.get(i));
+                            setData = true;
+                            break;
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    if (!setData && items.size() <= 10) { //제일 사이즈가 큼 10개 이하일때만
+                        items.add(originDatas.get(i));
+                    }
+                    if (items.size() > 10) {
+                        items.remove(10);
+                    }
                 }
             }
             ChangeItemData();
@@ -331,6 +336,13 @@ public class CourseModifyFragment extends Fragment {
                 codes[i]=datas.get(i).getCode();
         }
         return codes;
+    }
+
+    public void SetTouchName(String name){
+        this.touchName = name;
+    }
+    public String getTouchName(){
+        return touchName;
     }
 
 

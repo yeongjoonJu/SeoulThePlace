@@ -27,9 +27,6 @@
 
 package com.ensharp.seoul.seoultheplace.UIElement;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
@@ -41,6 +38,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class HorizontalListView extends AdapterView<ListAdapter> {
 
@@ -277,7 +277,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 				View child = getChildAt(i);
 				int childWidth = child.getMeasuredWidth();
 				child.layout(left, 0, left + childWidth, child.getMeasuredHeight());
-				left += childWidth + 20;
+				left += childWidth;
 			}
 		}
 	}

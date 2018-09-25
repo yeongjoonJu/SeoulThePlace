@@ -30,7 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/place_category"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:fontFamily="@font/font_family"/>
 
         <TextView
             android:id="@+id/information"
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/place_information"
             android:gravity="right"
-            android:lineSpacingExtra="5dp" />
+            android:lineSpacingExtra="5dp"
+            android:fontFamily="@font/font_family"/>
 
     </LinearLayout>
 

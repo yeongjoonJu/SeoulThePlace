@@ -26,6 +26,7 @@
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/font_family"
                 android:textColor="@color/white"/>
 
         </FrameLayout>
@@ -47,6 +48,7 @@
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/white"
+                android:fontFamily="@font/font_family"
                 style="@style/TextAppearance.AppCompat.Body1"/>
 
         </FrameLayout>
@@ -63,6 +65,7 @@
                 android:textColor="#A8A8A8"
                 android:layout_gravity="top|right"
                 android:layout_marginRight="20dp"
+                android:fontFamily="@font/font_family"
                 style="@style/TextAppearance.AppCompat.Body1"/>
 
             <ImageView
