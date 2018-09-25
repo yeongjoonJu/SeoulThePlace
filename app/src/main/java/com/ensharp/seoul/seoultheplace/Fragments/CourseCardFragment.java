@@ -1,26 +1,19 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
-import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.*;
 import com.squareup.picasso.Picasso;
-import org.w3c.dom.Text;
 
 public class CourseCardFragment extends Fragment {
     public static final int HEART_BUTTON = 0;
@@ -35,6 +28,8 @@ public class CourseCardFragment extends Fragment {
     private Drawable unchoicedHeart;
     private Drawable choicedHeart;
     private int position;
+    private DAO dao;
+    private String useremail;
 
     private ImageButton image;
     private TextView name;
@@ -47,6 +42,9 @@ public class CourseCardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dao = new DAO();
+        SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
+        useremail = preferences.getString("email", null);
         choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
         unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
@@ -75,6 +73,12 @@ public class CourseCardFragment extends Fragment {
         name = (TextView) view.findViewById(R.id.course_name);
         location = (TextView) view.findViewById(R.id.course_location);
         heartButton = (ImageButton) view.findViewById(R.id.like_button);
+        if(course != null) {
+            if(dao.checkLikedCourse(course.getCode(), useremail).equals("true"))
+                heartButton.setImageDrawable(choicedHeart);
+            else
+                heartButton.setImageDrawable(unchoicedHeart);
+        }
 
         setElements();
 
@@ -113,6 +117,7 @@ public class CourseCardFragment extends Fragment {
                 heartButton.setImageDrawable(unchoicedHeart);
             else
                 heartButton.setImageDrawable(choicedHeart);
+            dao.likeCourse(course.getCode(), useremail);
         }
     };
 }

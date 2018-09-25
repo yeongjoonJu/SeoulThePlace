@@ -82,13 +82,6 @@ public class LikeFragment extends Fragment {
         // 코스 카드 뷰
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
-        /*
-        customAnimationDialog = new CustomAnimationDialog(getActivity());
-        customAnimationDialog.show();
-        showPlaceCardView(currentPlacePosition);
-        showCourseCardView(currentCoursePosition);
-        customAnimationDialog.dismiss();*/
-
         return rootView;
     }
 
