@@ -1,16 +1,21 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
+import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
@@ -23,6 +28,11 @@ public class PlaceCardFragment extends Fragment {
     private FrameLayout placeButton;
     private int position;
     private PlaceVO place;
+    private ImageButton heartButton;
+    private Drawable unchoicedHeart;
+    private Drawable choicedHeart;
+    private DAO dao;
+    private String useremail;
 
     public PlaceCardFragment() {
     }
@@ -37,6 +47,16 @@ public class PlaceCardFragment extends Fragment {
 
     public CardView getCardView() {
         return cardView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dao = new DAO();
+        SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
+        useremail = preferences.getString("email", null);
+        choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
+        unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
 
     @Override
@@ -62,6 +82,16 @@ public class PlaceCardFragment extends Fragment {
         index.setTextColor(Color.rgb(255,255,255));
         index.setText(String.format("%d", position));
 
+        heartButton = (ImageButton) view.findViewById(R.id.like_button);
+        if(place != null) {
+            if(dao.checkLikedPlace(place.getCode(), useremail).equals("true"))
+                heartButton.setImageDrawable(choicedHeart);
+            else
+                heartButton.setImageDrawable(unchoicedHeart);
+        }
+
+        heartButton.setOnClickListener(onHeartButtonClickListener);
+
         try {
             Picasso.get().load(place.getImageURL()[0]).into(image);
         } catch (Exception e) {
@@ -74,7 +104,6 @@ public class PlaceCardFragment extends Fragment {
             }finally {
                 Picasso.get().load(place.getImageURL()[2]).into(image);
             }
-            //new DownloadImageTask(image).execute(place.getImageURL()[0]);
         }
 
         final MainActivity activity = (MainActivity)getActivity();
@@ -93,4 +122,15 @@ public class PlaceCardFragment extends Fragment {
 
         return view;
     }
+
+    public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (heartButton.getDrawable().equals(choicedHeart))
+                heartButton.setImageDrawable(unchoicedHeart);
+            else
+                heartButton.setImageDrawable(choicedHeart);
+            dao.likePlace(place.getCode(), useremail);
+        }
+    };
 }

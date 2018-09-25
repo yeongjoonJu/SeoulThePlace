@@ -339,6 +339,36 @@ public class DAO {
         return null;
     }
 
+    //  플레이스 좋아요 확인
+    // Key : isPlaceLiked(String)
+    public String checkLikedPlace(String code, String id) {
+        // 처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Code", code);
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("url", BASE_URL+"/place/like/status");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+            else {
+                String liked = null;
+                try {
+                    liked = resultData.getJSONObject(0).getString("isPlaceLiked");
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return liked;
+            }
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //  코스 좋아요 확인
     // Key : isCourseLiked(String)
     public String checkLikedCourse(String code, String id) {

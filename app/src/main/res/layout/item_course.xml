@@ -26,7 +26,7 @@
             android:src="@drawable/item_place"
             android:background="@drawable/item_unchoicedtag"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
@@ -36,31 +36,32 @@
 
             <TextView
                 android:id="@+id/course_name"
-                android:layout_width="1dp"
-                android:layout_weight="4"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:text="서촌, 감성을 깨우다"
-                android:layout_gravity="center_vertical"
-                android:textColor="#A9A9A9"
+                android:layout_alignParentLeft="true"
+                android:textColor="#000000"
+                android:maxLength="13"
+                android:singleLine="true"
                 android:textSize="16sp" />
 
             <ImageButton
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/like_button"
                 android:scaleType="centerInside"
                 android:background="#FFFFFF"
+                android:layout_alignParentRight="true"
                 android:src="@drawable/unchoiced_heart" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/course_location"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:textSize="10sp"
-            android:textColor="#EFEFEF"
+            android:textSize="14sp"
+            android:textColor="#000000"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:padding="2dp"
