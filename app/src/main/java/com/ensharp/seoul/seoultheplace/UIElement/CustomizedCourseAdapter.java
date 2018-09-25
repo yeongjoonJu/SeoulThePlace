@@ -40,6 +40,7 @@ public class CustomizedCourseAdapter extends ArrayAdapter<EdittedCourseVO> {
         if (listItem == null)
             listItem = LayoutInflater.from(context).inflate(R.layout.item_customized_course, parent, false);
 
+
         EdittedCourseVO currentInformation = customizedCourseList.get(position);
 
         image = (ImageView) listItem.findViewById(R.id.customized_course_image);

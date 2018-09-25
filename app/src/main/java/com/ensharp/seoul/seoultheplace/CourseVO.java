@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CourseVO {
+public class  CourseVO {
     private String code;
     private String name;
     private String type;

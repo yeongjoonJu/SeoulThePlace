@@ -39,6 +39,7 @@ public class PlaceVO {
             for(int i=0; i<3; i++) {
                 this.imageURL[i] = jsonObject.getString("Image" + (i + 1));
             }
+
             this.phone = jsonObject.getString("Phone");
             this.tip = jsonObject.getString("Tip");
             this.parking = jsonObject.getString("Parking");
