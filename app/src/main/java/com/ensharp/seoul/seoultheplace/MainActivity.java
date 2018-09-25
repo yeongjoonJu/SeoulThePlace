@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private LinearLayout rootLayout;
     private int currentFragmentNumber = 0;
-    private Fragment fragmentToChange;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -199,6 +198,17 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public void changeToCourseFragment(CourseVO course, int enterRoute, int index) {
+        final Fragment fragment = new CourseFragment(course, enterRoute, index);
+
+        Log.e("editted_course/MainActivity", "came here");
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     public void changeToPlaceFragment(CourseVO course, int index, int enterRoute) {
         if (enterRoute == PlaceFragment.VIA_COURSE)
             getSupportFragmentManager().beginTransaction()
@@ -210,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                     .replace(R.id.fragment, new PlaceFragment(course, index, enterRoute))
-                    .addToBackStack(null)
+                    .addToBackStack("PLACE_FRAGMENT")
                     .commit();
     }
 
@@ -225,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom)
                     .replace(R.id.fragment, new PlaceFragment(placeCode, enterRoute))
+                    .addToBackStack("PLACE_FRAGMENT")
                     .addToBackStack(null)
                     .commit();
     }
