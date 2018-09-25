@@ -19,7 +19,6 @@ public class PlaceFragmentPagerAdapter extends FragmentStatePagerAdapter impleme
     public PlaceFragmentPagerAdapter(FragmentManager fm, float baseElevation) {
         super(fm);
         placeCards = new ArrayList<>();
-
         this.baseElevation = baseElevation;
     }
 
@@ -53,6 +52,7 @@ public class PlaceFragmentPagerAdapter extends FragmentStatePagerAdapter impleme
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+
         Object fragment = super.instantiateItem(container, position);
         placeCards.set(position, (PlaceCardFragment)fragment);
         return fragment;

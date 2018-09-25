@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MainFragment">
+    tools:context=".Fragments.MainFragment"
+    android:background="#ffffff">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -36,8 +37,8 @@
                         android:layout_alignParentRight="true"
                         android:textColor="@color/white"
                         android:background="@drawable/item_maintransform"
-                        android:layout_margin="4dp"
                         android:fontFamily="@font/font_family"
+                        android:layout_margin="8dp"
                         android:textSize="16sp"/>
             </RelativeLayout>
 
@@ -70,7 +71,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerInside"
                         android:background="@color/white"
                         android:src="@drawable/search_icon"/>
             </LinearLayout>
@@ -103,8 +104,8 @@
                 android:layout_weight="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="#ffffff">
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/course_search_result"
@@ -118,7 +119,8 @@
                     android:paddingEnd="@dimen/card_padding"
                     android:paddingLeft="@dimen/card_padding"
                     android:paddingRight="@dimen/card_padding"
-                    android:paddingStart="@dimen/card_padding"/>
+                    android:paddingStart="@dimen/card_padding"
+                    android:layout_marginTop="8dp"/>
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/place_search_result"

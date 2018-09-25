@@ -34,7 +34,7 @@ import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class MainFragment extends Fragment {
     ArrayList<String> tags = new ArrayList<String>(
-            Arrays.asList(new String[]{"친구끼리", "가족끼리", "혼자서", "커플데이트", "힐링"}));
+            Arrays.asList(new String[]{"혼자서", "연인끼리", "친구끼리", "가족끼리", "먹방투어", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
     private static final String[] CHANNELS = new String[]{"타입별", "검색"};
     private MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;
@@ -70,60 +70,6 @@ public class MainFragment extends Fragment {
     int currentPlacePosition = 0;
     int currentCoursePosition = 0;
 
-    /*
-    private CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
-        @Override
-        public int getCount() {
-            return CHANNELS.length;
-        }
-
-        @Override
-        public IPagerTitleView getTitleView(Context context, int index) {
-            ClipPagerTitleView clipPagerTitleView = new ClipPagerTitleView(context);
-            clipPagerTitleView.setText(CHANNELS[index]);
-            clipPagerTitleView.setTextColor(Color.parseColor("#E94220"));
-            clipPagerTitleView.setClipColor(Color.WHITE);
-            clipPagerTitleView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isPlusButtonExpanded) {
-                        mFragmentContainerHelper.handlePageSelected(index);
-                        if(index == 0) {
-                            searchBar.setVisibility(View.GONE);
-                            tagListView.setVisibility(View.VISIBLE);
-                            courseViewPager.setVisibility(View.VISIBLE);
-                            placeViewPager.setVisibility(View.VISIBLE);
-                            TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
-                            tagAdapter.setMainFragment(mainFragment);
-                            tagListView.setAdapter(tagAdapter);
-                        }
-                        else {
-                            searchEditText.setText("");
-                            searchBar.setVisibility(View.VISIBLE);
-                            tagListView.setVisibility(View.GONE);
-                            courseViewPager.setVisibility(View.INVISIBLE);
-                            placeViewPager.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }
-            });
-            return clipPagerTitleView;
-        }
-
-        @Override
-        public IPagerIndicator getIndicator(Context context) {
-            LinePagerIndicator indicator = new LinePagerIndicator(context);
-            float navigatorHeight = context.getResources().getDimension(R.dimen.common_navigator_height);
-            float borderWidth = UIUtil.dip2px(context, 1);
-            float lineHeight = navigatorHeight - 2 * borderWidth;
-            indicator.setLineHeight(lineHeight);
-            indicator.setRoundRadius(lineHeight / 2);
-            indicator.setYOffset(borderWidth);
-            indicator.setColors(Color.parseColor("#BC2A2A"));
-            return indicator;
-        }
-    };*/
-
     public void viewVisible() {
         if(recentList != null)
             recentList.setVisibility(View.GONE);
@@ -152,18 +98,6 @@ public class MainFragment extends Fragment {
 
     public MainFragment() {
     }
-
-    /*
-    private void initMagicIndicator(View rootView) {
-        magicIndicator = (MagicIndicator) rootView.findViewById(R.id.magic_indicator);
-        magicIndicator.setBackgroundResource(R.drawable.round_indicator_background);
-
-        //commonNavigator = new CommonNavigator(getContext());
-       //commonNavigator.setAdapter(commonNavigatorAdapter);
-
-        magicIndicator.setNavigator(commonNavigator);
-        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

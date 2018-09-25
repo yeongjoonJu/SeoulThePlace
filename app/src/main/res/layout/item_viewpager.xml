@@ -48,19 +48,32 @@
                     android:layout_height="0dp"
                     android:layout_weight="1.6"
                     android:orientation="vertical"
-                    android:gravity="center|top"
+                    android:gravity="left|top"
                     android:padding="10dp"
                     android:background="@color/white">
 
-                <TextView
-                        android:id="@+id/title"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_marginTop="14dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
-                    android:fontFamily="@font/font_family"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/title"
+                            style="@style/TextAppearance.AppCompat.Title"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/font_family"
+                            android:textColor="@color/black"/>
+                    <ImageButton
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/like_button"
+                            android:scaleType="centerInside"
+                            android:background="#FFFFFF"
+                            android:src="@drawable/unchoiced_heart" />
+                </RelativeLayout>
 
                 <TextView
                         android:id="@+id/address"
@@ -85,16 +98,6 @@
                         android:layout_marginBottom="2dp"
                         android:textColor="@color/black"
                     android:fontFamily="@font/font_family"/>
-
-                <!--
-                <ImageButton
-                        android:id="@+id/place"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/item_angle"/>-->
 
             </LinearLayout>
 
