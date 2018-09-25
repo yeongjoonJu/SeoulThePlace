@@ -2,7 +2,6 @@ package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -25,13 +24,7 @@ import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
-import net.lucode.hackware.magicindicator.buildins.UIUtil;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +69,7 @@ public class MainFragment extends Fragment {
     int currentPlacePosition = 0;
     int currentCoursePosition = 0;
 
+    /*
     private CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
         @Override
         public int getCount() {
@@ -127,7 +121,7 @@ public class MainFragment extends Fragment {
             indicator.setColors(Color.parseColor("#BC2A2A"));
             return indicator;
         }
-    };
+    };*/
 
     public void viewVisible() {
         if(recentList != null)
@@ -158,16 +152,17 @@ public class MainFragment extends Fragment {
     public MainFragment() {
     }
 
+    /*
     private void initMagicIndicator(View rootView) {
         magicIndicator = (MagicIndicator) rootView.findViewById(R.id.magic_indicator);
         magicIndicator.setBackgroundResource(R.drawable.round_indicator_background);
 
-        commonNavigator = new CommonNavigator(getContext());
-        commonNavigator.setAdapter(commonNavigatorAdapter);
+        //commonNavigator = new CommonNavigator(getContext());
+       //commonNavigator.setAdapter(commonNavigatorAdapter);
 
         magicIndicator.setNavigator(commonNavigator);
         mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -196,8 +191,8 @@ public class MainFragment extends Fragment {
                               Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        initMagicIndicator(rootView);
-        mFragmentContainerHelper.handlePageSelected(0, true);
+        //initMagicIndicator(rootView);
+        //mFragmentContainerHelper.handlePageSelected(0, true);
 
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.cource_text);
@@ -206,6 +201,32 @@ public class MainFragment extends Fragment {
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
+        final Button transformButton = (Button) rootView.findViewById(R.id.transform_button);
+        transformButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(transformButton.getText().equals("추천")) {
+                    searchBar.setVisibility(View.GONE);
+                    tagListView.setVisibility(View.VISIBLE);
+                    courseViewPager.setVisibility(View.VISIBLE);
+                    placeViewPager.setVisibility(View.VISIBLE);
+                    TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
+                    tagAdapter.setMainFragment(mainFragment);
+                    tagListView.setAdapter(tagAdapter);
+                    inputMethodManager.hideSoftInputFromInputMethod(searchEditText.getWindowToken(), 0);
+                    transformButton.setText("검색");
+                }
+                else {
+                    searchEditText.setText("");
+                    searchBar.setVisibility(View.VISIBLE);
+                    tagListView.setVisibility(View.GONE);
+                    courseViewPager.setVisibility(View.INVISIBLE);
+                    placeViewPager.setVisibility(View.INVISIBLE);
+                    transformButton.setText("추천");
+                }
+            }
+        });
+
         // 최근 검색
         listAdapter.setEditText(searchEditText);
         recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);

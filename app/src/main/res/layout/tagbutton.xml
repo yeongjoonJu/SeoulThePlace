@@ -11,4 +11,5 @@
     android:paddingRight="8dp"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
+    style="?android:attr/borderlessButtonStyle"
     android:background="@drawable/item_unchoicedtag"/>
