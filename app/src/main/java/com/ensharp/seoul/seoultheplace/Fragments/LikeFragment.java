@@ -46,8 +46,8 @@ public class LikeFragment extends Fragment {
 
         customAnimationDialog = new CustomAnimationDialog(getActivity());
         customAnimationDialog.show();
-        showPlaceCardView(currentPlacePosition);
         showCourseCardView(currentCoursePosition);
+        showPlaceCardView(currentPlacePosition);
         customAnimationDialog.dismiss();
     }
 
@@ -108,10 +108,15 @@ public class LikeFragment extends Fragment {
             e.printStackTrace();
             placeViewAdapter = new PlaceFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
             placeViewAdapter.setPlaceData(places);
+            placeViewPager.setAdapter(placeViewAdapter);
         }
-        placeViewPager.setOffscreenPageLimit(3);
-        placeViewPager.setCurrentItem(currentPosition);
-        placeCardShadowTransformer.enableScaling(true);
+        try {
+            placeViewPager.setOffscreenPageLimit(3);
+            placeViewPager.setCurrentItem(currentPosition);
+            placeCardShadowTransformer.enableScaling(true);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showCourseCardView(int currentPosition) {
