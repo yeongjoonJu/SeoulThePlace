@@ -70,6 +70,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
     public void NextActivity(){
+        Log.d(TAG,"convertToMainActivity");
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();
@@ -81,7 +82,7 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         SharedPreferences sf = getSharedPreferences("data",0);
         if(sf.getString("email","")!=""){
             Log.d(TAG,"Already Login : "+sf.getString("email",""));
-            convertToMainActivity();
+            NextActivity();
         }
         else{
             DeleteData(); //없으면 초기화
@@ -157,9 +158,8 @@ public class LoginBackgroundActivity extends AppCompatActivity {
             }
         }
     }
-    public void convertToMainActivity(){
-        Log.d(TAG,"convertToMainActivity");
-        Intent intent = new Intent(this,MainActivity.class);
+    public void convertToTutorial(){
+        Intent intent = new Intent(this,TutorialActivity.class);
         startActivity(intent);
         finish();
     }

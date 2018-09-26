@@ -62,7 +62,7 @@ public class OriginSignUpFragment extends android.support.v4.app.Fragment implem
             case R.id.orisignup:
                 if(AllCheckData()) {
                     SetSharedPreference();
-                    LActivity.NextActivity();
+                    LActivity.convertToTutorial();
                 }
                 break;
         }

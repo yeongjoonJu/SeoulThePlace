@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ensharp.seoul.seoultheplace.Login.LoginBackgroundActivity;
+import com.ensharp.seoul.seoultheplace.Login.TutorialActivity;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -66,6 +67,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 getActivity().finish();
                 break;
             case R.id.introduceApps:
+                Intent intent2 = new Intent(getActivity(), TutorialActivity.class);
+                startActivity(intent2);
+                getActivity().finish();
                 if(stack == 5) {
                     try {
                         PackageInfo info = getActivity().getPackageManager().getPackageInfo("com.ensharp.seoul.seoultheplace", PackageManager.GET_SIGNATURES);
