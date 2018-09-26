@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
+import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
@@ -93,26 +94,7 @@ public class PlaceCardFragment extends Fragment {
         heartButton.setOnClickListener(onHeartButtonClickListener);
 
         if(place.getImageURL() != null) {
-            try {
-                Picasso.get().load(place.getImageURL()[0]).into(image);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (place.getImageURL().length >= 2)
-                        Picasso.get().load(place.getImageURL()[1]).into(image);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (place.getImageURL().length >= 3)
-                            Picasso.get().load(place.getImageURL()[2]).into(image);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-            }
+            PicassoImage.DownLoadImage(place.getImageURL(),image);
         }
 
         final MainActivity activity = (MainActivity)getActivity();
