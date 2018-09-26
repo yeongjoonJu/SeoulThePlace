@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.ViewGroup;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceCardFragment;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
