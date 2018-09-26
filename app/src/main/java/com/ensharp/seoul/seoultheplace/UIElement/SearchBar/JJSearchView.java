@@ -8,11 +8,6 @@ import android.icu.util.Measure;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * ?ãÀìé?ãêĞôîÜ?£¬ĞÑô¸ãıï×éô?
- * <p>
- * Created by androidcjj on 2016/4/1.
- */
 public class JJSearchView extends View {
     private Paint mPaint;
     private Path mPath;

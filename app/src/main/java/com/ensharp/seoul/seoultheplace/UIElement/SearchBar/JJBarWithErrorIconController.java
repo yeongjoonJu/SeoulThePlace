@@ -6,11 +6,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
 
-/**
- * ?ãÀìé?ãêĞôîÜ?£¬ãêĞôîÜãÀ?ã·îÜ?ı¦û¿û¿îÜ£¬ı¨?íÂíº??ö¦Üô??áÖ??Öõ
- *
- * Created by cjj on 2016/4/3.
- */
 public class JJBarWithErrorIconController extends JJBaseController {
     private String mColor = "#00000000";
     private float cx, cy, cr;

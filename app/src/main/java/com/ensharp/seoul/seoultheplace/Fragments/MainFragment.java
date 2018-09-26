@@ -22,6 +22,8 @@ import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
 import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJBarWithErrorIconController;
+import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView;
 import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -46,7 +48,7 @@ public class MainFragment extends Fragment {
     private CustomAnimationDialog customAnimationDialog;
     private DAO dao;
     private String useremail;
-    LinearLayout searchBar;
+    FrameLayout searchBar;
     HorizontalListView tagListView;
     TagAdapter tagAdapter;
     TextView courseText;
@@ -61,6 +63,10 @@ public class MainFragment extends Fragment {
     ImageButton searchButton;
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
+    JJSearchView searchView;
+    Button start;
+    Button end;
+
     // 최근 검색
     LinearLayout recentList;
     ListView recentListView;
@@ -135,7 +141,7 @@ public class MainFragment extends Fragment {
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.cource_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
-        searchBar = (LinearLayout) rootView.findViewById(R.id.search_bar);
+        searchBar = (FrameLayout) rootView.findViewById(R.id.search_bar);
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
@@ -172,8 +178,24 @@ public class MainFragment extends Fragment {
         recentListView.setAdapter(listAdapter);
 
         // 플레이스 카드 뷰
+        searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
+        searchView.setController(new JJBarWithErrorIconController());
+        start = rootView.findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAnimation(searchView);
+            }
+        });
+        end = rootView.findViewById(R.id.end);
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endAnimation(searchView);
+            }
+        });
+
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
-        // 코스 카드 뷰
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
         tagAdapter = new TagAdapter(getActivity(), tags);
@@ -181,30 +203,63 @@ public class MainFragment extends Fragment {
 
         tagListView.setAdapter(tagAdapter);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customAnimationDialog = new CustomAnimationDialog(getActivity());
-                customAnimationDialog.show();
-
-                courseViewPager.setVisibility(View.VISIBLE);
-                placeViewPager.setVisibility(View.VISIBLE);
-
-                String searchWord = String.valueOf(searchEditText.getText());
-                listAdapter.insert(searchWord, 0);
-
-                // 코스 검색
-                showCourseCardView(searchWord);
-                // 플레이스 검색
-                showPlaceCardView(searchWord);
-
-                // 키보드 숨김
-                inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-                customAnimationDialog.dismiss();
-            }
-        });
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                customAnimationDialog = new CustomAnimationDialog(getActivity());
+//                customAnimationDialog.show();
+//
+//                courseViewPager.setVisibility(View.VISIBLE);
+//                placeViewPager.setVisibility(View.VISIBLE);
+//
+//                String searchWord = String.valueOf(searchEditText.getText());
+//                listAdapter.insert(searchWord, 0);
+//
+//                showCourseCardView(searchWord);
+//                showPlaceCardView(searchWord);
+//
+//                inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+//                customAnimationDialog.dismiss();
+//            }
+//        });
 
         return rootView;
+    }
+
+    private void startAnimation(View v) {
+        searchView.startAnim();
+        searchEditText.setVisibility(View.VISIBLE);
+        start.setVisibility(View.GONE);
+        end.setVisibility(View.VISIBLE);
+    }
+
+    private void endAnimation(View v) {
+        searchView.resetAnim();
+        searchEditText.setVisibility(View.GONE);
+        start.setVisibility(View.VISIBLE);
+        end.setVisibility(View.GONE);
+
+        customAnimationDialog = new CustomAnimationDialog(getActivity());
+        customAnimationDialog.show();
+
+        courseViewPager.setVisibility(View.VISIBLE);
+        placeViewPager.setVisibility(View.VISIBLE);
+
+        String searchWord = String.valueOf(searchEditText.getText());
+        listAdapter.insert(searchWord, 0);
+
+        Log.e("abcd", "searchWord: "+ searchWord);
+
+        // 코스 검색
+        showCourseCardView(searchWord);
+        // 플레이스 검색
+        showPlaceCardView(searchWord);
+
+        // 키보드 숨김
+        inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+        customAnimationDialog.dismiss();
+
+        searchEditText.setText("");
     }
 
     @Override

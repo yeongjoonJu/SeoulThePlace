@@ -14,11 +14,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 
-/**
- * ?ãÀìé?ãêÐôîÜcontroller£¬ãêÐô?ØÙ?...ØÙ?...?¡£
- * <p/>
- * Created by androidcjj on 2016/4/1.
- */
 public abstract class JJBaseController {
     public static final int STATE_ANIM_NONE = 0;
     public static final int STATE_ANIM_START = 1;
@@ -56,7 +51,7 @@ public abstract class JJBaseController {
     }
 
     /**
-     * ?ö¢viewîÜ?Óø
+     * ?ï¿½ï¿½viewï¿½ï¿½?ï¿½ï¿½
      *
      * @return
      */
@@ -65,7 +60,7 @@ public abstract class JJBaseController {
     }
 
     /**
-     * ?ö¢viewîÜÍÔÓø
+     * ?ï¿½ï¿½viewï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      *
      * @return
      */
@@ -74,7 +69,7 @@ public abstract class JJBaseController {
     }
 
     /**
-     * ?ð¤ö¦Îß?ä²?í­?ËÛñ®?
+     * ?ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½?ï¿½?ï¿½ï¿½ï¿½?
      *
      * @param canvas
      * @param paint
@@ -82,13 +77,13 @@ public abstract class JJBaseController {
     public abstract void draw(Canvas canvas, Paint paint);
 
     /**
-     * ??â¤ßã??
+     * ??ï¿½ï¿½ï¿½??
      */
     public void startAnim() {
     }
 
     /**
-     * ñìöÇâ¤ßã??
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½??
      */
     public void resetAnim() {
     }
