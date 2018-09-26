@@ -101,10 +101,12 @@ public class MainActivity extends AppCompatActivity {
                         int linearWrapperHeight = rootLayout.getHeight();
                         int diff = rootViewHeight - linearWrapperHeight;
                         // 키보드가 내려간 상태면
-                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(50)) {
+                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(20)) {
+                            Log.i("keyboardstate", "키보드 내려감");
                             ((MainFragment)fragments[0]).viewVisible();
                         }
                         else {
+                            Log.i("keyboardstate", "키보드 올라감");
                             ((MainFragment)fragments[0]).viewInvisible();
                         }
                     }
