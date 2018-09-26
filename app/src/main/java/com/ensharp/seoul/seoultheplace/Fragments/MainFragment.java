@@ -63,6 +63,7 @@ public class MainFragment extends Fragment {
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
     TextView noSearchResult;
+
     // 최근 검색
     LinearLayout recentList;
     ListView recentListView;
@@ -83,6 +84,7 @@ public class MainFragment extends Fragment {
         if(searchCourseResult != null) {
             courseText.setVisibility(View.VISIBLE);
             courseViewPager.setVisibility(View.VISIBLE);
+            noSearchResult.setVisibility(View.GONE);
         }
     }
 
@@ -134,7 +136,7 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // 화면 구성 요소
-        courseText = (TextView) rootView.findViewById(R.id.cource_text);
+        courseText = (TextView) rootView.findViewById(R.id.course_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
         searchBar = (LinearLayout) rootView.findViewById(R.id.search_bar);
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
@@ -157,6 +159,8 @@ public class MainFragment extends Fragment {
                     transformButton.setText("검색");
                 }
                 else {
+                    courseText.setVisibility(View.INVISIBLE);
+                    placeText.setVisibility(View.INVISIBLE);
                     searchEditText.setText("");
                     searchBar.setVisibility(View.VISIBLE);
                     tagListView.setVisibility(View.GONE);
@@ -253,6 +257,7 @@ public class MainFragment extends Fragment {
         noSearchResult.setVisibility(View.GONE);
         showPlaceCardView(type);
         showCourseCardView(type);
+
     }
 
     // 플레이스 카드 뷰
@@ -260,8 +265,10 @@ public class MainFragment extends Fragment {
         ArrayList<PlaceVO> places = dao.searchPlace(word);
         if(places == null || places.size() == 0) {
             placeViewPager.setVisibility(View.INVISIBLE);
+            placeText.setVisibility(View.INVISIBLE);
             return;
         }
+        placeText.setVisibility(View.VISIBLE);
         placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         placeViewAdapter.setPlaceData(places);
         ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
@@ -282,8 +289,10 @@ public class MainFragment extends Fragment {
         ArrayList<CourseVO> courses = dao.searchCourse(word);
         if(courses == null || courses.size() == 0) {
             courseViewPager.setVisibility(View.INVISIBLE);
+            courseText.setVisibility(View.INVISIBLE);
             return;
         }
+        courseText.setVisibility(View.VISIBLE);
         courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         courseViewAdapter.setCourseData(courses);
         ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
