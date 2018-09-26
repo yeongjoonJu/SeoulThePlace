@@ -289,6 +289,7 @@ public class DAO {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
+            Log.i("search", keyword + " 검색");
             jsonObject.accumulate("keyword", keyword);
             jsonObject.accumulate("url", BASE_URL+"/search/course");
 
@@ -298,7 +299,7 @@ public class DAO {
             if(resultData == null)
                 return null;
 
-            Log.i("코스 검색", resultData.toString());
+            Log.i("search", resultData.toString());
 
             courseData = new ArrayList<>();
             for(int i=0; i < resultData.length(); i++)

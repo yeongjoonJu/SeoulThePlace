@@ -63,6 +63,8 @@
                 <EditText
                         android:id="@+id/search_edittext"
                         android:layout_width="0dp"
+                        android:maxLength="15"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:layout_weight="4"/>
@@ -108,6 +110,19 @@
                 android:layout_height="0dp"
                 android:orientation="vertical"
                 android:background="#ffffff">
+
+            <TextView
+                    android:id="@+id/no_search_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/font_family"
+                    android:layout_gravity="center_vertical"
+                    android:text="검색 결과가 없습니다."/>
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/course_search_result"

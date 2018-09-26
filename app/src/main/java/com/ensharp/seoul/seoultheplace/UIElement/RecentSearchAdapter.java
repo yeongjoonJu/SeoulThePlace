@@ -33,8 +33,6 @@ public class RecentSearchAdapter extends ArrayAdapter<String> {
         final TextView word = (TextView) listItemView.findViewById(R.id.recent_word);
         word.setText(getItem(position));
 
-        //final LinearLayout recentText = (LinearLayout) listItemView.findViewById(R.id.recent_text);
-
         word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

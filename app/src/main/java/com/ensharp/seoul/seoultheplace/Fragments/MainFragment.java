@@ -29,6 +29,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigat
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
@@ -61,6 +62,7 @@ public class MainFragment extends Fragment {
     ImageButton searchButton;
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
+    TextView noSearchResult;
     // 최근 검색
     LinearLayout recentList;
     ListView recentListView;
@@ -76,6 +78,7 @@ public class MainFragment extends Fragment {
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.VISIBLE);
             placeViewPager.setVisibility(View.VISIBLE);
+            noSearchResult.setVisibility(View.GONE);
         }
         if(searchCourseResult != null) {
             courseText.setVisibility(View.VISIBLE);
@@ -89,10 +92,12 @@ public class MainFragment extends Fragment {
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
+            noSearchResult.setVisibility(View.GONE);
         }
         if(searchCourseResult != null) {
             courseText.setVisibility(View.INVISIBLE);
             courseViewPager.setVisibility(View.INVISIBLE);
+            noSearchResult.setVisibility(View.GONE);
         }
     }
 
@@ -113,8 +118,7 @@ public class MainFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         // 최근 검색어 SharedPreference에서 가져온다
-        if(recentSearchList == null)
-            recentSearchList = new ArrayList<>();
+        recentSearchList = new ArrayList<>();
         preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
         for(int i=0; i < 6; i++) {
             String word = preferences.getString("RecentSearch" + i, null);
@@ -129,9 +133,6 @@ public class MainFragment extends Fragment {
                               Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //initMagicIndicator(rootView);
-        //mFragmentContainerHelper.handlePageSelected(0, true);
-
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.cource_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
@@ -139,6 +140,7 @@ public class MainFragment extends Fragment {
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
+        noSearchResult = (TextView) rootView.findViewById(R.id.no_search_result);
         final Button transformButton = (Button) rootView.findViewById(R.id.transform_button);
         transformButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +162,7 @@ public class MainFragment extends Fragment {
                     tagListView.setVisibility(View.GONE);
                     courseViewPager.setVisibility(View.INVISIBLE);
                     placeViewPager.setVisibility(View.INVISIBLE);
+                    noSearchResult.setVisibility(View.GONE);
                     transformButton.setText("추천");
                 }
             }
@@ -189,50 +192,72 @@ public class MainFragment extends Fragment {
 
                 courseViewPager.setVisibility(View.VISIBLE);
                 placeViewPager.setVisibility(View.VISIBLE);
+                noSearchResult.setVisibility(View.GONE);
 
                 String searchWord = String.valueOf(searchEditText.getText());
-                listAdapter.insert(searchWord, 0);
+                // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
+                if( searchWord.length() > 15)
+                    searchWord = searchWord.substring(0, 14);
+                if(Pattern.matches("^[ ]{2,}", searchWord))
+                    searchWord = "";
 
-                // 코스 검색
-                showCourseCardView(searchWord);
-                // 플레이스 검색
-                showPlaceCardView(searchWord);
+                // 검색어를 입력하지 않은 경우
+                if(searchWord.length() != 0 && !searchWord.equals(" ")) {
+                    listAdapter.insert(searchWord, 0);
+                    // 코스 검색
+                    showCourseCardView(searchWord);
+                    // 플레이스 검색
+                    showPlaceCardView(searchWord);
+                }
+                else {
+                    courseViewPager.setVisibility(View.INVISIBLE);
+                    placeViewPager.setVisibility(View.INVISIBLE);
+                }
+
+                // 결과가 없으면 결과없음 출력
+                if(courseViewPager.getVisibility() == View.INVISIBLE && placeViewPager.getVisibility() == View.INVISIBLE) {
+                    noSearchResult.setVisibility(View.VISIBLE);
+                }
 
                 // 키보드 숨김
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
                 customAnimationDialog.dismiss();
             }
         });
-
         return rootView;
     }
 
     @Override
     public void onDestroy() {
-        Log.e("home_tag_error/MainFragment", "onDestroy");
-
         super.onDestroy();
         if(placeViewPager != null)
             currentPlacePosition = placeViewPager.getCurrentItem();
         if(courseViewPager != null)
             currentCoursePosition = courseViewPager.getCurrentItem();
+
+        // 최근 검색어 SharedPreference에 저장
+        SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor =  preferences.edit();
+        for(int i = 0; i < listAdapter.getCount(); i++) {
+            if(i >= 6)
+                break;
+            if(listAdapter.getItem(i) != null)
+                editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+        }
+        editor.commit();
     }
 
     public void renewCardView(String type) {
-        customAnimationDialog = new CustomAnimationDialog(getActivity());
-
-        customAnimationDialog.show();
         placeViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setVisibility(View.VISIBLE);
+        noSearchResult.setVisibility(View.GONE);
         showPlaceCardView(type);
         showCourseCardView(type);
-
-        customAnimationDialog.dismiss();
     }
 
     // 플레이스 카드 뷰
     protected void showPlaceCardView(String word) {
-        ArrayList<PlaceVO> places = dao.getUserPlaceData(word);
+        ArrayList<PlaceVO> places = dao.searchPlace(word);
         if(places == null || places.size() == 0) {
             placeViewPager.setVisibility(View.INVISIBLE);
             return;
@@ -254,7 +279,7 @@ public class MainFragment extends Fragment {
     }
 
     protected void showCourseCardView(String word) {
-        ArrayList<CourseVO> courses = dao.getUserCourseData(word);
+        ArrayList<CourseVO> courses = dao.searchCourse(word);
         if(courses == null || courses.size() == 0) {
             courseViewPager.setVisibility(View.INVISIBLE);
             return;
