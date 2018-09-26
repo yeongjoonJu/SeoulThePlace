@@ -22,6 +22,8 @@ import com.ensharp.seoul.seoultheplace.R;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
 import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJBarWithErrorIconController;
+import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView;
 import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -47,7 +49,7 @@ public class MainFragment extends Fragment {
     private CustomAnimationDialog customAnimationDialog;
     private DAO dao;
     private String useremail;
-    LinearLayout searchBar;
+    FrameLayout searchBar;
     HorizontalListView tagListView;
     TagAdapter tagAdapter;
     TextView courseText;
@@ -63,6 +65,9 @@ public class MainFragment extends Fragment {
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
     TextView noSearchResult;
+    JJSearchView searchView;
+    Button start;
+    Button end;
 
     // 최근 검색
     LinearLayout recentList;
@@ -89,8 +94,6 @@ public class MainFragment extends Fragment {
     }
 
     public void viewInvisible() {
-        if(recentList != null)
-            recentList.setVisibility(View.VISIBLE);
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
@@ -138,7 +141,7 @@ public class MainFragment extends Fragment {
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.course_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
-        searchBar = (LinearLayout) rootView.findViewById(R.id.search_bar);
+        searchBar = (FrameLayout) rootView.findViewById(R.id.search_bar);
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
@@ -177,10 +180,27 @@ public class MainFragment extends Fragment {
         recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
         recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
         recentListView.setAdapter(listAdapter);
+        recentList.setVisibility(View.GONE);
 
         // 플레이스 카드 뷰
+        searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
+        searchView.setController(new JJBarWithErrorIconController());
+        start = rootView.findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAnimation(searchView);
+            }
+        });
+        end = rootView.findViewById(R.id.end);
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endAnimation(searchView);
+            }
+        });
+
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
-        // 코스 카드 뷰
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
         tagAdapter = new TagAdapter(getActivity(), tags);
@@ -188,47 +208,61 @@ public class MainFragment extends Fragment {
 
         tagListView.setAdapter(tagAdapter);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customAnimationDialog = new CustomAnimationDialog(getActivity());
-                customAnimationDialog.show();
-
-                courseViewPager.setVisibility(View.VISIBLE);
-                placeViewPager.setVisibility(View.VISIBLE);
-                noSearchResult.setVisibility(View.GONE);
-
-                String searchWord = String.valueOf(searchEditText.getText());
-                // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
-                if( searchWord.length() > 15)
-                    searchWord = searchWord.substring(0, 14);
-                if(Pattern.matches("^[ ]{2,}", searchWord))
-                    searchWord = "";
-
-                // 검색어를 입력하지 않은 경우
-                if(searchWord.length() != 0 && !searchWord.equals(" ")) {
-                    listAdapter.insert(searchWord, 0);
-                    // 코스 검색
-                    showCourseCardView(searchWord);
-                    // 플레이스 검색
-                    showPlaceCardView(searchWord);
-                }
-                else {
-                    courseViewPager.setVisibility(View.INVISIBLE);
-                    placeViewPager.setVisibility(View.INVISIBLE);
-                }
-
-                // 결과가 없으면 결과없음 출력
-                if(courseViewPager.getVisibility() == View.INVISIBLE && placeViewPager.getVisibility() == View.INVISIBLE) {
-                    noSearchResult.setVisibility(View.VISIBLE);
-                }
-
-                // 키보드 숨김
-                inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-                customAnimationDialog.dismiss();
-            }
-        });
         return rootView;
+    }
+
+    private void startAnimation(View v) {
+        searchView.startAnim();
+        searchEditText.setVisibility(View.VISIBLE);
+        start.setVisibility(View.GONE);
+        end.setVisibility(View.VISIBLE);
+        recentList.setVisibility(View.VISIBLE);
+    }
+
+    private void endAnimation(View v) {
+        searchView.resetAnim();
+        searchEditText.setVisibility(View.GONE);
+        start.setVisibility(View.VISIBLE);
+        end.setVisibility(View.GONE);
+        recentList.setVisibility(View.GONE);
+
+        customAnimationDialog = new CustomAnimationDialog(getActivity());
+        customAnimationDialog.show();
+
+        courseViewPager.setVisibility(View.VISIBLE);
+        placeViewPager.setVisibility(View.VISIBLE);
+        noSearchResult.setVisibility(View.GONE);
+
+        String searchWord = String.valueOf(searchEditText.getText());
+        // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
+        if( searchWord.length() > 15)
+        searchWord = searchWord.substring(0, 14);
+        if(Pattern.matches("^[ ]{2,}", searchWord))
+        searchWord = "";
+
+        // 검색어를 입력하지 않은 경우
+        if(searchWord.length() != 0 && !searchWord.equals(" ")) {
+            listAdapter.insert(searchWord, 0);
+            // 코스 검색
+            showCourseCardView(searchWord);
+            // 플레이스 검색
+            showPlaceCardView(searchWord);
+        }
+        else {
+            courseViewPager.setVisibility(View.INVISIBLE);
+            placeViewPager.setVisibility(View.INVISIBLE);
+        }
+
+        // 결과가 없으면 결과없음 출력
+        if(courseViewPager.getVisibility() == View.INVISIBLE && placeViewPager.getVisibility() == View.INVISIBLE) {
+            noSearchResult.setVisibility(View.VISIBLE);
+        }
+
+        // 키보드 숨김
+        inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+        customAnimationDialog.dismiss();
+
+        searchEditText.setText("");
     }
 
     @Override

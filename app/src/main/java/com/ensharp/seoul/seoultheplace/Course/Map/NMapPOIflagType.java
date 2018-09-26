@@ -28,7 +28,12 @@ public class NMapPOIflagType {
 
 	// Spot, Pin icons
 	public static final int SPOT = SINGLE_POI_BASE + 1;
-	public static final int PIN = SPOT + 1;
+	public static final int MIN_PIN = SPOT + 1;
+	public static final int PIN1 = MIN_PIN + 1;
+    public static final int PIN2 = PIN1 + 1;
+    public static final int PIN3 = PIN2 + 1;
+    public static final int PIN4 = PIN3 + 1;
+    public static final int PIN5 = PIN4 + 1;
 
 	// Direction POI icons: From, To
 	private static final int DIRECTION_POI_BASE = 0x0200;

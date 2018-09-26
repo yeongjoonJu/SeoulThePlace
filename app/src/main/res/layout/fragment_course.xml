@@ -52,7 +52,6 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_addButtonPlusIconColor="@color/half_black"
             fab:fab_labelStyle="@style/menu_labels_style"
             fab:fab_icon="@drawable/item_pencil"
             android:layout_marginBottom="16dp"/>
@@ -63,7 +62,6 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_addButtonPlusIconColor="@color/half_black"
             fab:fab_icon="@drawable/unchoiced_heart"
             fab:fab_labelStyle="@style/menu_labels_style"/>
 
