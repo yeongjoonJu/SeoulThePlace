@@ -30,4 +30,7 @@
     <color name="plus_color_normal">#FFFFFF</color>
     <color name="plus_pressed">#F1F1F1</color>
     <color name="theme">#FF00BCFE</color>
+
+    <color name="like_small_title">#868686</color>
+    <color name="like_no_info">#4A4A4A</color>
 </resources>

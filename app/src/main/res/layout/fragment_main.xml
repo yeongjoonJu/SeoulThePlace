@@ -51,32 +51,49 @@
                     android:layout_height="wrap_content">
             </com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView>
 
-            <LinearLayout
-                    android:id="@+id/search_bar"
+            <FrameLayout
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" >
+
+                <com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView
+                    android:id="@+id/jjsv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:visibility="gone">
+                    android:layout_height="120dp"/>
+
                 <EditText
-                        android:id="@+id/search_edittext"
-                        android:layout_width="0dp"
-                        android:maxLength="15"
-                        android:singleLine="true"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:layout_weight="4"/>
-                <ImageButton
-                        android:id="@+id/search_button"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerInside"
-                        android:background="@color/white"
-                        android:src="@drawable/search_icon"/>
-            </LinearLayout>
+                    android:id="@+id/search_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="55dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:visibility="gone"
+                    android:textColor="#00BDFC"
+                    android:maxLines="1"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/start"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@null"/>
+
+                <Button
+                    android:id="@+id/end"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="30dp"
+                    android:background="@null"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout

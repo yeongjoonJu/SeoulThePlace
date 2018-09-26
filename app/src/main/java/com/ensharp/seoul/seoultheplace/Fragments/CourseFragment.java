@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public class CourseFragment extends Fragment {
     private List<PlaceVO> places;
     private CourseMapFragment courseMapFragment;
     private CourseVO course;
-    private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton editCourseButton;
     private FloatingActionButton likeButton;
 
@@ -52,6 +52,13 @@ public class CourseFragment extends Fragment {
         this.code = course.getCode();
         this.course = course;
         this.enterRoute = enterRoute;
+    }
+
+    public CourseFragment(CourseVO course, int enterRoute, int index) {
+        this.code = course.getCode();
+        this.course = course;
+        this.enterRoute = enterRoute;
+        this.index = index;
     }
 
     @Override
@@ -72,7 +79,6 @@ public class CourseFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        floatingActionsMenu = (FloatingActionsMenu) rootView.findViewById(R.id.editianal_features);
         editCourseButton = (FloatingActionButton) rootView.findViewById(R.id.edit_course);
         likeButton = (FloatingActionButton) rootView.findViewById(R.id.like_button);
 
