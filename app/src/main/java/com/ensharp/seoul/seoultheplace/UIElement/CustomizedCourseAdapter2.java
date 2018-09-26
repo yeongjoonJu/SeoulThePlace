@@ -19,6 +19,7 @@ import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.EdittedCourseVO;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.MainActivity;
+import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class CustomizedCourseAdapter2 extends RecyclerView.Adapter<CustomizedCou
         EdittedCourseVO currentInformation = customizedCourseList.get(position);
         DAO dao = new DAO();
         PlaceVO placeVO = dao.getPlaceData(currentInformation.getPlaceCode().get(0));
-        Picasso.get().load(placeVO.getImageURL()[0]).into(holder.image);
+        PicassoImage.DownLoadImage(placeVO.getImageURL(),holder.image);
         holder.title.setText(currentInformation.getName());
         holder.location.setText(placeVO.getLocation());
         holder.cardview.setOnClickListener(new View.OnClickListener() {

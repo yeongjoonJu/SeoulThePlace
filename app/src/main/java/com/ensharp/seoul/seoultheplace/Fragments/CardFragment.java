@@ -71,7 +71,7 @@ public class CardFragment extends Fragment {
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
 
-        Picasso.get().load(place.getImageURL()[0]).into(image);
+        PicassoImage.DownLoadImage(place.getImageURL(),image);
 
         title.setText(place.getName());
         address.setText(place.getLocation());

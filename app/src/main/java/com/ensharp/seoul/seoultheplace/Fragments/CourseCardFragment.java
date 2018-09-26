@@ -104,8 +104,7 @@ public class CourseCardFragment extends Fragment {
     public void setElements() {
         DAO dao = new DAO();
         PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
-        String imageURL = firstPlace.getImageURL()[0];
-        Picasso.get().load(imageURL).into(image);
+        PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
         name.setText(course.getName());
         location.setText(firstPlace.getLocation());
     }

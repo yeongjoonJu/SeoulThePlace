@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.EdittedCourseVO;
+import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
@@ -49,7 +50,7 @@ public class CustomizedCourseAdapter extends ArrayAdapter<EdittedCourseVO> {
 
         PlaceVO place = dao.getPlaceData(currentInformation.getPlaceCode().get(0));
 
-        Picasso.get().load(place.getImageURL()[0]).into(image);
+        PicassoImage.DownLoadImage(place.getImageURL(),image);
         name.setText(currentInformation.getName());
         location.setText(place.getLocation());
 

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
@@ -46,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final PlaceVO data = datas.get(position);
         SetImageBox(holder,position);
-        Picasso.get().load(data.getImageURL()[0]).into(holder.image);
+        PicassoImage.DownLoadImage(data.getImageURL(),holder.image);
         holder.title.setText(data.getName());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override

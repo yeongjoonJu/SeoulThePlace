@@ -2,23 +2,18 @@ package com.ensharp.seoul.seoultheplace.UIElement;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.ensharp.seoul.seoultheplace.DownloadImageTask;
+import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class PlaceViewPagerAdapter extends PagerAdapter {
@@ -50,7 +45,7 @@ public class PlaceViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.item_place_image, null);
 
-        Picasso.get().load(images[position]).into((ImageView) view.findViewById(R.id.imageView));
+        PicassoImage.DownLoadImage(images[position],(ImageView)view.findViewById(R.id.imageView));
 
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view, 0);

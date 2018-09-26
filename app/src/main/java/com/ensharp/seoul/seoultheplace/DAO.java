@@ -110,12 +110,12 @@ public class DAO {
         return resultData;
     }
 
-    public JSONObject getUserCourseData(String type, String id) {
+    public ArrayList<CourseVO> getUserCourseData(String type) {
+        ArrayList<CourseVO> courseData = null;
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.accumulate("Type", type);
-            jsonObject.accumulate("Id", id);
             jsonObject.accumulate("url", BASE_URL+"/main/course_info");
 
             // 네트워크 처리 비동기화
@@ -124,12 +124,40 @@ public class DAO {
             if(resultData == null)
                 return null;
 
-            jsonObject = resultData.getJSONObject(0);
-            Log.i("yeongjoon", resultData.toString());
+            courseData = new ArrayList<>();
+            for(int i = 0; i < resultData.length(); i++) {
+                courseData.add(new CourseVO(resultData.getJSONObject(i)));
+            }
+            Log.i("sssukho", resultData.toString());
         }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        return jsonObject;
+        return courseData;
+    }
+
+    public ArrayList<PlaceVO> getUserPlaceData(String type) {
+        ArrayList<PlaceVO> placeData = null;
+        //처리 설정
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("Type", type);
+            jsonObject.accumulate("url", BASE_URL+"/main/place_info");
+
+            //네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            if(resultData == null)
+                return null;
+
+            placeData = new ArrayList<>();
+            for(int i = 0; i < resultData.length(); i++) {
+                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
+            }
+            Log.i("sssukho", resultData.toString());
+        } catch(JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return placeData;
     }
 
     public CourseVO getCourseData(String key) {

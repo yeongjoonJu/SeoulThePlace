@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private LinearLayout rootLayout;
     private int currentFragmentNumber = 0;
+    private Fragment fragmentToChange;
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         ActivityCompat.requestPermissions(this, neededPermissions,0);
+        backPressCloseHandler = new BackPressCloseHandler(this);
     }
 
     //0번째가 홈, 1번째가 내가만든 코스, 2번째가 좋아요 코스, 3번째가 좋아요 코스
@@ -325,5 +328,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[3])
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(fragments[0].isVisible() || fragments[1].isVisible() || fragments[2].isVisible() || fragments[3].isVisible())
+            backPressCloseHandler.onBackPressed();
+        else {
+            super.onBackPressed();
+        }
     }
 }
