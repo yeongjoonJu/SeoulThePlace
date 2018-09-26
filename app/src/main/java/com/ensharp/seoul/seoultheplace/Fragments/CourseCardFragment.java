@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ public class CourseCardFragment extends Fragment {
     public static final int COURSE_LOCATION = 2;
     public static final int COURSE_IMAGE = 3;
 
-    private View view;
     private CardView cardView;
     private ImageButton heartButton;
     private CourseVO course;
@@ -51,7 +49,6 @@ public class CourseCardFragment extends Fragment {
 
     public void setData(CourseVO course) {
         this.course = course;
-        Log.i("setData", course.getName());
     }
 
     public void setPosition(int position) {
@@ -65,7 +62,7 @@ public class CourseCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.item_course, container, false);
+        View view = inflater.inflate(R.layout.item_course, container, false);
 
         cardView = (CardView) view.findViewById(R.id.courseView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
@@ -91,10 +88,11 @@ public class CourseCardFragment extends Fragment {
                 activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
             }
         });
+
+        final MainActivity activity = (MainActivity)getActivity();
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MainActivity activity = (MainActivity)getActivity();
                 activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
             }
         });
@@ -103,7 +101,6 @@ public class CourseCardFragment extends Fragment {
     }
 
     public void setElements() {
-        DAO dao = new DAO();
         PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
         PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
         name.setText(course.getName());

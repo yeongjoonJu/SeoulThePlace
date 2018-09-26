@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
-import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 
 public class PlaceCardFragment extends Fragment {
 
@@ -94,10 +93,7 @@ public class PlaceCardFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                CustomAnimationDialog customAnimationDialog = new CustomAnimationDialog(activity);
-                customAnimationDialog.show();
                 activity.changeToPlaceFragment(place.getCode(), PlaceFragment.VIA_SEARCH);
-                customAnimationDialog.dismiss();
             }
         });
 
