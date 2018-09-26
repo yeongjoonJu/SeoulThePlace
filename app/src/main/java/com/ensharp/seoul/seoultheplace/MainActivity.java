@@ -334,7 +334,11 @@ public class MainActivity extends AppCompatActivity {
         if(fragments[0].isVisible() || fragments[1].isVisible() || fragments[2].isVisible() || fragments[3].isVisible())
             backPressCloseHandler.onBackPressed();
         else {
-            super.onBackPressed();
+            try {
+                super.onBackPressed();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

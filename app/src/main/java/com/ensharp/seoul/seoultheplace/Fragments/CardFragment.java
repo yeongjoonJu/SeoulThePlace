@@ -1,6 +1,8 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,12 +25,27 @@ public class CardFragment extends Fragment {
     private PlaceVO place;
     private CardView cardView;
     private ImageButton placeButton;
+    private DAO dao;
+    private ImageButton heartButton;
+    private Drawable unchoicedHeart;
+    private Drawable choicedHeart;
+    private String useremail;
 
     @SuppressLint("ValidFragment")
     public CardFragment(CourseVO course, int index, PlaceVO place) {
         this.index = index;
         this.place = place;
         this.course = course;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dao = new DAO();
+        SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
+        useremail = preferences.getString("email", null);
+        choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
+        unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
 
     @SuppressLint("DefaultLocale")
@@ -77,6 +94,16 @@ public class CardFragment extends Fragment {
         description.setText(place.getDetails());
         placeIndex.setText(Integer.toString(index));
 
+        heartButton = (ImageButton) view.findViewById(R.id.like_button);
+        if(place != null) {
+            if(dao.checkLikedPlace(place.getCode(), useremail).equals("true"))
+                heartButton.setImageDrawable(choicedHeart);
+            else
+                heartButton.setImageDrawable(unchoicedHeart);
+        }
+
+        heartButton.setOnClickListener(onHeartButtonClickListener);
+
         final MainActivity activity = (MainActivity)getActivity();
 
         FrameLayout placeButton = (FrameLayout) view.findViewById(R.id.place);
@@ -93,4 +120,15 @@ public class CardFragment extends Fragment {
     public CardView getCardView() {
         return cardView;
     }
+
+    public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (heartButton.getDrawable().equals(choicedHeart))
+                heartButton.setImageDrawable(unchoicedHeart);
+            else
+                heartButton.setImageDrawable(choicedHeart);
+            dao.likePlace(place.getCode(), useremail);
+        }
+    };
 }

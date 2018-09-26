@@ -3,11 +3,12 @@ package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.ViewGroup;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseCardFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class CourseFragmentPagerAdapter extends FragmentPagerAdapter implements 
 
     @Override
     public CardView getCardViewAt(int position) {
+        if(courseCards.get(position).getCardView() == null)
+            Log.i("getCardView", "null 이야");
         return courseCards.get(position).getCardView();
     }
 

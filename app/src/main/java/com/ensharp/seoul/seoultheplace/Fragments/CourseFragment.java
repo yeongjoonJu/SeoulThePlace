@@ -10,18 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.*;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton;
 import com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionsMenu;
-
 import org.json.JSONException;
 
 import java.util.List;
