@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
-import com.squareup.picasso.Picasso;
 
 public class CourseCardFragment extends Fragment {
     public static final int HEART_BUTTON = 0;
@@ -106,7 +105,12 @@ public class CourseCardFragment extends Fragment {
         PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
         PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
         name.setText(course.getName());
-        location.setText(firstPlace.getLocation());
+
+        String[] area = firstPlace.getLocation().split(" ");
+        if(area.length >= 2)
+            location.setText(area[1]);
+        else
+            location.setText(area[0]);
     }
 
     public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {

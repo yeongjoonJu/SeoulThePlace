@@ -1,7 +1,6 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
-import com.squareup.picasso.Picasso;
 
 @SuppressLint("ValidFragment")
 public class CardFragment extends Fragment {
@@ -70,11 +68,13 @@ public class CardFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
         TextView placeIndex = (TextView) view.findViewById(R.id.index);
+        TextView description = (TextView) view.findViewById(R.id.description);
 
         PicassoImage.DownLoadImage(place.getImageURL(),image);
 
         title.setText(place.getName());
         address.setText(place.getLocation());
+        description.setText(place.getDetails());
         placeIndex.setText(Integer.toString(index));
 
         final MainActivity activity = (MainActivity)getActivity();

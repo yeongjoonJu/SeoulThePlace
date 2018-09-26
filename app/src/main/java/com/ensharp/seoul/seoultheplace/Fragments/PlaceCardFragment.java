@@ -15,13 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PicassoImage;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.*;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
-import com.squareup.picasso.Picasso;
 
 public class PlaceCardFragment extends Fragment {
 
@@ -63,14 +58,13 @@ public class PlaceCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_viewpager, container, false);
+        View view = inflater.inflate(R.layout.item_mainplace, container, false);
 
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView address = (TextView) view.findViewById(R.id.address);
-        TextView description = (TextView) view.findViewById(R.id.description);
         TextView index = (TextView) view.findViewById(R.id.index);
         ImageView image = (ImageView) view.findViewById(R.id.placeImage);
 
@@ -78,10 +72,6 @@ public class PlaceCardFragment extends Fragment {
         title.setTextColor(Color.rgb(0,0,0));
         address.setText(place.getLocation());
         address.setTextColor(Color. rgb(0,0,0));
-        description.setText(place.getDetails());
-        description.setTextColor(Color.rgb(0,0,0));
-        index.setTextColor(Color.rgb(255,255,255));
-        index.setText(String.format("%d", position));
 
         heartButton = (ImageButton) view.findViewById(R.id.like_button);
         if(place != null) {
