@@ -140,19 +140,43 @@ console.log('\n코스 정보 가져오기 라우터 : ' + code);
 app.post('/main/course_info', function(req, res) {
   var courseType = req.body.Type; //코스 타입
   var userID = req.body.Id; //로그인한 아이디
-console.log('\n메인에서 type으로 코스 리스트 띄울 때 필요한 정보 라우터 : ' + userID);
+	var selectQuery = 'SELECT * FROM COURSE WHERE Type LIKE ?';
+console.log('\n메인에서 type으로 코스 리스트 띄울 때 필요한 정보 라우터 : ' + courseType);
 
-  //해당 타입에 맞는 코스 가져옴
-  con.query('SELECT * FROM COURSE WHERE Type LIKE ?', ["%" + courseType + "%"], function(err, rows, fields) {
-    if(err) {
-      console.log('메인에서 코스 리스트err: ' + err);
-    } else {
-      if(rows.length === 0) {
-      } else {
-        mainCourseListInfo(res, rows, userID);
-      }
-    }
-  });
+	con.query(selectQuery, ["%" + courseType + "%"], function(err, rows, fields) {
+		if(err) {
+			console.log('메인에서 코스 리스트err: ' + err);
+		} else {
+			if(rows.length === 0) {
+				res.json(null);
+				console.log('결과 x');
+			} else {
+				console.log();
+				console.log('타입으로 코스 리스트 가져오는거 rows 크기 : ' + rows.length);
+				res.json(getInfoToArray(rows, 'COURSE'));
+			}
+		}
+	});
+});
+
+//Main에서 type으로 플레이스 리스트로 띄울 때 필요한 정보 가져오기
+app.post('/main/place_info', function(req, res) {
+	var placeType = req.body.Type;
+	var userID = req.body.Id;
+	var selectQuery = 'SELECT * FROM PLACE WHERE Type LIKE ?';
+console.log('\n메인에서 type으로 플레이스 리스트 띄울 때 필요한 정보 라우터 : ' + placeType);
+
+	con.query(selectQuery, ["%" + placeType + "%"], function(err, rows, fields) {
+		if(err) {
+			console.log('메인에서 플레이스 리스트 err : ' + err);
+		} else {
+			if(rows.length === 0) {
+				res.json(null);
+			} else {
+				res.json(getInfoToArray(rows, 'PLACE'));
+			}
+		}
+	});
 });
 
 //Main에서 해당 코스 눌렀을 때 필요한 정보 가져오기
@@ -364,6 +388,8 @@ app.post('/edited_course/info', function(req, res) {
 	var user_ID = req.body.Id;
 	var query_edittedCourse = 'SELECT * FROM EDITTEDCOURSE WHERE Person = ?';
 	jsonArray = initJsonArray(jsonArray);
+console.log();
+console.log('커스텀 코스 띄울 때 Id : ' + user_ID);
 	sync.fiber(function() {
 		//edittedcourse 정보 받아오기
 		var query_edittedCourse_result = sync.await(con.query(query_edittedCourse, user_ID, sync.defer()));
