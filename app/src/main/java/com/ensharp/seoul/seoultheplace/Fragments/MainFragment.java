@@ -298,7 +298,7 @@ public class MainFragment extends Fragment {
 
     // 플레이스 카드 뷰
     protected void showPlaceCardView(String word) {
-        ArrayList<PlaceVO> places = dao.searchPlace(word);
+        ArrayList<PlaceVO> places = dao.getUserPlaceData(word);
         if(places == null || places.size() == 0) {
             placeViewPager.setVisibility(View.INVISIBLE);
             return;
@@ -320,7 +320,7 @@ public class MainFragment extends Fragment {
     }
 
     protected void showCourseCardView(String word) {
-        ArrayList<CourseVO> courses = dao.searchCourse(word);
+        ArrayList<CourseVO> courses = dao.getUserCourseData(word);
         if(courses == null || courses.size() == 0) {
             courseViewPager.setVisibility(View.INVISIBLE);
             return;
