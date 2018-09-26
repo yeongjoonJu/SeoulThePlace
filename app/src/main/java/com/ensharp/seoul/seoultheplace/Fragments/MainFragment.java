@@ -42,6 +42,8 @@ public class MainFragment extends Fragment {
     private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
     private boolean isPlusButtonExpanded = false;
     private MainFragment mainFragment;
+    final int SEARCH = 0;
+    final int TYPE = 1;
 
     InputMethodManager inputMethodManager;
     private CustomAnimationDialog customAnimationDialog;
@@ -209,9 +211,9 @@ public class MainFragment extends Fragment {
                 if(searchWord.length() != 0 && !searchWord.equals(" ")) {
                     listAdapter.insert(searchWord, 0);
                     // 코스 검색
-                    showCourseCardView(searchWord);
+                    showCourseCardView(SEARCH, searchWord);
                     // 플레이스 검색
-                    showPlaceCardView(searchWord);
+                    showPlaceCardView(SEARCH, searchWord);
                 }
                 else {
                     courseViewPager.setVisibility(View.INVISIBLE);
@@ -255,14 +257,18 @@ public class MainFragment extends Fragment {
         placeViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setVisibility(View.VISIBLE);
         noSearchResult.setVisibility(View.GONE);
-        showPlaceCardView(type);
-        showCourseCardView(type);
+        showPlaceCardView(TYPE, type);
+        showCourseCardView(TYPE, type);
 
     }
 
     // 플레이스 카드 뷰
-    protected void showPlaceCardView(String word) {
-        ArrayList<PlaceVO> places = dao.searchPlace(word);
+    protected void showPlaceCardView(int dataType, String word) {
+        ArrayList<PlaceVO> places = null;
+        if(dataType == SEARCH)
+            places = dao.searchPlace(word);
+        else
+            places = dao.getUserPlaceData(word);
         if(places == null || places.size() == 0) {
             placeViewPager.setVisibility(View.INVISIBLE);
             placeText.setVisibility(View.INVISIBLE);
@@ -281,12 +287,16 @@ public class MainFragment extends Fragment {
             placeViewAdapter.setPlaceData(places);
         }
         placeViewPager.setOffscreenPageLimit(3);
-        //placeViewPager.setCurrentItem(currentPlacePosition);
+        placeViewPager.setCurrentItem(0);
         placeCardShadowTransformer.enableScaling(true);
     }
 
-    protected void showCourseCardView(String word) {
-        ArrayList<CourseVO> courses = dao.searchCourse(word);
+    protected void showCourseCardView(int dataType, String word) {
+        ArrayList<CourseVO> courses = null;
+        if(dataType == SEARCH)
+            courses = dao.searchCourse(word);
+        else
+            courses = dao.getUserCourseData(word);
         if(courses == null || courses.size() == 0) {
             courseViewPager.setVisibility(View.INVISIBLE);
             courseText.setVisibility(View.INVISIBLE);
@@ -305,7 +315,7 @@ public class MainFragment extends Fragment {
             courseViewAdapter.setCourseData(courses);
         }
         courseViewPager.setOffscreenPageLimit(3);
-        //courseViewPager.setCurrentItem(currentCoursePosition);
+        courseViewPager.setCurrentItem(0);
         courseCardShadowTransformer.enableScaling(true);
     }
 }

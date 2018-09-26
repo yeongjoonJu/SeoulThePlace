@@ -123,12 +123,13 @@ public class DAO {
 
             if(resultData == null)
                 return null;
+            Log.i("courseTypeData", type + " " + resultData.toString());
 
             courseData = new ArrayList<>();
             for(int i = 0; i < resultData.length(); i++) {
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
+                Log.i("courseType", courseData.get(i).getName());
             }
-            Log.i("sssukho", resultData.toString());
         }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -153,7 +154,6 @@ public class DAO {
             for(int i = 0; i < resultData.length(); i++) {
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
             }
-            Log.i("sssukho", resultData.toString());
         } catch(JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -173,6 +173,7 @@ public class DAO {
 
             if(resultData == null)
                 return null;
+
             courseData = new CourseVO(resultData.getJSONObject(0));
 
         }catch (JSONException | ExecutionException | InterruptedException e) {
