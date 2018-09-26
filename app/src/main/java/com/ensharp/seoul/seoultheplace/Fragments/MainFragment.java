@@ -187,7 +187,6 @@ public class MainFragment extends Fragment {
 
         tagAdapter = new TagAdapter(getActivity(), tags);
         tagAdapter.setMainFragment(this);
-
         tagListView.setAdapter(tagAdapter);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -257,9 +256,8 @@ public class MainFragment extends Fragment {
         placeViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setVisibility(View.VISIBLE);
         noSearchResult.setVisibility(View.GONE);
-        showPlaceCardView(TYPE, type);
         showCourseCardView(TYPE, type);
-
+        showPlaceCardView(TYPE, type);
     }
 
     // 플레이스 카드 뷰

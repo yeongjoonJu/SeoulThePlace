@@ -17,6 +17,8 @@ import java.util.ArrayList;
 public class TagAdapter extends ArrayAdapter<String> {
     private Button preChoicedButton = null;
     private MainFragment mainFragment = null;
+    // 선택된 타입
+    private String choicedType = null;
 
     public TagAdapter(Activity context, ArrayList<String> tags) {
         super(context, 0, tags);
@@ -25,6 +27,7 @@ public class TagAdapter extends ArrayAdapter<String> {
     public void setMainFragment(MainFragment mainFragment) {
         this.mainFragment = mainFragment;
         mainFragment.renewCardView(getItem(0));
+        choicedType = getItem(0);
     }
 
     public Button getTagButton() {
@@ -41,8 +44,15 @@ public class TagAdapter extends ArrayAdapter<String> {
         }
 
         String currentTag = getItem(position);
-
         final Button tagButton = (Button) listItemView.findViewById(R.id.tagButton);
+
+        if(!currentTag.equals(choicedType)) {
+            tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_unchoicedtag));
+            tagButton.setTextColor(0xFF777788);
+        }else {
+            tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
+            tagButton.setTextColor(Color.BLACK);
+        }
         tagButton.setText(currentTag);
 
         // 아무 것도 선택 안 되어 있을 때
@@ -52,6 +62,8 @@ public class TagAdapter extends ArrayAdapter<String> {
             preChoicedButton = tagButton;
         }
 
+        final int currentPosition = position;
+
         tagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +71,7 @@ public class TagAdapter extends ArrayAdapter<String> {
                 if(preChoicedButton != null && preChoicedButton.equals(tagButton))
                     return;
 
+                choicedType = tagButton.getText().toString();
                 tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
                 tagButton.setTextColor(Color.BLACK);
 
