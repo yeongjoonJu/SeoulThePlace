@@ -33,4 +33,7 @@
 
     <color name="like_small_title">#868686</color>
     <color name="like_no_info">#4A4A4A</color>
+
+    <color name="course_place_name">#000000</color>
+    <color name="course_place_location">#868686</color>
 </resources>

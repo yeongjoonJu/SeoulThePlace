@@ -16,42 +16,48 @@
         android:weightSum="3"
         android:padding="20dp">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.8">
+            android:layout_weight="0.7"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
-                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/font_family"
-                android:textColor="@color/white"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.9">
+                android:layout_marginBottom="7dp"
+                android:fontFamily="@font/bold_font_family"
+                android:textColor="@color/white"
+                android:textSize="@dimen/course_card_title_size"/>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:background="@color/white"/>
 
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2.0"
+            android:scrollbars="vertical"
+            android:fillViewport="true"
+            android:overScrollMode="never">
+
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/font_family"
-                style="@style/TextAppearance.AppCompat.Body1"/>
+                android:textSize="@dimen/course_card_description_size"/>
 
-        </FrameLayout>
+        </ScrollView>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -63,15 +69,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/course_guide"
                 android:textColor="#A8A8A8"
-                android:layout_gravity="top|right"
+                android:layout_gravity="bottom|right"
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/font_family"
-                style="@style/TextAppearance.AppCompat.Body1"/>
+                android:textSize="@dimen/course_card_guide_size"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="bottom|right"
                 android:paddingTop="3dp"
                 android:src="@drawable/course_swipe"
                 android:scaleType="fitXY"/>
