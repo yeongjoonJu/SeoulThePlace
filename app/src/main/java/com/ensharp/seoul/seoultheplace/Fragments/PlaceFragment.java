@@ -61,6 +61,8 @@ public class PlaceFragment extends Fragment {
     private CourseVO courseVO;
     private FloatingActionButton likeButton;
     private FloatingActionButton createCourseButton;
+    private boolean isliked = false;
+    private String userID;
 
     @SuppressLint("ValidFragment")
     public PlaceFragment(String placeCode, int enterRoute) {
@@ -97,6 +99,7 @@ public class PlaceFragment extends Fragment {
                 .add(R.id.fragment, placeChildFragment)
                 .commit();
 
+        setUserID();
         setFloatingButtons();
 
         return rootView;
@@ -106,7 +109,13 @@ public class PlaceFragment extends Fragment {
         likeButton = (FloatingActionButton) rootView.findViewById(R.id.like_button);
         createCourseButton = (FloatingActionButton) rootView.findViewById(R.id.create_course);
 
-        // like!!
+        if(dao.checkLikedPlace(place.getCode(), userID).equals("true")) {
+            likeButton.setIcon(R.drawable.choiced_heart);
+            isliked = true;
+        } else {
+            likeButton.setIcon(R.drawable.unchoiced_heart);
+            isliked = false;
+        }
 
         if (enterRoute == DURING_EDITTING_COURSE)
             createCourseButton.setVisibility(View.GONE);
@@ -115,10 +124,23 @@ public class PlaceFragment extends Fragment {
         createCourseButton.setOnClickListener(onCreateCourseListener);
     }
 
+    private void setUserID() {
+        MainActivity activity = (MainActivity) getActivity();
+        userID = activity.getUserID();
+    }
+
     private FloatingActionButton.OnClickListener onLikeListener = new FloatingActionButton.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (isliked) {
+                likeButton.setIcon(R.drawable.unchoiced_heart);
+                isliked = false;
+            } else {
+                likeButton.setIcon(R.drawable.choiced_heart);
+                isliked = true;
+            }
 
+            dao.likePlace(place.getCode(), userID);
         }
     };
 

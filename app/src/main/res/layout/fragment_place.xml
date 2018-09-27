@@ -37,8 +37,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="30dp"
             fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_icon="@drawable/unchoiced_heart" />
+            fab:fab_colorPressed="@color/white_pressed" />
 
         <com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton
             android:id="@+id/create_course"
