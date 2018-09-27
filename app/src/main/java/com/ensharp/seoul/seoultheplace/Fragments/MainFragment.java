@@ -19,7 +19,6 @@ import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
-import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
 import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJBarWithErrorIconController;
@@ -48,7 +47,6 @@ public class MainFragment extends Fragment {
     final int TYPE = 1;
 
     InputMethodManager inputMethodManager;
-    private CustomAnimationDialog customAnimationDialog;
     private DAO dao;
     private String useremail;
     FrameLayout searchBar;
@@ -68,8 +66,8 @@ public class MainFragment extends Fragment {
     ArrayList<CourseVO> searchCourseResult = null;
     TextView noSearchResult;
     JJSearchView searchView;
-    Button start;
     Button end;
+    boolean isAnimated = false;
 
     // 최근 검색
     LinearLayout recentList;
@@ -115,8 +113,6 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.e("home_tag_error/MainFragment", "came here in MainFragment");
-
         mainFragment = this;
         dao = new DAO();
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -153,6 +149,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(transformButton.getText().equals("추천")) {
+                    recentList.setVisibility(View.GONE);
                     searchBar.setVisibility(View.GONE);
                     tagListView.setVisibility(View.VISIBLE);
                     courseViewPager.setVisibility(View.VISIBLE);
@@ -160,7 +157,7 @@ public class MainFragment extends Fragment {
                     TagAdapter tagAdapter = new TagAdapter(getActivity(), tags);
                     tagAdapter.setMainFragment(mainFragment);
                     tagListView.setAdapter(tagAdapter);
-                    inputMethodManager.hideSoftInputFromInputMethod(searchEditText.getWindowToken(), 0);
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     transformButton.setText("검색");
                 }
                 else {
@@ -174,7 +171,19 @@ public class MainFragment extends Fragment {
                     placeViewPager.setVisibility(View.INVISIBLE);
                     noSearchResult.setVisibility(View.GONE);
                     transformButton.setText("추천");
+                    initSearchBar();
                 }
+            }
+        });
+
+        // 검색
+        searchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean isFocused) {
+                if (!isFocused) return;
+                searchEditText.setText("");
+                inputMethodManager.showSoftInputFromInputMethod(searchEditText.getWindowToken(), 0);
+                recentList.setVisibility(View.VISIBLE);
             }
         });
 
@@ -188,18 +197,11 @@ public class MainFragment extends Fragment {
         // 플레이스 카드 뷰
         searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
         searchView.setController(new JJBarWithErrorIconController());
-        start = rootView.findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startAnimation(searchView);
-            }
-        });
         end = rootView.findViewById(R.id.end);
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endAnimation(searchView);
+                endAnimation();
             }
         });
 
@@ -213,24 +215,15 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    private void startAnimation(View v) {
-        searchView.startAnim();
+    private void initSearchBar() {
         searchEditText.setVisibility(View.VISIBLE);
-        start.setVisibility(View.GONE);
         end.setVisibility(View.VISIBLE);
-        recentList.setVisibility(View.VISIBLE);
+        if (isAnimated) searchView.startAnim();
+        isAnimated = true;
     }
 
-    private void endAnimation(View v) {
-        searchView.resetAnim();
-        searchEditText.setVisibility(View.GONE);
-        start.setVisibility(View.VISIBLE);
-        end.setVisibility(View.GONE);
+    private void endAnimation() {
         recentList.setVisibility(View.GONE);
-
-        customAnimationDialog = new CustomAnimationDialog(getActivity());
-        customAnimationDialog.show();
-
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
         noSearchResult.setVisibility(View.GONE);
@@ -262,9 +255,6 @@ public class MainFragment extends Fragment {
 
         // 키보드 숨김
         inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-        customAnimationDialog.dismiss();
-
-        searchEditText.setText("");
     }
 
     @Override

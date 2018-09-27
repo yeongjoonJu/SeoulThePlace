@@ -71,9 +71,7 @@ public class JJBarWithErrorIconController extends JJBaseController {
     private void drawStartAnimView(Paint paint, Canvas canvas) {
         canvas.save();
         if (mPro <= 0.25) {
-            canvas.drawLine(cx + cr * sign, cy + cr * sign, cx + cr * sign + cr * sign *
-                    (1 - mPro * 4), cy + cr * sign + cr * sign * (1 - mPro * 4), paint);
-            canvas.drawCircle(cx, cy, cr, paint);
+
         } else if (mPro > 0.25 && mPro <= 0.5f) {
             canvas.drawArc(mRectF, 90, -180, false, paint);
             canvas.drawLine(mRectF2.left + cr, mRectF.top, mRectF.right - cr, mRectF.top, paint);
@@ -118,19 +116,15 @@ public class JJBarWithErrorIconController extends JJBaseController {
         paint.reset();
         paint.setAntiAlias(true);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        canvas.save();
         paint.setColor(Color.parseColor("#00BDFC"));
         paint.setStrokeWidth(8);
         paint.setStyle(Paint.Style.STROKE);
-        canvas.drawCircle(cx, cy, cr, paint);
-        canvas.drawLine(cx + cr * sign, cy + cr * sign, cx + cr * 2 * sign,
-                cy + cr * 2 * sign, paint);
-        canvas.restore();
+
+        startAnim();
     }
 
     @Override
     public void startAnim() {
-        if (mState == STATE_ANIM_START) return;
         mState = STATE_ANIM_START;
         startSearchViewAnim();
     }
