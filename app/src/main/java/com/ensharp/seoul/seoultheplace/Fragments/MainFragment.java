@@ -149,7 +149,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(transformButton.getText().equals("추천")) {
-
                     recentList.setVisibility(View.GONE);
                     searchBar.setVisibility(View.GONE);
                     tagListView.setVisibility(View.VISIBLE);
@@ -182,7 +181,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onFocusChange(View view, boolean isFocused) {
                 if (!isFocused) return;
-                searchEditText.setText("");
+                searchEditText.getText().clear();
                 inputMethodManager.showSoftInput(view, 0);
                 recentList.setVisibility(View.VISIBLE);
             }
@@ -228,6 +227,7 @@ public class MainFragment extends Fragment {
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
         noSearchResult.setVisibility(View.GONE);
+        searchEditText.clearFocus();
 
         String searchWord = String.valueOf(searchEditText.getText());
         // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
