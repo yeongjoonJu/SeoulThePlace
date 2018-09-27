@@ -77,13 +77,6 @@
                     android:inputType="text" />
 
                 <Button
-                    android:id="@+id/start"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:background="@null"/>
-
-                <Button
                     android:id="@+id/end"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -93,31 +86,6 @@
                     android:visibility="gone"/>
 
             </FrameLayout>
-
-            <!--<LinearLayout-->
-                    <!--android:id="@+id/search_bar"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:layout_marginLeft="8dp"-->
-                    <!--android:layout_marginTop="6dp"-->
-                    <!--android:layout_marginBottom="6dp"-->
-                    <!--android:visibility="gone">-->
-                <!--<EditText-->
-                        <!--android:id="@+id/search_edittext"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:layout_weight="4"/>-->
-                <!--<ImageButton-->
-                        <!--android:id="@+id/search_button"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:background="@color/white"-->
-                        <!--android:src="@drawable/search_icon"/>-->
-            <!--</LinearLayout>-->
 
         </LinearLayout>
 

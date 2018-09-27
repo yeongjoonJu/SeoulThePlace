@@ -64,8 +64,8 @@ public class MainFragment extends Fragment {
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
     JJSearchView searchView;
-    Button start;
     Button end;
+    boolean isAnimated = false;
 
     // 최근 검색
     LinearLayout recentList;
@@ -108,8 +108,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.e("home_tag_error/MainFragment", "came here in MainFragment");
 
         mainFragment = this;
         dao = new DAO();
@@ -167,6 +165,7 @@ public class MainFragment extends Fragment {
                     courseViewPager.setVisibility(View.INVISIBLE);
                     placeViewPager.setVisibility(View.INVISIBLE);
                     transformButton.setText("추천");
+                    initSearchBar();
                 }
             }
         });
@@ -180,18 +179,11 @@ public class MainFragment extends Fragment {
         // 플레이스 카드 뷰
         searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
         searchView.setController(new JJBarWithErrorIconController());
-        start = rootView.findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startAnimation(searchView);
-            }
-        });
         end = rootView.findViewById(R.id.end);
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endAnimation(searchView);
+                endAnimation();
             }
         });
 
@@ -203,52 +195,23 @@ public class MainFragment extends Fragment {
 
         tagListView.setAdapter(tagAdapter);
 
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                customAnimationDialog = new CustomAnimationDialog(getActivity());
-//                customAnimationDialog.show();
-//
-//                courseViewPager.setVisibility(View.VISIBLE);
-//                placeViewPager.setVisibility(View.VISIBLE);
-//
-//                String searchWord = String.valueOf(searchEditText.getText());
-//                listAdapter.insert(searchWord, 0);
-//
-//                showCourseCardView(searchWord);
-//                showPlaceCardView(searchWord);
-//
-//                inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-//                customAnimationDialog.dismiss();
-//            }
-//        });
-
         return rootView;
     }
 
-    private void startAnimation(View v) {
-        searchView.startAnim();
+    private void initSearchBar() {
         searchEditText.setVisibility(View.VISIBLE);
-        start.setVisibility(View.GONE);
         end.setVisibility(View.VISIBLE);
+        if (isAnimated) searchView.startAnim();
+        isAnimated = true;
+
     }
 
-    private void endAnimation(View v) {
-        searchView.resetAnim();
-        searchEditText.setVisibility(View.GONE);
-        start.setVisibility(View.VISIBLE);
-        end.setVisibility(View.GONE);
-
-        customAnimationDialog = new CustomAnimationDialog(getActivity());
-        customAnimationDialog.show();
-
+    private void endAnimation() {
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
 
         String searchWord = String.valueOf(searchEditText.getText());
         listAdapter.insert(searchWord, 0);
-
-        Log.e("abcd", "searchWord: "+ searchWord);
 
         // 코스 검색
         showCourseCardView(searchWord);
@@ -258,8 +221,6 @@ public class MainFragment extends Fragment {
         // 키보드 숨김
         inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
         customAnimationDialog.dismiss();
-
-        searchEditText.setText("");
     }
 
     @Override
