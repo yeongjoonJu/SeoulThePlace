@@ -44,6 +44,7 @@ public class CourseFragment extends Fragment {
         DAO dao = new DAO();
         this.code = code;
         course = dao.getCourseData(code);
+        Log.e("abcd", course.getDetails());
         index = 0;
         this.enterRoute = enterRoute;
     }
@@ -51,12 +52,14 @@ public class CourseFragment extends Fragment {
     public CourseFragment(CourseVO course, int enterRoute) {
         this.code = course.getCode();
         this.course = course;
+        Log.e("abcd", course.getDetails());
         this.enterRoute = enterRoute;
     }
 
     public CourseFragment(CourseVO course, int enterRoute, int index) {
         this.code = course.getCode();
         this.course = course;
+        Log.e("abcd", course.getDetails());
         this.enterRoute = enterRoute;
         this.index = index;
     }

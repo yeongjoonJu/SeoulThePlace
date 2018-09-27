@@ -95,8 +95,6 @@ public class MainFragment extends Fragment {
     }
 
     public void viewInvisible() {
-        if(recentList != null)
-            recentList.setVisibility(View.VISIBLE);
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
@@ -203,7 +201,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onFocusChange(View view, boolean isFocused) {
                 if (!isFocused) return;
-                searchEditText.setText("");
+                searchEditText.getText().clear();
                 inputMethodManager.showSoftInput(view, 0);
                 recentList.setVisibility(View.VISIBLE);
             }
@@ -237,6 +235,7 @@ public class MainFragment extends Fragment {
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
         noSearchResult.setVisibility(View.GONE);
+        searchEditText.clearFocus();
 
         String searchWord = String.valueOf(searchEditText.getText());
         // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
