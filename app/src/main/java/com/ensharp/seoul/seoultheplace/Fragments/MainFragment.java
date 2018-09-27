@@ -45,6 +45,7 @@ public class MainFragment extends Fragment {
     private MainFragment mainFragment;
     final int SEARCH = 0;
     final int TYPE = 1;
+    private int screenStatus = 0;
 
     InputMethodManager inputMethodManager;
     private DAO dao;
@@ -79,6 +80,7 @@ public class MainFragment extends Fragment {
     int currentCoursePosition = 0;
 
     public void viewVisible() {
+        Log.i("keyboard", "viewVisible");
         if(recentList != null)
             recentList.setVisibility(View.GONE);
         if(searchPlaceResult != null) {
@@ -94,6 +96,9 @@ public class MainFragment extends Fragment {
     }
 
     public void viewInvisible() {
+        Log.i("keyboard", "viewInvisible");
+        if(recentList != null)
+            recentList.setVisibility(View.VISIBLE);
         if(searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
@@ -120,15 +125,24 @@ public class MainFragment extends Fragment {
         useremail = preferences.getString("email", null);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+    }
+
+    public void loadRecentSearch() {
+
         // 최근 검색어 SharedPreference에서 가져온다
         recentSearchList = new ArrayList<>();
-        preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
         for(int i=0; i < 6; i++) {
             String word = preferences.getString("RecentSearch" + i, null);
             if(word != null)
                 recentSearchList.add(word);
         }
         listAdapter = new RecentSearchAdapter(getActivity(), recentSearchList);
+
+        // 최근 검색
+        listAdapter.setEditText(searchEditText);
+        recentListView.setAdapter(listAdapter);
+        recentList.setVisibility(View.GONE);
     }
 
     @Override
@@ -144,12 +158,19 @@ public class MainFragment extends Fragment {
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
         searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
         noSearchResult = (TextView) rootView.findViewById(R.id.no_search_result);
+        recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
+        recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
+        end = rootView.findViewById(R.id.end);
+        searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
+        placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
+        courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
+
         final Button transformButton = (Button) rootView.findViewById(R.id.transform_button);
         transformButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(transformButton.getText().equals("추천")) {
-
+                    screenStatus = TYPE;
                     recentList.setVisibility(View.GONE);
                     searchBar.setVisibility(View.GONE);
                     tagListView.setVisibility(View.VISIBLE);
@@ -162,6 +183,7 @@ public class MainFragment extends Fragment {
                     transformButton.setText("검색");
                 }
                 else {
+                    screenStatus = SEARCH;
                     recentList.setVisibility(View.GONE);
                     courseText.setVisibility(View.INVISIBLE);
                     placeText.setVisibility(View.INVISIBLE);
@@ -173,6 +195,7 @@ public class MainFragment extends Fragment {
                     noSearchResult.setVisibility(View.GONE);
                     transformButton.setText("추천");
                     initSearchBar();
+                    loadRecentSearch();
                 }
             }
         });
@@ -188,26 +211,14 @@ public class MainFragment extends Fragment {
             }
         });
 
-        // 최근 검색
-        listAdapter.setEditText(searchEditText);
-        recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
-        recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
-        recentListView.setAdapter(listAdapter);
-        recentList.setVisibility(View.GONE);
-
         // 플레이스 카드 뷰
-        searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
         searchView.setController(new JJBarWithErrorIconController());
-        end = rootView.findViewById(R.id.end);
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 endAnimation();
             }
         });
-
-        placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
-        courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
 
         tagAdapter = new TagAdapter(getActivity(), tags);
         tagAdapter.setMainFragment(this);
