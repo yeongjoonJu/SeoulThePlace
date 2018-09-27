@@ -7,55 +7,56 @@
     android:background="#ffffff">
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="4"
-            android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="4"
+        android:orientation="vertical">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:background="@color/white"
-                android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:background="@color/white"
+            android:orientation="vertical">
 
             <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="55dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/ic_backpack"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_backpack"/>
                 <Button
-                        android:id="@+id/transform_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="검색"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/white"
-                        android:background="@drawable/item_maintransform"
-                        android:fontFamily="@font/font_family"
-                        android:layout_margin="8dp"
-                        android:textSize="16sp"/>
+                    android:id="@+id/transform_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="검색"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/white"
+                    android:background="@drawable/item_maintransform"
+                    android:fontFamily="@font/font_family"
+                    android:layout_margin="8dp"
+                    android:textSize="16sp"/>
             </RelativeLayout>
 
             <com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView
-                    android:id="@+id/tagListView"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:id="@+id/tagListView"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             </com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView>
 
             <FrameLayout
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" >
+                android:visibility="gone"
+                android:focusableInTouchMode="true">
 
                 <com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView
                     android:id="@+id/jjsv"
@@ -90,104 +91,104 @@
         </LinearLayout>
 
         <LinearLayout
-                android:layout_height="0dp"
-                android:layout_width="match_parent"
-                android:layout_weight="3.3"
-                android:orientation="vertical"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:padding="12dp"
-                android:id="@+id/recent_search"
-                android:visibility="gone"
-                android:background="@drawable/item_recent">
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="3.3"
+            android:orientation="vertical"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:padding="12dp"
+            android:id="@+id/recent_search"
+            android:visibility="gone"
+            android:background="@drawable/item_recent" >
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/font_family"
-                    android:text="최근 검색"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/font_family"
+                android:text="최근 검색"/>
             <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:id="@+id/recent_listview"/>
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:id="@+id/recent_listview"/>
         </LinearLayout>
 
         <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_weight="3.2"
+            android:layout_marginTop="8dp"
+            android:layout_weight="3.2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:background="#ffffff">
+
+            <TextView
+                android:id="@+id/no_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:fontFamily="@font/font_family"
+                android:layout_gravity="center_vertical"
+                android:text="검색 결과가 없습니다."/>
+
+            <TextView
+                android:fontFamily="@font/font_family"
+                android:visibility="gone"
+                android:id="@+id/course_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:padding="4dp"
+                android:paddingStart="12dp"
+                android:background="#FFFFFF"
+                android:text="코스"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/course_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
-                android:background="#ffffff">
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="14dp"
+                android:paddingEnd="@dimen/card_padding"
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingRight="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding"
+                android:layout_marginTop="8dp"/>
 
             <TextView
-                    android:id="@+id/no_search_result"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:visibility="gone"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    android:textAlignment="center"
-                    android:fontFamily="@font/font_family"
-                    android:layout_gravity="center_vertical"
-                    android:text="검색 결과가 없습니다."/>
-
-            <TextView
-                    android:fontFamily="@font/font_family"
-                    android:visibility="gone"
-                    android:id="@+id/course_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:padding="4dp"
-                    android:paddingStart="12dp"
-                    android:background="#FFFFFF"
-                    android:text="코스"/>
+                android:fontFamily="@font/font_family"
+                android:visibility="gone"
+                android:id="@+id/place_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:padding="4dp"
+                android:paddingStart="12dp"
+                android:background="#FFFFFF"
+                android:text="플레이스"/>
 
             <android.support.v4.view.ViewPager
-                    android:id="@+id/course_search_result"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="bottom"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:paddingBottom="14dp"
-                    android:paddingEnd="@dimen/card_padding"
-                    android:paddingLeft="@dimen/card_padding"
-                    android:paddingRight="@dimen/card_padding"
-                    android:paddingStart="@dimen/card_padding"
-                    android:layout_marginTop="8dp"/>
-
-            <TextView
-                    android:fontFamily="@font/font_family"
-                    android:visibility="gone"
-                    android:id="@+id/place_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:padding="4dp"
-                    android:paddingStart="12dp"
-                    android:background="#FFFFFF"
-                    android:text="플레이스"/>
-
-            <android.support.v4.view.ViewPager
-                    android:id="@+id/place_search_result"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="bottom"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:paddingBottom="12dp"
-                    android:paddingEnd="@dimen/card_padding"
-                    android:paddingLeft="@dimen/card_padding"
-                    android:paddingRight="@dimen/card_padding"
-                    android:paddingStart="@dimen/card_padding"/>
+                android:id="@+id/place_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="12dp"
+                android:paddingEnd="@dimen/card_padding"
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingRight="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding"/>
         </LinearLayout>
     </LinearLayout>
 

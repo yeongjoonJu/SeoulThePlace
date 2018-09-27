@@ -149,6 +149,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(transformButton.getText().equals("추천")) {
+
                     recentList.setVisibility(View.GONE);
                     searchBar.setVisibility(View.GONE);
                     tagListView.setVisibility(View.VISIBLE);
@@ -182,7 +183,7 @@ public class MainFragment extends Fragment {
             public void onFocusChange(View view, boolean isFocused) {
                 if (!isFocused) return;
                 searchEditText.setText("");
-                inputMethodManager.showSoftInputFromInputMethod(searchEditText.getWindowToken(), 0);
+                inputMethodManager.showSoftInput(view, 0);
                 recentList.setVisibility(View.VISIBLE);
             }
         });
