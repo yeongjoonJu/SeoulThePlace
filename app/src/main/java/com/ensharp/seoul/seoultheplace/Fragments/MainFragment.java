@@ -36,7 +36,7 @@ import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class MainFragment extends Fragment {
     ArrayList<String> tags = new ArrayList<String>(
-            Arrays.asList(new String[]{"혼자서", "연인끼리", "친구끼리", "가족끼리", "먹방투어", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
+            Arrays.asList(new String[]{"연인끼리", "혼자서", "친구끼리", "가족끼리", "먹방투어", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
     private static final String[] CHANNELS = new String[]{"타입별", "검색"};
     private MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;

@@ -47,8 +47,6 @@ public class CourseFragmentPagerAdapter extends FragmentPagerAdapter implements 
 
     @Override
     public CardView getCardViewAt(int position) {
-        if(courseCards.get(position).getCardView() == null)
-            Log.i("getCardView", "null 이야");
         return courseCards.get(position).getCardView();
     }
 
