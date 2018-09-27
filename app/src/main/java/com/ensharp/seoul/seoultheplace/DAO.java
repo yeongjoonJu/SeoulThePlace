@@ -316,7 +316,7 @@ public class DAO {
     public String insertMemberData(String[] information) {
         Log.v("test", "insertMemberData");
         // 처리 설정
-        String[] memberCategory = new String[]{"Id", "Password", "Name"};
+        String[] memberCategory = new String[]{"Id", "Password", "Name","Phone"};
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -639,6 +639,33 @@ public class DAO {
             e.printStackTrace();
         }
         return placeData;
+    }
+
+    public String SearchPasswd(String id, String name,String phone) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("Id", id);
+            jsonObject.accumulate("Name", name);
+            jsonObject.accumulate("Phone",phone);
+            jsonObject.accumulate("url", BASE_URL+"/user/findPassword");
+
+            // 네트워크 처리 비동기화
+            resultData = new NetworkProcessor().execute(jsonObject).get();
+
+            // 결과 처리
+            if(resultData == null)
+                return "null";
+
+            jsonObject = resultData.getJSONObject(0);
+            Log.e("SearchPasswd : ", String.valueOf(jsonObject));
+            if(!jsonObject.getString("Password").equals("null"))
+                return jsonObject.getString("Password");
+
+        }catch (JSONException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "null";
     }
 
 }
