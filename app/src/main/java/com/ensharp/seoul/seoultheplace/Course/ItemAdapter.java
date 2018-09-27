@@ -2,20 +2,16 @@ package com.ensharp.seoul.seoultheplace.Course;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PicassoImage;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
@@ -45,8 +41,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         PicassoImage.DownLoadImage(item.getImageURL(),holder.image);
         holder.title.setText(item.getName());
-        holder.distance.setText(String.valueOf(item.getDistance())+"m");
-        holder.Destination.setText(courseModifyFragment.getTouchName());
+        String dest = courseModifyFragment.getTouchName();
+        if(dest.length() != 0)
+            holder.distance.setText("에서 " + String.valueOf(item.getDistance())+"m");
+        else
+            holder.distance.setText("0m");
+        holder.Destination.setText(dest);
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
