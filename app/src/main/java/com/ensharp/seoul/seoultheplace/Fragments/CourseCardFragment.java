@@ -1,0 +1,125 @@
+package com.ensharp.seoul.seoultheplace.Fragments;
+
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
+import com.ensharp.seoul.seoultheplace.*;
+
+public class CourseCardFragment extends Fragment {
+    public static final int HEART_BUTTON = 0;
+    public static final int COURSE_NAME = 1;
+    public static final int COURSE_LOCATION = 2;
+    public static final int COURSE_IMAGE = 3;
+
+    private CardView cardView;
+    private ImageButton heartButton;
+    private CourseVO course;
+    private Drawable unchoicedHeart;
+    private Drawable choicedHeart;
+    private int position;
+    private DAO dao;
+    private String useremail;
+
+    private ImageButton image;
+    private TextView name;
+    private TextView location;
+
+    public CourseCardFragment() {
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dao = new DAO();
+        SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
+        useremail = preferences.getString("email", null);
+        choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
+        unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
+    }
+
+    public void setData(CourseVO course) {
+        this.course = course;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public CardView getCardView() {
+        return cardView;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.item_course, container, false);
+
+        cardView = (CardView) view.findViewById(R.id.courseView);
+        cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
+
+        image = (ImageButton) view.findViewById(R.id.course_image);
+        name = (TextView) view.findViewById(R.id.course_name);
+        location = (TextView) view.findViewById(R.id.course_location);
+        heartButton = (ImageButton) view.findViewById(R.id.like_button);
+        if(course != null) {
+            if(dao.checkLikedCourse(course.getCode(), useremail).equals("true"))
+                heartButton.setImageDrawable(choicedHeart);
+            else
+                heartButton.setImageDrawable(unchoicedHeart);
+        }
+
+        setElements();
+
+        heartButton.setOnClickListener(onHeartButtonClickListener);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MainActivity activity = (MainActivity)getActivity();
+                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
+            }
+        });
+
+        final MainActivity activity = (MainActivity)getActivity();
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
+            }
+        });
+
+        return view;
+    }
+
+    public void setElements() {
+        PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
+        PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
+        name.setText(course.getName());
+
+        String[] area = firstPlace.getLocation().split(" ");
+        if(area.length >= 2)
+            location.setText(area[1]);
+        else
+            location.setText(area[0]);
+    }
+
+    public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (heartButton.getDrawable().equals(choicedHeart))
+                heartButton.setImageDrawable(unchoicedHeart);
+            else
+                heartButton.setImageDrawable(choicedHeart);
+            dao.likeCourse(course.getCode(), useremail);
+        }
+    };
+}

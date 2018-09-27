@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/tagButton"
+    android:layout_gravity="center"
+    android:textAlignment="center"
+    android:textSize="14sp"
+    android:textColor="#777788"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    style="?android:attr/borderlessButtonStyle"
+    android:background="@drawable/item_unchoicedtag"
+    android:fontFamily="@font/font_family"/>
