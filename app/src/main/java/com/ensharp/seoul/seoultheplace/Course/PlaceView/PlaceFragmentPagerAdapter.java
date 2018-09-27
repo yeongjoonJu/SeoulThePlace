@@ -1,7 +1,9 @@
 package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -12,7 +14,7 @@ import com.ensharp.seoul.seoultheplace.PlaceVO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceFragmentPagerAdapter extends FragmentStatePagerAdapter implements CardAdapter {
+public class PlaceFragmentPagerAdapter extends FragmentPagerAdapter implements CardAdapter {
 
     List<PlaceCardFragment> placeCards;
     private float baseElevation;
@@ -30,6 +32,11 @@ public class PlaceFragmentPagerAdapter extends FragmentStatePagerAdapter impleme
             placeCard.setData(places.get(i));
             addCardFragment(placeCard);
         }
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 
 public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
@@ -35,11 +36,11 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
             }
         }
         scalingEnabled = enable;
+
     }
 
     @Override
     public void transformPage(View page, float position) {
-
     }
 
     @Override
@@ -99,11 +100,9 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
 
     @Override
     public void onPageSelected(int position) {
-
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 }

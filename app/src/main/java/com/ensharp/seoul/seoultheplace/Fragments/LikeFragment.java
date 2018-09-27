@@ -100,18 +100,11 @@ public class LikeFragment extends Fragment {
 
         placeViewPager.setVisibility(View.VISIBLE);
 
-        placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
+        placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(places.size(), getActivity()));
         placeViewAdapter.setPlaceData(places);
         ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
         placeViewPager.setPageTransformer(false, placeCardShadowTransformer);
-        try {
-            placeViewPager.setAdapter(placeViewAdapter);
-        }catch(Exception e) {
-            e.printStackTrace();
-            placeViewAdapter = new PlaceFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
-            placeViewAdapter.setPlaceData(places);
-            placeViewPager.setAdapter(placeViewAdapter);
-        }
+        placeViewPager.setAdapter(placeViewAdapter);
     }
 
     protected void showCourseCardView(int currentPosition) {
@@ -128,15 +121,6 @@ public class LikeFragment extends Fragment {
         courseViewAdapter.setCourseData(courses);
         ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
         courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
-        try {
-            courseViewPager.setAdapter(courseViewAdapter);
-        }catch(Exception e) {
-            e.printStackTrace();
-            courseViewAdapter = new CourseFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
-            courseViewAdapter.setCourseData(courses);
-        }
-        courseViewPager.setOffscreenPageLimit(3);
-        courseViewPager.setCurrentItem(currentPosition);
-        courseCardShadowTransformer.enableScaling(true);
+        courseViewPager.setAdapter(courseViewAdapter);
     }
 }
