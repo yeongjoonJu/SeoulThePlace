@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="로그인"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_horizontal|center_vertical"/>
+
+        <EditText
+            android:id="@+id/emailloginEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/texteditbox2"
+            android:gravity="center_vertical|left"
+            android:hint="이메일"
+            android:fontFamily="@font/font_family"
+            android:inputType="textEmailAddress"
+            android:maxLength="30"
+            android:textColor="#ffffff"
+            android:textColorHint="#999999"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/passwdloginEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/texteditbox2"
+            android:gravity="center_vertical|left"
+            android:hint="패스워드"
+            android:fontFamily="@font/font_family"
+            android:inputType="textPassword"
+            android:maxLength="16"
+            android:textColor="#ffffff"
+            android:textColorHint="#999999"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/emailloginbtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/font_family"
+            android:background="@drawable/texteditbox"
+            android:text="로그인"
+            android:textSize="20sp"
+            android:textColor="#00befe" />
+    </LinearLayout>
+
+</RelativeLayout>

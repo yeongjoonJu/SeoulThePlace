@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yalantis.phoenix.PullToRefreshView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pull_to_destroy"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    app:anim_type_view="custom">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/images"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="40dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/sliderDots"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="15dp"/>
+
+            <FrameLayout
+                android:id="@+id/numberIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@layout/item_place_index"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/place_title"
+                android:textSize="@dimen/place_title_size"/>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/place_address"
+                android:textSize="@dimen/place_address_size"/>
+
+            <TextView
+                android:id="@+id/phone"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/place_phone"
+                android:textSize="@dimen/place_phone_size" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="30dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#A8A8A8"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:layout_marginBottom="35dp"
+                android:lineSpacingExtra="10dp"
+                android:textColor="@color/place_detail"
+                android:textSize="@dimen/place_detail_size"/>
+
+            <ListView
+                android:id="@+id/information"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:background="@color/white"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+                <FrameLayout
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/non_active_dot" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <FrameLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:layout_marginTop="25dp"
+                android:visibility="gone" >
+
+                <ImageButton
+                    android:id="@+id/previous_page_image_button"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center|left"
+                    android:background="@null"
+                    android:src="@drawable/item_previous_page" />
+
+                <Button
+                    android:id="@+id/previous_page_text_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:textColor="@color/place_changing"
+                    android:textSize="@dimen/place_change_size"
+                    android:text="이전 페이지"/>
+
+                <Button
+                    android:id="@+id/next_page_text_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@null"
+                    android:textColor="@color/place_changing"
+                    android:textSize="@dimen/place_change_size"
+                    android:text="다음 페이지"/>
+
+                <ImageButton
+                    android:id="@+id/next_page_image_button"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center|right"
+                    android:background="@null"
+                    android:src="@drawable/item_next_page"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</com.yalantis.phoenix.PullToRefreshView>

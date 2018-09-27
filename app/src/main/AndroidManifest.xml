@@ -2,20 +2,60 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ensharp.seoul.seoultheplace">
 
+    <!-- 인터넷 연결 허용하는 퍼미션 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- for naver api -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- for make phone call -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_backpack"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:name=".Login.KakaoLogin.GlobalApplication">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="f9c30c2fe5bc1b60b8fa1607c7bef5d6" />
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent">
         </activity>
+
+        <activity android:name=".Login.LoginBackgroundActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="@string/fb_login_protocol_scheme" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".UIElement.SplashActivity"
+            android:theme="@style/SplashTheme">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".Course.SaveCourseActivity"
+            android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".Login.TutorialActivity"/>
     </application>
 
 </manifest>

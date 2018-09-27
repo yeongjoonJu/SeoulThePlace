@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <Button
+        android:id="@+id/makersButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"/>
+
+    <LinearLayout
+        android:id="@+id/makersLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#be000000"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/makersTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="서울 더 플레이스"
+            android:textColor="#ffffff"
+            android:textSize="40sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Captain : Yejin Kim"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Server : Sukho Lim"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Engineer : Yeongjun Joo"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Tester : Jaesung Choi"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="도움을 주신분들"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Taegyun Kim"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+
+        <TextView
+            android:id="@+id/makersText7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="hyowan Park"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:fontFamily="@font/font_family"/>
+    </LinearLayout>
+</RelativeLayout>

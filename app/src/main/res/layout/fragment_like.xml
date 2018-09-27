@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.LikeFragment"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="12dp"
+            android:text="좋아요"
+            android:gravity="center"
+            android:foregroundGravity="center"
+            android:textColor="#3B3B44"
+            android:textSize="28sp"
+            android:fontFamily="@font/font_family"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cource_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="코스"
+                android:textColor="@color/like_small_title"
+                android:textSize="18sp"
+                android:fontFamily="@font/font_family"/>
+
+            <TextView
+                android:id="@+id/no_like_course"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
+                android:text="좋아요한 코스가 없습니다"
+                android:fontFamily="@font/font_family"
+                android:textSize="20sp"
+                android:textColor="@color/like_no_info"
+                android:visibility="gone"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/course_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="30dp"
+                android:paddingEnd="@dimen/card_padding"
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingRight="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding" />
+
+            <TextView
+                android:id="@+id/place_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:text="플레이스"
+                android:textColor="@color/like_small_title"
+                android:textSize="18sp"
+                android:fontFamily="@font/font_family"/>
+
+            <TextView
+                android:id="@+id/no_like_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
+                android:text="좋아요한 플레이스가 없습니다"
+                android:fontFamily="@font/font_family"
+                android:textSize="20sp"
+                android:textColor="@color/like_no_info"
+                android:visibility="gone"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/place_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="30dp"
+                android:paddingEnd="@dimen/card_padding"
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingRight="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
