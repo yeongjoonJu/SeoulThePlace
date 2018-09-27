@@ -21,6 +21,7 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
     EditText email;
     EditText password;
     Button Login;
+    Button searchPW;
     private LoginBackgroundActivity LActivity;
 
     @Override
@@ -38,6 +39,13 @@ public class EmailLoginFragment extends Fragment implements View.OnClickListener
         password=(EditText)view.findViewById(R.id.passwdloginEditText);
         Login = (Button)view.findViewById(R.id.emailloginbtn);
         Login.setOnClickListener(this);
+        searchPW = (Button)view.findViewById(R.id.searchPassword);
+        searchPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LActivity.SearchPassWDChanger();
+            }
+        });
         Log.d(TAG,"Ready To EmailLogin");
         return view;
     }

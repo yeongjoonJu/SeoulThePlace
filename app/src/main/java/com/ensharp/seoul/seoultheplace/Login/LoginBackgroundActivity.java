@@ -57,14 +57,14 @@ public class LoginBackgroundActivity extends AppCompatActivity {
     public void onFragmentChanged() {
         mVideoview.pause();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top,R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom);
         fragmentTransaction.replace(R.id.main_frame, new OriginSignUpFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
     public void EmailLoginChanger(){
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_right,R.anim.anim_slide_out_left);
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
         fragmentTransaction.replace(R.id.main_frame,new EmailLoginFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -112,7 +112,8 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         Log.d(TAG,"SendData signUp");
         String[] memberCategory = new String[]{ signup.getString("email",null),
                 signup.getString("password",null),
-                signup.getString("name",null)};
+                signup.getString("name",null),
+                signup.getString("phone",null)};
         Log.d(TAG,"SignUp final : " + dao.insertMemberData(memberCategory));
     }
 
@@ -162,5 +163,13 @@ public class LoginBackgroundActivity extends AppCompatActivity {
         Intent intent = new Intent(this,TutorialActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void SearchPassWDChanger(){
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left,R.anim.anim_slide_in_left,R.anim.anim_slide_out_right);
+        fragmentTransaction.replace(R.id.main_frame,new SearchPasswd());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
