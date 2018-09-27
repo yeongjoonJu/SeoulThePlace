@@ -80,7 +80,6 @@ public class MainFragment extends Fragment {
     int currentCoursePosition = 0;
 
     public void viewVisible() {
-        Log.i("keyboard", "viewVisible");
         if(recentList != null)
             recentList.setVisibility(View.GONE);
         if(searchPlaceResult != null) {
@@ -96,7 +95,6 @@ public class MainFragment extends Fragment {
     }
 
     public void viewInvisible() {
-        Log.i("keyboard", "viewInvisible");
         if(recentList != null)
             recentList.setVisibility(View.VISIBLE);
         if(searchPlaceResult != null) {
@@ -278,15 +276,17 @@ public class MainFragment extends Fragment {
             currentCoursePosition = courseViewPager.getCurrentItem();
 
         // 최근 검색어 SharedPreference에 저장
-        SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor =  preferences.edit();
-        for(int i = 0; i < listAdapter.getCount(); i++) {
-            if(i >= 6)
-                break;
-            if(listAdapter.getItem(i) != null)
-                editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+        if(listAdapter != null) {
+            SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            for (int i = 0; i < listAdapter.getCount(); i++) {
+                if (i >= 6)
+                    break;
+                if (listAdapter.getItem(i) != null)
+                    editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+            }
+            editor.commit();
         }
-        editor.commit();
     }
 
     public void renewCardView(String type) {
