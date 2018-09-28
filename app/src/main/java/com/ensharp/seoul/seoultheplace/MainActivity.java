@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
            } else if(nextFragment == 2) { //다음 프레그먼트가 좋아요 프레그먼트
                bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
            } else if(nextFragment == 3) { //다음 프레그먼트가 내정보 프레그먼트
-               bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+               bottomButtons[nextFragment].setImageResource(R.drawable.more_colored);
            }
         }
         //현재 프레그먼트가 내가만든 코스
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             } else if(nextFragment == 2) {
                 bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
             } else if(nextFragment == 3) {
-                bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+                bottomButtons[nextFragment].setImageResource(R.drawable.more_colored);
             }
         }
         //현재 프레그먼트가 좋아요
@@ -160,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
             } else if(nextFragment == 2) {
                 bottomButtons[currentFragment].setImageResource(R.drawable.heart_colored);
             } else if(nextFragment == 3) {
-                bottomButtons[nextFragment].setImageResource(R.drawable.user_colored);
+                bottomButtons[nextFragment].setImageResource(R.drawable.more_colored);
             }
         }
         else if(currentFragment == 3) {
-            bottomButtons[currentFragment].setImageResource(R.drawable.user);
+            bottomButtons[currentFragment].setImageResource(R.drawable.more);
             if(nextFragment == 0) {
                 bottomButtons[nextFragment].setImageResource(R.drawable.home_colored);
             } else if(nextFragment == 1) {
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             } else if(nextFragment == 2) {
                 bottomButtons[nextFragment].setImageResource(R.drawable.heart_colored);
             } else if(nextFragment == 3) {
-                bottomButtons[currentFragment].setImageResource(R.drawable.user_colored);
+                bottomButtons[currentFragment].setImageResource(R.drawable.more_colored);
             }
         }
     }
@@ -197,8 +197,6 @@ public class MainActivity extends AppCompatActivity {
     public void changeToCourseFragment(CourseVO course, int enterRoute) {
         final Fragment fragment = new CourseFragment(course, enterRoute);
 
-        Log.e("editted_course/MainActivity", "came here");
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
                 .addToBackStack(null)
@@ -207,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToCourseFragment(CourseVO course, int enterRoute, int index) {
         final Fragment fragment = new CourseFragment(course, enterRoute, index);
-
-        Log.e("editted_course/MainActivity", "came here");
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
