@@ -30,42 +30,104 @@
             android:orientation="horizontal"
             android:background="#FFFFFF">
 
-            <ImageButton
-                android:id="@+id/homeButton"
+            <FrameLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/white"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/home_colored" />
-            <ImageButton
-                android:id="@+id/searchButton"
-                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+                <ImageButton
+                    android:id="@+id/homeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home_colored" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="1dp"
+                    android:text="홈"
+                    android:fontFamily="@font/font_family"
+                    android:textSize="8sp"/>
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:background="@android:color/white"
-                android:src="@drawable/notebook"/>
-            <ImageButton
-                android:id="@+id/bookmarkButton"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+                <ImageButton
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="18dp"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/white"
+                    android:src="@drawable/notebook"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="1dp"
+                    android:text="코스 편집"
+                    android:fontFamily="@font/font_family"
+                    android:textSize="8sp"/>
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:background="@android:color/white"
-                android:src="@drawable/heart"/>
-            <ImageButton
-                android:id="@+id/mypageButton"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/bookmarkButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/white"
+                    android:src="@drawable/heart"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="1dp"
+                    android:text="좋아요"
+                    android:fontFamily="@font/font_family"
+                    android:textSize="8sp"/>
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:background="@android:color/white"
-                android:src="@drawable/more"/>
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/mypageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="17dp"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/white"
+                    android:src="@drawable/more"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="1dp"
+                    android:text="더보기"
+                    android:fontFamily="@font/font_family"
+                    android:textSize="8sp"/>
+            </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>
