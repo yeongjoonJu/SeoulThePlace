@@ -65,7 +65,7 @@
                 android:padding="16dp"
                 android:scaleType="fitCenter"
                 android:background="@android:color/white"
-                android:src="@drawable/user"/>
+                android:src="@drawable/more"/>
         </LinearLayout>
 
     </LinearLayout>
