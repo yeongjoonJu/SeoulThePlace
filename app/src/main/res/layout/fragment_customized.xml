@@ -12,17 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="12dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bottom_bar"
+            android:fontFamily="@font/font_family"
+            android:gravity="center_horizontal|center_vertical"
             android:text="내가 만든 코스"
             android:textColor="#3B3B44"
-            android:textSize="28sp"
-            android:fontFamily="@font/font_family"
-            android:textStyle="bold"
-            />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/customized_list"
