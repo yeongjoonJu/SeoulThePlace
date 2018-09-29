@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,14 @@ import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapte
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
 import com.ensharp.seoul.seoultheplace.R;
+import com.ensharp.seoul.seoultheplace.UIElement.CourseListAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
+import com.ensharp.seoul.seoultheplace.UIElement.PlaceListAdapter;
+import com.ensharp.seoul.seoultheplace.UIElement.RecycleViewOnItemTouchListener;
+import com.ensharp.seoul.seoultheplace.UIElement.RecycleViewUtil;
 
 import org.w3c.dom.Text;
 
@@ -28,10 +34,9 @@ public class LikeFragment extends Fragment {
     private TextView courseText;
     private TextView placeText;
     private String useremail;
-    private ViewPager courseViewPager;
-    private ViewPager placeViewPager;
+    private RecyclerView courseViewPager;
+    private RecyclerView placeViewPager;
     private CourseFragmentPagerAdapter courseViewAdapter;
-    private PlaceFragmentPagerAdapter placeViewAdapter;
     private TextView noCourseMessage;
     private TextView noPlaceMessage;
 
@@ -54,10 +59,6 @@ public class LikeFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(placeViewPager != null)
-            currentPlacePosition = placeViewPager.getCurrentItem();
-        if(courseViewPager != null)
-            currentCoursePosition = courseViewPager.getCurrentItem();
     }
 
     @Override
@@ -78,9 +79,9 @@ public class LikeFragment extends Fragment {
         placeText = (TextView) rootView.findViewById(R.id.place_text);
 
         // 플레이스 카드 뷰
-        placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
+        placeViewPager = (RecyclerView) rootView.findViewById(R.id.place_search_result);
         // 코스 카드 뷰
-        courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
+        courseViewPager = (RecyclerView) rootView.findViewById(R.id.course_search_result);
 
         // 안내메시지
         noCourseMessage = (TextView) rootView.findViewById(R.id.no_like_course);
@@ -99,14 +100,12 @@ public class LikeFragment extends Fragment {
         }
 
         placeViewPager.setVisibility(View.VISIBLE);
-
-        placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(places.size(), getActivity()));
-        placeViewAdapter.setPlaceData(places);
-        ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
-        placeViewPager.setPageTransformer(false, placeCardShadowTransformer);
-        placeViewPager.setAdapter(placeViewAdapter);
+        placeViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
+        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), places, useremail);
+        placeViewPager.setAdapter(placeListAdapter);
     }
 
+    // 코스 카드 뷰
     protected void showCourseCardView(int currentPosition) {
         ArrayList<CourseVO> courses = dao.getLikedCourseList(useremail);
         if(courses == null || courses.size() == 0){
@@ -116,11 +115,14 @@ public class LikeFragment extends Fragment {
         }
 
         courseViewPager.setVisibility(View.VISIBLE);
+        courseViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
+        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail);
+        courseViewPager.setAdapter(courseListAdapter);
 
-        courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
-        courseViewAdapter.setCourseData(courses);
-        ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
-        courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
-        courseViewPager.setAdapter(courseViewAdapter);
+//        courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
+//        courseViewAdapter.setCourseData(courses);
+//        ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
+//        courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
+//        courseViewPager.setAdapter(courseViewAdapter);
     }
 }
