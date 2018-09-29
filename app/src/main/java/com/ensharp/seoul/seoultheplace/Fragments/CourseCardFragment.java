@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
@@ -21,15 +22,14 @@ public class CourseCardFragment extends Fragment {
     public static final int COURSE_IMAGE = 3;
 
     private CardView cardView;
-    private ImageButton heartButton;
+    private ImageView heartButton;
     private CourseVO course;
-    private Drawable unchoicedHeart;
-    private Drawable choicedHeart;
     private int position;
     private DAO dao;
     private String useremail;
+    private boolean isLiked = false;
 
-    private ImageButton image;
+    private ImageView image;
     private TextView name;
     private TextView location;
 
@@ -43,8 +43,6 @@ public class CourseCardFragment extends Fragment {
         dao = new DAO();
         SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
         useremail = preferences.getString("email", null);
-        choicedHeart = getResources().getDrawable(R.drawable.choiced_heart);
-        unchoicedHeart = getResources().getDrawable(R.drawable.unchoiced_heart);
     }
 
     public void setData(CourseVO course) {
@@ -65,39 +63,36 @@ public class CourseCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.item_course, container, false);
 
         cardView = (CardView) view.findViewById(R.id.courseView);
-        cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
+//        cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
+        cardView.setOnClickListener(onCardViewClickListener);
+        cardView.setCardElevation(0);
+        CardView imageBox = (CardView) view.findViewById(R.id.image_container);
+        imageBox.setCardElevation(0);
+        CardView backgroundBox = (CardView) view.findViewById(R.id.container);
+        backgroundBox.setCardElevation(0);
 
-        image = (ImageButton) view.findViewById(R.id.course_image);
+        heartButton = (ImageView) view.findViewById(R.id.like_button);
+        heartButton.setOnClickListener(onHeartButtonClickListener);
+        setHeart();
+
+        image = (ImageView) view.findViewById(R.id.course_image);
         name = (TextView) view.findViewById(R.id.course_name);
         location = (TextView) view.findViewById(R.id.course_location);
-        heartButton = (ImageButton) view.findViewById(R.id.like_button);
-        if(course != null) {
-            if(dao.checkLikedCourse(course.getCode(), useremail).equals("true"))
-                heartButton.setImageDrawable(choicedHeart);
-            else
-                heartButton.setImageDrawable(unchoicedHeart);
-        }
-
         setElements();
 
-        heartButton.setOnClickListener(onHeartButtonClickListener);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MainActivity activity = (MainActivity)getActivity();
-                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
-            }
-        });
-
-        final MainActivity activity = (MainActivity)getActivity();
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
-            }
-        });
-
         return view;
+    }
+
+    private void setHeart() {
+        if (course == null) return;
+
+        if(dao.checkLikedCourse(course.getCode(), useremail).equals("true")) {
+            heartButton.setImageResource(R.drawable.choiced_heart);
+            isLiked = true;
+        } else {
+            heartButton.setImageResource(R.drawable.unchoiced_heart);
+            isLiked = false;
+        }
     }
 
     public void setElements() {
@@ -112,13 +107,28 @@ public class CourseCardFragment extends Fragment {
             location.setText(area[0]);
     }
 
+    public void changeToCourseFragmment() {
+        final MainActivity activity = (MainActivity)getActivity();
+        activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
+    }
+
+    public CardView.OnClickListener onCardViewClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            changeToCourseFragmment();
+        }
+    };
+
     public ImageButton.OnClickListener onHeartButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (heartButton.getDrawable().equals(choicedHeart))
-                heartButton.setImageDrawable(unchoicedHeart);
-            else
-                heartButton.setImageDrawable(choicedHeart);
+            if (isLiked) {
+                heartButton.setImageResource(R.drawable.unchoiced_heart);
+                isLiked = false;
+            } else {
+                heartButton.setImageResource(R.drawable.choiced_heart);
+                isLiked = true;
+            }
             dao.likeCourse(course.getCode(), useremail);
         }
     };

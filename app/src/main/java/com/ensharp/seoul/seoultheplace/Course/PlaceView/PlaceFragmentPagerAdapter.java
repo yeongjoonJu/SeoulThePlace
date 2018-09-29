@@ -29,7 +29,6 @@ public class PlaceFragmentPagerAdapter extends FragmentPagerAdapter implements C
         for(int i = 0; i < places.size(); i++){
             Log.i("datacheck", places.get(i).getName());
             PlaceCardFragment placeCard = new PlaceCardFragment();
-            placeCard.setPosition(i);
             placeCard.setData(places.get(i));
             addCardFragment(placeCard);
         }

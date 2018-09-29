@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,70 +11,128 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="#ffffffff"
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/setting"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bottom_bar"
+            android:fontFamily="@font/font_family"
             android:gravity="center_vertical|center_horizontal"
             android:text="더보기"
-            android:fontFamily="@font/font_family"
-            android:layout_marginBottom="50dp"
-            android:textSize="30sp"
             android:textColor="#ff000000"
-            />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/item_unchoicedtag"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="로그아웃"
-            android:fontFamily="@font/font_family"
-            android:layout_margin="5dp"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/texteditbox3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/makers"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/item_unchoicedtag"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_margin="5dp"
-            android:text="만든이들"
-            android:fontFamily="@font/font_family"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/setting_logout" />
 
-        <Button
-            android:id="@+id/introduceApps"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:background="@drawable/item_unchoicedtag"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_margin="5dp"
-            android:text="앱소개"
-            android:fontFamily="@font/font_family"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:fontFamily="@font/font_family"
+                android:gravity="center_vertical|left"
+
+                android:text="로그아웃"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/texteditbox3"
+
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/setting_user" />
+
+            <Button
+                android:id="@+id/makers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:fontFamily="@font/font_family"
+                android:gravity="center_vertical|left"
+
+                android:text="만든이들"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/texteditbox3"
+
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/setting_info" />
+
+            <Button
+                android:id="@+id/introduceApps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@null"
+                android:fontFamily="@font/font_family"
+                android:gravity="center_vertical|left"
+                android:text="앱소개"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/versionView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="#00000000"
             android:focusable="false"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_margin="5dp"
-            android:text="버전 정보 / 1.0.0"
             android:fontFamily="@font/font_family"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="버전 정보 / 1.0.0"
             android:textColor="#595959"
             android:textSize="15sp" />
 
