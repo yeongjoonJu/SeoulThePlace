@@ -1,28 +1,18 @@
 package com.ensharp.seoul.seoultheplace.Fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CardAdapter;
 import com.ensharp.seoul.seoultheplace.*;
-import com.ensharp.seoul.seoultheplace.UIElement.UpperRoundedImageView;
 
 public class PlaceCardFragment extends Fragment {
 
@@ -36,6 +26,12 @@ public class PlaceCardFragment extends Fragment {
     private boolean isLiked = false;
 
     public PlaceCardFragment() {
+    }
+
+    public String getPlaceName() {
+        if(place != null)
+            return place.getName();
+        return "";
     }
 
     public void setData(PlaceVO place) {
@@ -69,7 +65,7 @@ public class PlaceCardFragment extends Fragment {
 //        FrameLayout imageContainer = (FrameLayout) view.findViewById(R.id.image_container);
 //        imageContainer.setBackground(getContext().getResources().getDrawable(R.drawable.item_place_card_upper_background));
 
-        LinearLayout bottomLayout = (LinearLayout) view.findViewById(R.id.text_container);
+        //LinearLayout bottomLayout = (LinearLayout) view.findViewById(R.id.text_container);
 //        bottomLayout.setBackground(getContext().getResources().getDrawable(R.drawable.item_place_card_bottom_background));
 
         heartButton = (ImageView) view.findViewById(R.id.like_button);

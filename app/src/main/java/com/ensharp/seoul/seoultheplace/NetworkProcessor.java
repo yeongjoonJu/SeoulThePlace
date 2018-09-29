@@ -2,23 +2,20 @@ package com.ensharp.seoul.seoultheplace;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
+import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class NetworkProcessor extends AsyncTask<JSONObject, Void, JSONArray> {
     private HttpURLConnection conn = null;
+    CourseFragmentPagerAdapter courseAdapter;
+    PlaceFragmentPagerAdapter placeAdapter;
 
     // 서버 연결 시도
     protected boolean connectServer(String url) {
@@ -92,6 +89,17 @@ public class NetworkProcessor extends AsyncTask<JSONObject, Void, JSONArray> {
             }
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(JSONArray jsonArray) {
+        Log.i("yeongjoon", "onPostExecute");
+        if(placeAdapter != null)
+            placeAdapter.notifyDataSetChanged();
+        if(courseAdapter != null)
+            courseAdapter.notifyDataSetChanged();
+        placeAdapter = null;
+        courseAdapter = null;
     }
 
     @Override

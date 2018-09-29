@@ -43,7 +43,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class HorizontalListView extends AdapterView<ListAdapter> {
-
 	public boolean mAlwaysOverrideTouch = true;
 	protected ListAdapter mAdapter;
 	private int mLeftViewIndex = -1;
@@ -59,13 +58,17 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	private OnItemClickListener mOnItemClicked;
 	private OnItemLongClickListener mOnItemLongClicked;
 	private boolean mDataChanged = false;
-	
+	private int gap = 0;
 
 	public HorizontalListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initView();
 	}
-	
+
+	public void setGap(int gap) {
+		this.gap = gap;
+	}
+
 	private synchronized void initView() {
 		mLeftViewIndex = -1;
 		mRightViewIndex = 0;
@@ -76,7 +79,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		mScroller = new Scroller(getContext());
 		mGesture = new GestureDetector(getContext(), mOnGesture);
 	}
-	
+
 	@Override
 	public void setOnItemSelectedListener(OnItemSelectedListener listener) {
 		mOnItemSelected = listener;
@@ -277,7 +280,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 				View child = getChildAt(i);
 				int childWidth = child.getMeasuredWidth();
 				child.layout(left, 0, left + childWidth, child.getMeasuredHeight());
-				left += childWidth;
+				left += childWidth + gap;
 			}
 		}
 	}

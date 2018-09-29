@@ -7,8 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.*;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 
-public class CourseHolder extends RecyclerView.ViewHolder {
+public class CourseMainHolder extends RecyclerView.ViewHolder {
     private DAO dao = new DAO();
     private MainActivity activity;
     private Context context;
@@ -20,25 +21,16 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     private ImageView image;
     private TextView name;
     private TextView location;
-    private TextView likes;
     private ImageView like;
     private boolean isLiked = false;
 
-    public CourseHolder(View itemView, MainActivity activity) {
+    public CourseMainHolder(View itemView, MainActivity activity) {
         super(itemView);
 
         this.activity = activity;
-        container = (CardView) itemView.findViewById(R.id.courseView);
-        container.setElevation(0);
-        container.setCardElevation(0);
-        container.setOnClickListener(onContainerClickListener);
-        textBox = (CardView) itemView.findViewById(R.id.container);
-        textBox.setElevation(0);
-        textBox.setCardElevation(0);
-        image = (ImageView) itemView.findViewById(R.id.course_image);
-        name = (TextView)itemView.findViewById(R.id.course_name);
-        location = (TextView)itemView.findViewById(R.id.course_location);
-        likes = (TextView) itemView.findViewById(R.id.liked_count);
+        name = (TextView) itemView.findViewById(R.id.course_name);
+        location = (TextView) itemView.findViewById(R.id.course_location);
+        image = (ImageView) itemView.findViewById(R.id.ex_image);
         like = (ImageView) itemView.findViewById(R.id.like_button);
         like.setOnClickListener(onLikeClickListener);
     }
@@ -48,14 +40,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         this.context = context;
         this.userID = userID;
 
-        if(course.getImage() == null)
-            setElements();
-        else {
-            name.setText(course.getName());
-            PicassoImage.DownLoadImage(course.getImage(), image);
-            location.setText(course.getLocation());
-        }
-
+        setElements();
         if (dao.checkLikedCourse(course.getCode(), userID).equals("true")) {
             like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
             isLiked = true;
@@ -80,7 +65,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     private View.OnClickListener onContainerClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            activity.changeToPlaceFragment(place.getCode(), PlaceFragment.VIA_SEARCH);
+            activity.changeToCourseFragment(dao.getCourseData(course.getCode()), CourseFragment.VIA_NORMAL);
         }
     };
 
