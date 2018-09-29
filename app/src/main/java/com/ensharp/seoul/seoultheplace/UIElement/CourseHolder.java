@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.*;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
+import com.ensharp.seoul.seoultheplace.R;
 
 public class CourseHolder extends RecyclerView.ViewHolder {
     private DAO dao = new DAO();
@@ -54,6 +56,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
             name.setText(course.getName());
             PicassoImage.DownLoadImage(course.getImage(), image);
             location.setText(course.getLocation());
+            likes.setText(String.valueOf(course.getLikes()));
         }
 
         if (dao.checkLikedCourse(course.getCode(), userID).equals("true")) {
@@ -69,6 +72,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
         PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
         name.setText(course.getName());
+        likes.setText(String.valueOf(course.getLikes()));
 
         String[] area = firstPlace.getLocation().split(" ");
         if(area.length >= 2)
@@ -80,7 +84,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     private View.OnClickListener onContainerClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            activity.changeToPlaceFragment(place.getCode(), PlaceFragment.VIA_SEARCH);
+            activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
         }
     };
 

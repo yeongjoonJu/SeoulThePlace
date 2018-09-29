@@ -6,7 +6,7 @@
     android:id="@+id/courseView"
     app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="430dp"
     android:layout_gravity="center"
     card_view:cardBackgroundColor="#00000000"
     card_view:cardCornerRadius="@dimen/card_radius">
@@ -31,7 +31,7 @@
                 android:id="@+id/course_image"
                 android:layout_width="match_parent"
                 android:layout_height="330dp"
-                android:background="@drawable/drawable_rounded_corner_background"
+                android:background="@color/non_active_dot"
                 android:scaleType="centerCrop"
                 android:elevation="5dp"/>
 
@@ -115,8 +115,7 @@
                     android:fontFamily="@font/font_family"
                     android:textColor="@color/course_cardview_location"
                     android:textSize="@dimen/course_location_size"
-                    android:singleLine="true"
-                    android:text="가나다라"/>
+                    android:singleLine="true"/>
 
                 <View
                     android:layout_width="fill_parent"
@@ -144,8 +143,7 @@
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/font_family"
                         android:textSize="@dimen/course_like_size"
-                        android:textColor="@color/course_like"
-                        android:text="7"/>
+                        android:textColor="@color/course_like" />
 
                 </LinearLayout>
 
