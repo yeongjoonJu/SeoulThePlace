@@ -52,7 +52,7 @@
                     android:layout_marginTop="1dp"
                     android:text="홈"
                     android:fontFamily="@font/font_family"
-                    android:textSize="8sp"/>
+                    android:textSize="@dimen/tab_font_size"/>
             </FrameLayout>
 
             <FrameLayout
@@ -77,7 +77,7 @@
                     android:layout_marginTop="1dp"
                     android:text="코스 편집"
                     android:fontFamily="@font/font_family"
-                    android:textSize="8sp"/>
+                    android:textSize="@dimen/tab_font_size"/>
             </FrameLayout>
 
             <FrameLayout
@@ -101,7 +101,7 @@
                     android:layout_marginTop="1dp"
                     android:text="좋아요"
                     android:fontFamily="@font/font_family"
-                    android:textSize="8sp"/>
+                    android:textSize="@dimen/tab_font_size"/>
             </FrameLayout>
 
             <FrameLayout
@@ -125,7 +125,7 @@
                     android:layout_marginTop="1dp"
                     android:text="더보기"
                     android:fontFamily="@font/font_family"
-                    android:textSize="8sp"/>
+                    android:textSize="@dimen/tab_font_size"/>
             </FrameLayout>
 
         </LinearLayout>
