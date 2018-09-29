@@ -16,6 +16,7 @@ import com.ensharp.seoul.seoultheplace.R;
 
 public class SaveCourseActivity extends Activity {
 
+    Toast mToast;
     EditText title;
     EditText description;
     Intent intent;
@@ -51,7 +52,8 @@ public class SaveCourseActivity extends Activity {
                     finish();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "모든 항목을 입력해주세요.",Toast.LENGTH_LONG).show();
+                    showAToast("모든 항목을 입력해주세요.");
+//                    Toast.makeText(getApplicationContext(), "모든 항목을 입력해주세요.",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -62,7 +64,8 @@ public class SaveCourseActivity extends Activity {
         String Id = getSharedPreferences("data", 0).getString("email","");
         if(dao.SaveNameCheck(Id,title))
             return true;
-        Toast.makeText(getApplicationContext(),"중복된 제목입니다.",Toast.LENGTH_LONG).show();
+        showAToast("중복된 제목입니다.");
+//        Toast.makeText(getApplicationContext(),"중복된 제목입니다.",Toast.LENGTH_LONG).show();
         return false;
     }
 
@@ -71,7 +74,8 @@ public class SaveCourseActivity extends Activity {
         if(titles.length()>0&&titles.length()<20){
             return true;
         }
-        Toast.makeText(getApplicationContext(),"제목이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
+        showAToast("제목이 너무 길거나 짧습니다.");
+//        Toast.makeText(getApplicationContext(),"제목이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
         return false;
     }
 
@@ -80,7 +84,8 @@ public class SaveCourseActivity extends Activity {
         if(titles.length()>0&&titles.length()<150){
             return true;
         }
-        Toast.makeText(getApplicationContext(),"설명이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
+        showAToast("설명이 너무 길거나 짧습니다.");
+//        Toast.makeText(getApplicationContext(),"설명이 너무 길거나 짧습니다.",Toast.LENGTH_LONG).show();
         return false;
     }
 
@@ -91,6 +96,14 @@ public class SaveCourseActivity extends Activity {
             return false;
         }
         return true;
+    }
+
+    public void showAToast (String message){ //"Toast toast" is declared in the class
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 }
 

@@ -42,6 +42,7 @@
             android:inputType="text"
             android:textColor="#000"
             android:textSize="15sp"
+            android:background="@drawable/edittext_border_color"
             android:fontFamily="@font/font_family"/>
 
         <EditText
@@ -55,6 +56,7 @@
             android:hint="코스 설명 150자 이내"
             android:textColor="#000"
             android:textSize="15sp"
+            android:background="@drawable/edittext_border_color"
             android:fontFamily="@font/font_family"/>
     </LinearLayout>
     <!-- Notice -->
