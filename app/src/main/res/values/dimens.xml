@@ -37,7 +37,20 @@
     <dimen name="course_card_title_size">19sp</dimen>
     <dimen name="course_card_description_size">14sp</dimen>
     <dimen name="course_card_guide_size">13sp</dimen>
-
     <dimen name="course_place_name_size">20sp</dimen>
     <dimen name="course_place_location_size">16sp</dimen>
+
+    <!--메인 코스 카드 설정-->
+    <dimen name="course_margintop">-42.61dp</dimen>
+    <dimen name="course_name_size">19sp</dimen>
+    <dimen name="course_location_size">15sp</dimen>
+    <dimen name="course_like_size">13sp</dimen>
+
+    <!--메인 플레이스 카드 설정-->
+    <dimen name="place_margintop">-42.61dp</dimen>
+    <dimen name="place_name_size">19sp</dimen>
+    <dimen name="place_location_size">15sp</dimen>
+    <dimen name="place_like_size">13sp</dimen>
+    <dimen name="card_radius">30dp</dimen>
+    <dimen name="card_radius_margin">-18dp</dimen>
 </resources>

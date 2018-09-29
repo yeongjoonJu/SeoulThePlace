@@ -36,4 +36,9 @@
 
     <color name="course_place_name">#000000</color>
     <color name="course_place_location">#868686</color>
+
+    <color name="like_background_transparent_white">#88FFFFFF</color>
+
+    <color name="course_cardview_location">#B2B2B2</color>
+    <color name="place_cardview_location">#B2B2B2</color>
 </resources>
