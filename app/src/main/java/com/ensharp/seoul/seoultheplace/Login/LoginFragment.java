@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.GlobalApplication;
 import com.ensharp.seoul.seoultheplace.Login.KakaoLogin.SessionCallback;
@@ -38,8 +39,9 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
     GoogleApiClient mGoogleApiClient;
     SignInButton googleLoginBtn;
     LoginButton kakaoLoginBtn;
-    public static OAuthLogin mOAuthLoginModule;
-    OAuthLoginButton mOAuthLoginButton;
+
+    ImageView kakaoLogin;
+    ImageView googleLogin;
 
     Button emailLogin;
     Button makeID;
@@ -65,7 +67,9 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
 
         kakaoLoginBtn = (LoginButton)view.findViewById(R.id.kakao_login);
         kakaoLoginBtn.setOnClickListener(this);
+        kakaoLogin = (ImageView)view.findViewById(R.id.fake_kakao);
 
+        googleLogin = (ImageView)view.findViewById(R.id.fake_google);
         googleLoginBtn = (SignInButton)view.findViewById(R.id.google_login);
         googleLoginBtn.setSize(SignInButton.SIZE_STANDARD);
         googleLoginBtn.setOnClickListener(this);
@@ -121,6 +125,13 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Vi
             case R.id.EmailLogin:
                 LActivity.EmailLoginChanger();
                 break;
+            case R.id.fake_google:
+                googleLoginBtn.performClick();
+                break;
+            case R.id.fake_kakao:
+                kakaoLoginBtn.performClick();
+                break;
+
         }
     }
     public static void SNSSignIn(){

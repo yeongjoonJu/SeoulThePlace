@@ -25,26 +25,51 @@
             android:layout_weight="8"
             app:srcCompat="@drawable/title2" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_login"
-            android:layout_width="210dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="10dp"
-            android:scaleType="fitXY"></com.google.android.gms.common.SignInButton>
 
-        <com.kakao.usermgmt.LoginButton
-            android:id="@+id/kakao_login"
+        <FrameLayout
             android:layout_width="200dp"
             android:layout_height="55dp"
-            android:layout_marginBottom="10dp"
-            android:scaleType="fitXY" />
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:scaleType="fitXY"/>
+            <ImageView
+                android:id="@+id/fake_google"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/google_login"/>
+
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="10dp">
+
+            <com.kakao.usermgmt.LoginButton
+                android:id="@+id/kakao_login"
+                android:layout_width="200dp"
+                android:layout_height="55dp"
+                android:layout_marginBottom="10dp"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/fake_kakao"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/kakao_login"/>
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/EmailLogin"
             android:layout_width="200dp"
             android:layout_height="55dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/emaillogin"
+            android:background="@drawable/email_login"
             android:scaleType="fitXY" />
 
         <Button
