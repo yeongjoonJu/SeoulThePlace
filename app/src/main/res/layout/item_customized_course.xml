@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/item_unchoicedtag"
+                android:background="@color/non_active_dot"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
