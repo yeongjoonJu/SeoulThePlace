@@ -40,6 +40,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--<FrameLayout-->
+            <!--android:id="@+id/fl_change"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="84dp"-->
+            <!--android:visibility="gone"/>-->
+
             <TextView
                 android:id="@+id/cource_text"
                 android:layout_width="match_parent"
@@ -68,7 +74,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/course_search_result"
                 android:layout_width="match_parent"
-                android:layout_height="310dp"
+                android:layout_height="430dp"
                 android:layout_gravity="bottom"
                 android:clipToPadding="false"
                 android:overScrollMode="never" />
@@ -78,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="8dp"
                 android:text="플레이스"
                 android:textColor="@color/like_small_title"

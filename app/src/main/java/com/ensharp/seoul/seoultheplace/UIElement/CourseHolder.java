@@ -28,6 +28,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     private ImageView image;
     private TextView name;
     private TextView location;
+    private TextView likes;
     private ImageView like;
     private boolean isLiked = false;
 
@@ -45,6 +46,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         image = (ImageView) itemView.findViewById(R.id.course_image);
         name = (TextView)itemView.findViewById(R.id.course_name);
         location = (TextView)itemView.findViewById(R.id.course_location);
+        likes = (TextView) itemView.findViewById(R.id.liked_count);
         like = (ImageView) itemView.findViewById(R.id.like_button);
         like.setOnClickListener(onLikeClickListener);
     }
@@ -56,7 +58,8 @@ public class CourseHolder extends RecyclerView.ViewHolder {
 
         name.setText(course.getName());
         PicassoImage.DownLoadImage(course.getImage(), image);
-        location.setText(course.getLocation());
+//        location.setText(course.getLocation());
+//        likes.setText(course.getLikes());
         if (dao.checkLikedCourse(course.getCode(), userID).equals("true")) {
             like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
             isLiked = true;

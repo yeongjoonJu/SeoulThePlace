@@ -36,6 +36,7 @@
 
     <color name="course_place_name">#000000</color>
     <color name="course_place_location">#868686</color>
+    <color name="course_like">#868686</color>
 
     <color name="like_background_transparent_white">#88FFFFFF</color>
 

@@ -20,7 +20,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/image_container"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="330dp"
             android:layout_gravity="top"
             android:elevation="0dp"
             app:cardElevation="0dp"
@@ -30,9 +30,10 @@
             <ImageView
                 android:id="@+id/course_image"
                 android:layout_width="match_parent"
-                android:layout_height="273dp"
+                android:layout_height="330dp"
                 android:background="@drawable/drawable_rounded_corner_background"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:elevation="5dp"/>
 
             <FrameLayout
                 android:layout_width="50dp"
@@ -40,7 +41,8 @@
                 android:layout_gravity="top|right"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/item_transparent_circle">
+                android:background="@drawable/item_transparent_circle"
+                android:elevation="5dp">
 
                 <ImageView
                     android:id="@+id/like_button"
@@ -55,53 +57,99 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="130dp"
             android:layout_gravity="bottom"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-43dp"
+            android:layout_marginTop="-45dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            card_view:cardBackgroundColor="#00000000"
+            card_view:cardCornerRadius="@dimen/card_radius"
+            app:cardElevation="-1dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/item_transparent_backround"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:elevation="5dp"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-150dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            card_view:cardBackgroundColor="#00000000">
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="@dimen/card_radius">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:paddingTop="10dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                card_view:cardBackgroundColor="@color/white"
-                card_view:cardCornerRadius="@dimen/card_radius">
+                android:layout_gravity="top|left"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/course_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold_font_family"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/course_name_size" />
+
+                <TextView
+                    android:id="@+id/course_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:fontFamily="@font/font_family"
+                    android:textColor="@color/course_cardview_location"
+                    android:textSize="@dimen/course_location_size"
+                    android:singleLine="true"
+                    android:text="가나다라"/>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/non_active_dot"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="left|center"
+                        android:background="@drawable/choiced_heart"/>
 
                     <TextView
-                        android:id="@+id/course_name"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/liked_count"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="8dp"
                         android:fontFamily="@font/font_family"
-                        android:maxLength="16"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/course_name_size" />
-
-                    <TextView
-                        android:id="@+id/course_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/font_family"
-                        android:singleLine="true"
-                        android:textColor="@color/course_cardview_location"
-                        android:textSize="@dimen/course_location_size" />
+                        android:textSize="@dimen/course_like_size"
+                        android:textColor="@color/course_like"
+                        android:text="7"/>
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 

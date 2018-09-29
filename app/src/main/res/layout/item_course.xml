@@ -63,11 +63,6 @@
             android:layout_marginRight="30dp"
             card_view:cardBackgroundColor="#00000000">
 
-
-            <com.sdsmdg.harjot.materialshadows.MaterialShadowViewWrapper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
             <android.support.v7.widget.CardView
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
@@ -76,37 +71,33 @@
                 card_view:cardCornerRadius="@dimen/card_radius"
                 android:elevation="15dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/course_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/font_family"
-                            android:maxLength="16"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/course_name_size" />
+                    <TextView
+                        android:id="@+id/course_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family"
+                        android:maxLength="16"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/course_name_size" />
 
-                        <TextView
-                            android:id="@+id/course_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/font_family"
-                            android:singleLine="true"
-                            android:textColor="@color/course_cardview_location"
-                            android:textSize="@dimen/course_location_size" />
+                    <TextView
+                        android:id="@+id/course_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family"
+                        android:singleLine="true"
+                        android:textColor="@color/course_cardview_location"
+                        android:textSize="@dimen/course_location_size" />
 
-                    </LinearLayout>
-
-
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-            </com.sdsmdg.harjot.materialshadows.MaterialShadowViewWrapper>
 
         </android.support.v7.widget.CardView>
 
