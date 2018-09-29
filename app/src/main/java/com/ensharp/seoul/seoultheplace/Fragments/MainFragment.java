@@ -198,8 +198,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-
-
         // 플레이스 카드 뷰
         searchView.setController(new JJBarWithErrorIconController());
         end.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +205,18 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 viewVisible();
                 search(rootView);
+                // 최근 검색어 SharedPreference에 저장
+                if(listAdapter != null) {
+                    SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    for (int i = 0; i < listAdapter.getCount(); i++) {
+                        if (i >= 6)
+                            break;
+                        if (listAdapter.getItem(i) != null)
+                            editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+                    }
+                    editor.commit();
+                }
             }
         });
 
@@ -239,6 +249,7 @@ public class MainFragment extends Fragment {
         // 검색어를 입력하지 않은 경우 제외
         if(searchWord.length() != 0 && !searchWord.equals(" ")) {
             listAdapter.insert(searchWord, 0);
+
             // 코스 검색
             showCourseCardView(SEARCH, searchWord);
             // 플레이스 검색
@@ -251,6 +262,7 @@ public class MainFragment extends Fragment {
 
         // 결과가 없으면 결과없음 출력
         if(courseViewPager.getVisibility() == View.INVISIBLE && placeViewPager.getVisibility() == View.INVISIBLE) {
+            noSearchResult.setText("검색 결과가 없습니다");
             noSearchResult.setVisibility(View.VISIBLE);
         }
 
@@ -261,27 +273,19 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        // 최근 검색어 SharedPreference에 저장
-        if(listAdapter != null) {
-            SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            for (int i = 0; i < listAdapter.getCount(); i++) {
-                if (i >= 6)
-                    break;
-                if (listAdapter.getItem(i) != null)
-                    editor.putString("RecentSearch" + i, listAdapter.getItem(i));
-            }
-            editor.commit();
-        }
     }
 
     public void renewCardView(String type) {
         placeViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setVisibility(View.VISIBLE);
-        noSearchResult.setVisibility(View.GONE);
         showCourseCardView(TYPE, type);
         showPlaceCardView(TYPE, type);
+        if(placeViewPager.getVisibility() == View.INVISIBLE && courseViewPager.getVisibility() == View.INVISIBLE) {
+            noSearchResult.setText("추천 플레이스 및 코스가 없습니다");
+            noSearchResult.setVisibility(View.VISIBLE);
+        }
+        else
+            noSearchResult.setVisibility(View.GONE);
     }
 
     // 플레이스 카드 뷰
