@@ -1,7 +1,6 @@
 package com.ensharp.seoul.seoultheplace;
 
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +42,6 @@ public class  CourseVO {
 
     public CourseVO(JSONObject jsonObject) {
         try {
-
             code = jsonObject.getString("Code");
             name = jsonObject.getString("Name");
             if(!jsonObject.isNull("Type"))
@@ -60,8 +58,10 @@ public class  CourseVO {
             if(!jsonObject.isNull("Details")) {
                 details = jsonObject.getString("Details");
             }
-            if(!jsonObject.isNull("Image"))
+            if(!jsonObject.isNull("Image")) {
+                Log.i("loadImage", jsonObject.getString("image"));
                 image = jsonObject.getString("Image");
+            }
             if(!jsonObject.isNull("location"))
                 location = jsonObject.getString("location");
             if(!jsonObject.isNull("User_Likes")) {

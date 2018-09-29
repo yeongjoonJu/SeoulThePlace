@@ -148,7 +148,7 @@
                 android:background="#FFFFFF"
                 android:text="코스"/>
 
-            <android.support.v4.view.ViewPager
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/course_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -176,7 +176,7 @@
                 android:background="#FFFFFF"
                 android:text="플레이스"/>
 
-            <android.support.v4.view.ViewPager
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/place_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

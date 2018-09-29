@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +12,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
-import com.ensharp.seoul.seoultheplace.Course.PlaceView.ShadowTransformer;
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
-import com.ensharp.seoul.seoultheplace.R;
-import com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView;
-import com.ensharp.seoul.seoultheplace.UIElement.RecentSearchAdapter;
+import com.ensharp.seoul.seoultheplace.*;
+import com.ensharp.seoul.seoultheplace.UIElement.*;
 import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJBarWithErrorIconController;
 import com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView;
-import com.ensharp.seoul.seoultheplace.UIElement.TagAdapter;
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
@@ -29,8 +23,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigat
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
-
-import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class MainFragment extends Fragment {
     ArrayList<String> tags = new ArrayList<String>(
@@ -53,8 +45,8 @@ public class MainFragment extends Fragment {
     TagAdapter tagAdapter;
     TextView courseText;
     TextView placeText;
-    ViewPager courseViewPager;
-    ViewPager placeViewPager;
+    RecyclerView courseViewPager;
+    RecyclerView placeViewPager;
     CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
     Button transformButton;
@@ -156,8 +148,8 @@ public class MainFragment extends Fragment {
         recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
         end = rootView.findViewById(R.id.end);
         searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
-        placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
-        courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
+        placeViewPager = (RecyclerView) rootView.findViewById(R.id.place_search_result);
+        courseViewPager = (RecyclerView) rootView.findViewById(R.id.course_search_result);
         transformButton = (Button) rootView.findViewById(R.id.transform_button);
 
         transformButton.setOnClickListener(new View.OnClickListener() {
@@ -265,10 +257,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(placeViewPager != null)
-            currentPlacePosition = placeViewPager.getCurrentItem();
-        if(courseViewPager != null)
-            currentCoursePosition = courseViewPager.getCurrentItem();
 
         // 최근 검색어 SharedPreference에 저장
         if(listAdapter != null) {
@@ -305,22 +293,9 @@ public class MainFragment extends Fragment {
             return;
         }
         placeText.setVisibility(View.VISIBLE);
-        placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
-        placeViewAdapter.setPlaceData(places);
-        placeViewAdapter.notifyDataSetChanged();
-        ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
-        placeViewPager.setPageTransformer(false, placeCardShadowTransformer);
-        try {
-            placeViewPager.setAdapter(placeViewAdapter);
-        }catch(Exception e) {
-            e.printStackTrace();
-            placeViewAdapter = new PlaceFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
-            placeViewAdapter.setPlaceData(places);
-            placeViewAdapter.notifyDataSetChanged();
-        }
-        placeViewPager.setOffscreenPageLimit(3);
-        placeViewPager.setCurrentItem(0);
-        placeCardShadowTransformer.enableScaling(true);
+        placeViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
+        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), places, useremail);
+        placeViewPager.setAdapter(placeListAdapter);
     }
 
     protected void showCourseCardView(int dataType, String word) {
@@ -335,21 +310,9 @@ public class MainFragment extends Fragment {
             return;
         }
         courseText.setVisibility(View.VISIBLE);
-        courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
-        courseViewAdapter.setCourseData(courses);
-        courseViewAdapter.notifyDataSetChanged();
-        ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
-        courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
-        try {
-            courseViewPager.setAdapter(courseViewAdapter);
-        }catch(Exception e) {
-            e.printStackTrace();
-            courseViewAdapter = new CourseFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
-            courseViewAdapter.setCourseData(courses);
-            courseViewAdapter.notifyDataSetChanged();
-        }
-        courseViewPager.setOffscreenPageLimit(3);
-        courseViewPager.setCurrentItem(0);
-        courseCardShadowTransformer.enableScaling(true);
+
+        courseViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
+        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail);
+        courseViewPager.setAdapter(courseListAdapter);
     }
 }
