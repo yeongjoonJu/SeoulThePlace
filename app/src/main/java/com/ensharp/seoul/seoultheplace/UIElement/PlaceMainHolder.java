@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.*;
 import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
@@ -19,17 +20,20 @@ public class PlaceMainHolder extends RecyclerView.ViewHolder {
     private TextView name;
     private TextView location;
     private ImageView like;
+    private LinearLayout placeCard;
     private boolean isLiked = false;
 
     public PlaceMainHolder(View itemView, MainActivity activity) {
         super(itemView);
 
         this.activity = activity;
+        placeCard = (LinearLayout) itemView.findViewById(R.id.place_card);
         image = (ImageView) itemView.findViewById(R.id.ex_image);
         name = (TextView)itemView.findViewById(R.id.place_name);
         location = (TextView)itemView.findViewById(R.id.place_location);
         like = (ImageView) itemView.findViewById(R.id.like_button);
         like.setOnClickListener(onLikeClickListener);
+        placeCard.setOnClickListener(onContainerClickListener);
     }
 
     public void setData(PlaceVO place, Context context,  String userID) {

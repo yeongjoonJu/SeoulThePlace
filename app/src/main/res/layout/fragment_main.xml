@@ -75,7 +75,7 @@
                     android:visibility="gone"
                     android:textColor="#00BDFC"
                     android:maxLines="1"
-                    android:inputType="text" />
+                    android:inputType="text"/>
 
                 <Button
                     android:id="@+id/end"

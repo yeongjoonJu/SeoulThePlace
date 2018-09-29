@@ -1,10 +1,10 @@
 package com.ensharp.seoul.seoultheplace.UIElement;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.*;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
@@ -16,8 +16,7 @@ public class CourseMainHolder extends RecyclerView.ViewHolder {
     private CourseVO course;
     private String userID;
 
-    private CardView container;
-    private CardView textBox;
+    private LinearLayout courseCard;
     private ImageView image;
     private TextView name;
     private TextView location;
@@ -29,10 +28,12 @@ public class CourseMainHolder extends RecyclerView.ViewHolder {
 
         this.activity = activity;
         name = (TextView) itemView.findViewById(R.id.course_name);
+        courseCard = (LinearLayout) itemView.findViewById(R.id.course_card);
         location = (TextView) itemView.findViewById(R.id.course_location);
         image = (ImageView) itemView.findViewById(R.id.ex_image);
         like = (ImageView) itemView.findViewById(R.id.like_button);
         like.setOnClickListener(onLikeClickListener);
+        courseCard.setOnClickListener(onContainerClickListener);
     }
 
     public void setData(CourseVO course, Context context,  String userID) {
@@ -41,6 +42,7 @@ public class CourseMainHolder extends RecyclerView.ViewHolder {
         this.userID = userID;
 
         setElements();
+
         if (dao.checkLikedCourse(course.getCode(), userID).equals("true")) {
             like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
             isLiked = true;
