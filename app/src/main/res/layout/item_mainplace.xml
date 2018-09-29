@@ -1,87 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
-    app:cardUseCompatPadding="true"
-    android:background="@drawable/item_place_card_background"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center">
-
-    <LinearLayout
-        android:id="@+id/place"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="10"
-        android:orientation="vertical"
-        android:background="@null">
-        
-        <FrameLayout
+        android:layout_gravity="center"
+        card_view:cardBackgroundColor="#00000000"
+        card_view:cardCornerRadius="20dp">
+
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="7.1" >
-
-            <ImageView
-                android:id="@+id/placeImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:background="@drawable/item_place_card_background"/>
-
-            <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="top|right"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/item_transparent_circle" >
-
-                <ImageView
-                    android:id="@+id/like_button"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:src="@drawable/unchoiced_heart" />
-
-            </FrameLayout>
-
-        </FrameLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="4"
+            android:background="@drawable/item_unchoicedtag">
 
         <LinearLayout
-            android:id="@+id/text_container"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="3.5"
-            android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/card_radius_margin"
-            android:paddingTop="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:background="@drawable/item_place_card_bottom_background" >
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="3.0"
+                android:background="@drawable/item_unchoicedtag">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="7dp"
-                android:fontFamily="@font/bold_font_family"
-                android:textSize="@dimen/place_name_size"
-                android:textColor="@color/black"/>
+            <ImageView
+                    android:id="@+id/ex_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/item_unchoicedtag"/>
 
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:fontFamily="@font/font_family"
-                android:textSize="@dimen/place_location_size"
-                android:textColor="@color/place_cardview_location" />
+            <Button
+                    android:layout_width="600dp"
+                    android:layout_height="200dp"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:fontFamily="@font/font_family"
+                    android:background="#00000000"/>
 
         </LinearLayout>
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/place_name"
+                    android:layout_width="1dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:singleLine="true"
+                    android:text="서촌, 감성을 깨우다"
+                    android:fontFamily="@font/font_family"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/place_location"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:textSize="14sp"
+                android:textColor="#000000"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:padding="2dp"
+                android:singleLine="true"
+                android:layout_marginBottom="4dp"
+                android:text="서울특별시 종로구 청운효자동"
+                android:fontFamily="@font/font_family"/>
+
     </LinearLayout>
+    <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/item_transparent_circle">
+
+        <ImageView
+                android:id="@+id/like_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/unchoiced_heart" />
+
+    </FrameLayout>
 </android.support.v7.widget.CardView>

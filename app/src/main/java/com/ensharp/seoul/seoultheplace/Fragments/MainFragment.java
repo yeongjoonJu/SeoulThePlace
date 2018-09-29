@@ -294,7 +294,7 @@ public class MainFragment extends Fragment {
         }
         placeText.setVisibility(View.VISIBLE);
         placeViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
-        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), places, useremail);
+        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), places, useremail, 1);
         placeViewPager.setAdapter(placeListAdapter);
     }
 
@@ -310,9 +310,8 @@ public class MainFragment extends Fragment {
             return;
         }
         courseText.setVisibility(View.VISIBLE);
-
         courseViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
-        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail);
+        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail, 1);
         courseViewPager.setAdapter(courseListAdapter);
     }
 }
