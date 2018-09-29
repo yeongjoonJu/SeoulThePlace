@@ -1,10 +1,10 @@
 package com.ensharp.seoul.seoultheplace.Course.PlaceView;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.ViewGroup;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.Fragments.CourseCardFragment;
@@ -30,6 +30,11 @@ public class CourseFragmentPagerAdapter extends FragmentPagerAdapter implements 
             courseCard.setData(courses.get(i));
             addCardFragment(courseCard);
         }
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
     public void addCardFragment(CourseCardFragment fragment) {

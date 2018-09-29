@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
@@ -35,7 +34,7 @@ import static com.ensharp.seoul.seoultheplace.MainActivity.dpToPixels;
 
 public class MainFragment extends Fragment {
     ArrayList<String> tags = new ArrayList<String>(
-            Arrays.asList(new String[]{"연인끼리", "혼자서", "친구끼리", "가족끼리", "먹방투어", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
+            Arrays.asList(new String[]{"연인끼리", "혼자서", "친구끼리", "먹방투어", "가족끼리", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
     private static final String[] CHANNELS = new String[]{"타입별", "검색"};
     private MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;
@@ -58,6 +57,7 @@ public class MainFragment extends Fragment {
     ViewPager placeViewPager;
     CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
+    Button transformButton;
 
     // 검색
     EditText searchEditText;
@@ -67,7 +67,6 @@ public class MainFragment extends Fragment {
     TextView noSearchResult;
     JJSearchView searchView;
     Button end;
-    boolean isAnimated = false;
 
     // 최근 검색
     LinearLayout recentList;
@@ -94,14 +93,14 @@ public class MainFragment extends Fragment {
     }
 
     public void viewInvisible() {
-        if(recentList != null)
+        if (recentList != null)
             recentList.setVisibility(View.VISIBLE);
-        if(searchPlaceResult != null) {
+        if (searchPlaceResult != null) {
             placeText.setVisibility(View.INVISIBLE);
             placeViewPager.setVisibility(View.INVISIBLE);
             noSearchResult.setVisibility(View.GONE);
         }
-        if(searchCourseResult != null) {
+        if (searchCourseResult != null) {
             courseText.setVisibility(View.INVISIBLE);
             courseViewPager.setVisibility(View.INVISIBLE);
             noSearchResult.setVisibility(View.GONE);
@@ -120,12 +119,10 @@ public class MainFragment extends Fragment {
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         SharedPreferences preferences = getContext().getSharedPreferences("data", getContext().MODE_PRIVATE);
         useremail = preferences.getString("email", null);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
+        //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     public void loadRecentSearch() {
-
         // 최근 검색어 SharedPreference에서 가져온다
         recentSearchList = new ArrayList<>();
         SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
@@ -145,7 +142,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.course_text);
@@ -161,8 +158,8 @@ public class MainFragment extends Fragment {
         searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
         placeViewPager = (ViewPager) rootView.findViewById(R.id.place_search_result);
         courseViewPager = (ViewPager) rootView.findViewById(R.id.course_search_result);
+        transformButton = (Button) rootView.findViewById(R.id.transform_button);
 
-        final Button transformButton = (Button) rootView.findViewById(R.id.transform_button);
         transformButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,7 +210,7 @@ public class MainFragment extends Fragment {
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endAnimation();
+                search(rootView);
             }
         });
 
@@ -227,11 +224,9 @@ public class MainFragment extends Fragment {
     private void initSearchBar() {
         searchEditText.setVisibility(View.VISIBLE);
         end.setVisibility(View.VISIBLE);
-        if (isAnimated) searchView.startAnim();
-        isAnimated = true;
     }
 
-    private void endAnimation() {
+    private void search(View v) {
         recentList.setVisibility(View.GONE);
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
@@ -241,11 +236,11 @@ public class MainFragment extends Fragment {
         String searchWord = String.valueOf(searchEditText.getText());
         // 15글자 이상이거나 공백문자가 두 개 이상 포함되어있으면 검색하지 않음
         if( searchWord.length() > 15)
-        searchWord = searchWord.substring(0, 14);
+            searchWord = searchWord.substring(0, 14);
         if(Pattern.matches("^[ ]{2,}", searchWord))
-        searchWord = "";
+            searchWord = "";
 
-        // 검색어를 입력하지 않은 경우
+        // 검색어를 입력하지 않은 경우 제외
         if(searchWord.length() != 0 && !searchWord.equals(" ")) {
             listAdapter.insert(searchWord, 0);
             // 코스 검색
@@ -312,6 +307,7 @@ public class MainFragment extends Fragment {
         placeText.setVisibility(View.VISIBLE);
         placeViewAdapter = new PlaceFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         placeViewAdapter.setPlaceData(places);
+        placeViewAdapter.notifyDataSetChanged();
         ShadowTransformer placeCardShadowTransformer = new ShadowTransformer(placeViewPager, placeViewAdapter);
         placeViewPager.setPageTransformer(false, placeCardShadowTransformer);
         try {
@@ -320,6 +316,7 @@ public class MainFragment extends Fragment {
             e.printStackTrace();
             placeViewAdapter = new PlaceFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
             placeViewAdapter.setPlaceData(places);
+            placeViewAdapter.notifyDataSetChanged();
         }
         placeViewPager.setOffscreenPageLimit(3);
         placeViewPager.setCurrentItem(0);
@@ -340,6 +337,7 @@ public class MainFragment extends Fragment {
         courseText.setVisibility(View.VISIBLE);
         courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
         courseViewAdapter.setCourseData(courses);
+        courseViewAdapter.notifyDataSetChanged();
         ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
         courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
         try {
@@ -348,6 +346,7 @@ public class MainFragment extends Fragment {
             e.printStackTrace();
             courseViewAdapter = new CourseFragmentPagerAdapter(getFragmentManager(), dpToPixels(2, getActivity()));
             courseViewAdapter.setCourseData(courses);
+            courseViewAdapter.notifyDataSetChanged();
         }
         courseViewPager.setOffscreenPageLimit(3);
         courseViewPager.setCurrentItem(0);

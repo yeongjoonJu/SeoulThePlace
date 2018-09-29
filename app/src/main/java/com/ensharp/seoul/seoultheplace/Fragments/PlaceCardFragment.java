@@ -32,6 +32,12 @@ public class PlaceCardFragment extends Fragment {
     public PlaceCardFragment() {
     }
 
+    public String getPlaceName() {
+        if(place != null)
+            return place.getName();
+        return "";
+    }
+
     public void setData(PlaceVO place) {
         this.place = place;
     }

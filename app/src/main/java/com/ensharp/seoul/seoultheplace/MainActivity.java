@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
         // 메인 fragment
         currentFragment = fragments[0];
         currentFragmentNumber = 0;
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         int linearWrapperHeight = rootLayout.getHeight();
                         int diff = rootViewHeight - linearWrapperHeight;
                         // 키보드가 내려간 상태면
-                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(20)) {
+                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(40)) {
                             ((MainFragment)fragments[0]).viewVisible();
                         }
                         else {
@@ -186,8 +187,6 @@ public class MainActivity extends AppCompatActivity {
     public void changeToWebFragment(String link) {
         final Fragment fragment = new WebViewFragment(link);
 
-        Log.e("web/MainActivity", "came here");
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment, "WEB_FRAGMENT")
                 .addToBackStack(null)
@@ -197,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
     public void changeToCourseFragment(CourseVO course, int enterRoute) {
         final Fragment fragment = new CourseFragment(course, enterRoute);
 
-        Log.e("editted_course/MainActivity", "came here");
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
                 .addToBackStack(null)
@@ -207,8 +204,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToCourseFragment(CourseVO course, int enterRoute, int index) {
         final Fragment fragment = new CourseFragment(course, enterRoute, index);
-
-        Log.e("editted_course/MainActivity", "came here");
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragment)
@@ -274,10 +269,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SetSaveData(String[] datas){
-        for(int i = 0 ; i < datas.length;i++){
-            if(datas[i]!=null)
-            Log.e("Datas :",datas[i]);
-        }
         Intent intent = new Intent(this, SaveCourseActivity.class);
         intent.putExtra("codes",datas);
         startActivityForResult(intent, 1);
@@ -289,8 +280,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 String[] insertData = new String[]{null, null, null, null, null, null, null, null};
                 SharedPreferences sp = getSharedPreferences("data", 0);
-                Log.e("SaveTest :", "onActivityResult");
-                Log.e("SaveTest : ", "email " + sp.getString("email", ""));
                 insertData[0] = sp.getString("email", "");
                 insertData[1] = data.getStringExtra("title");
                 insertData[2] = data.getStringExtra("description");

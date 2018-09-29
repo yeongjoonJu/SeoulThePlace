@@ -1,5 +1,6 @@
 package com.ensharp.seoul.seoultheplace;
 
+import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +33,8 @@ public class PlaceVO {
 
     public PlaceVO(JSONObject jsonObject) {
         try {
+            Log.i("search", jsonObject.toString());
+
             this.code = jsonObject.getString("Code");
             this.name = jsonObject.getString("Name");
             this.location = jsonObject.getString("location");

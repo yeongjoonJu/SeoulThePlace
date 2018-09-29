@@ -1,9 +1,9 @@
 package com.ensharp.seoul.seoultheplace;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -123,12 +123,10 @@ public class DAO {
 
             if(resultData == null)
                 return null;
-            Log.i("courseTypeData", type + " " + resultData.toString());
 
             courseData = new ArrayList<>();
             for(int i = 0; i < resultData.length(); i++) {
                 courseData.add(new CourseVO(resultData.getJSONObject(i)));
-                Log.i("courseType", courseData.get(i).getName());
             }
         }catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -247,8 +245,6 @@ public class DAO {
             if(resultData == null)
                 return null;
 
-            Log.i("플레이스 검색", resultData.toString());
-
             placeData = new ArrayList<>();
             for(int i=0; i<resultData.length(); i++) {
                 placeData.add(new PlaceVO(resultData.getJSONObject(i)));
@@ -290,7 +286,6 @@ public class DAO {
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
-            Log.i("search", keyword + " 검색");
             jsonObject.accumulate("keyword", keyword);
             jsonObject.accumulate("url", BASE_URL+"/search/course");
 
@@ -299,8 +294,6 @@ public class DAO {
 
             if(resultData == null)
                 return null;
-
-            Log.i("search", resultData.toString());
 
             courseData = new ArrayList<>();
             for(int i=0; i < resultData.length(); i++)
@@ -314,7 +307,6 @@ public class DAO {
 
     // 회원가입
     public String insertMemberData(String[] information) {
-        Log.v("test", "insertMemberData");
         // 처리 설정
         String[] memberCategory = new String[]{"Id", "Password", "Name","Phone"};
         JSONObject jsonObject = new JSONObject();
@@ -335,7 +327,6 @@ public class DAO {
                 if(jsonObject.getString("result").equals("false"))
                     return jsonObject.getString("msg");
             }
-            Log.v("test", "insertMemberData Complete");
         } catch (JSONException e) {
             e.printStackTrace();
             return "json error";
@@ -372,7 +363,6 @@ public class DAO {
     //  플레이스 좋아요 확인
     // Key : isPlaceLiked(String)
     public String checkLikedPlace(String code, String id) {
-        Log.i("yeong", code + " " + id);
         // 처리 설정
         JSONObject jsonObject = new JSONObject();
         try {
@@ -454,29 +444,6 @@ public class DAO {
         return null;
     }
 
-    public ArrayList<PlaceVO> searchPlaceByTag(String tag) {
-        ArrayList<PlaceVO> placeData = null;
-        // 처리 설정
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.accumulate("Tag", tag);
-            jsonObject.accumulate("url", BASE_URL+"/place/tag");
-
-            // 네트워크 처리 비동기화
-            resultData = new NetworkProcessor().execute(jsonObject).get();
-
-            if(resultData == null)
-                return null;
-
-            for(int i=0; i<resultData.length(); i++)
-                placeData.add(new PlaceVO(resultData.getJSONObject(i)));
-
-        }catch (JSONException | ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return placeData;
-    }
-
     public JSONArray AllPlaceDownload() {
         JSONObject jsonObject = new JSONObject();
 
@@ -528,7 +495,6 @@ public class DAO {
 
     // 편집한 코스 수정 완료 후 입력
     public String insertMemberCourseData(String[] information) {
-        Log.v("test", "insertMemberData");
         // 처리 설정
         String[] memberCategory = new String[]{"Id", "Name","Description","PlaceCode1","PlaceCode2","PlaceCode3","PlaceCode4","PlaceCode5"};
         JSONObject jsonObject = new JSONObject();
@@ -537,7 +503,6 @@ public class DAO {
             jsonObject.accumulate("url", BASE_URL+"/course/editted");
             for (int i = 0; i < memberCategory.length; i++) {
                 jsonObject.accumulate(memberCategory[i], information[i]);
-                Log.e("SaveTest :",memberCategory[i] +"  "+information[i]);
             }
 
 
@@ -552,7 +517,6 @@ public class DAO {
                 if(jsonObject.getString("success").equals("false"))
                     return "error";
             }
-            Log.v("test", "insertMemberData Complete");
         } catch (JSONException e) {
             e.printStackTrace();
             return "json error";
@@ -600,8 +564,6 @@ public class DAO {
 
             if(resultData == null)
                 return null;
-
-            Log.i("yeong", resultData.toString());
 
             courseData = new ArrayList<>();
             JSONArray jsonArray = resultData.getJSONObject(0).getJSONArray("jsonArr");
@@ -658,7 +620,6 @@ public class DAO {
                 return "null";
 
             jsonObject = resultData.getJSONObject(0);
-            Log.e("SearchPasswd : ", String.valueOf(jsonObject));
             if(!jsonObject.getString("Password").equals("null"))
                 return jsonObject.getString("Password");
 
