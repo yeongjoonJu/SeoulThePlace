@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.LikeFragment"
@@ -11,8 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="20dp">
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="match_parent"
@@ -30,91 +30,23 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <com.flyco.tablayout.SegmentTabLayout
+        android:id="@+id/toggle_tab"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:overScrollMode="never">
+        android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp"
+        tl:tl_bar_color="#ffffff"
+        tl:tl_indicator_color="#2C97DE"
+        tl:tl_indicator_corner_radius="8dp"
+        tl:tl_tab_padding="20dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!--<FrameLayout-->
-            <!--android:id="@+id/fl_change"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="84dp"-->
-            <!--android:visibility="gone"/>-->
-
-            <TextView
-                android:id="@+id/cource_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="8dp"
-                android:text="코스"
-                android:textColor="@color/like_small_title"
-                android:textSize="18sp"
-                android:fontFamily="@font/font_family"/>
-
-            <TextView
-                android:id="@+id/no_like_course"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
-                android:text="좋아요한 코스가 없습니다"
-                android:fontFamily="@font/font_family"
-                android:textSize="20sp"
-                android:textColor="@color/like_no_info"
-                android:visibility="gone"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/course_search_result"
-                android:layout_width="match_parent"
-                android:layout_height="430dp"
-                android:layout_gravity="bottom"
-                android:clipToPadding="false"
-                android:overScrollMode="never" />
-
-            <TextView
-                android:id="@+id/place_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="8dp"
-                android:text="플레이스"
-                android:textColor="@color/like_small_title"
-                android:textSize="18sp"
-                android:fontFamily="@font/font_family"/>
-
-            <TextView
-                android:id="@+id/no_like_place"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
-                android:text="좋아요한 플레이스가 없습니다"
-                android:fontFamily="@font/font_family"
-                android:textSize="20sp"
-                android:textColor="@color/like_no_info"
-                android:visibility="gone"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/place_search_result"
-                android:layout_width="match_parent"
-                android:layout_height="310dp"
-                android:layout_gravity="bottom"
-                android:clipToPadding="false"
-                android:overScrollMode="never"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+    <FrameLayout
+        android:id="@+id/course_place_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -7,13 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.ensharp.seoul.seoultheplace.CourseVO;
-import com.ensharp.seoul.seoultheplace.DAO;
-import com.ensharp.seoul.seoultheplace.Fragments.PlaceFragment;
-import com.ensharp.seoul.seoultheplace.MainActivity;
-import com.ensharp.seoul.seoultheplace.PicassoImage;
-import com.ensharp.seoul.seoultheplace.PlaceVO;
+import com.ensharp.seoul.seoultheplace.*;
+import com.ensharp.seoul.seoultheplace.Fragments.CourseFragment;
 import com.ensharp.seoul.seoultheplace.R;
 
 public class CourseHolder extends RecyclerView.ViewHolder {
@@ -56,10 +51,15 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         this.context = context;
         this.userID = userID;
 
-        name.setText(course.getName());
-        PicassoImage.DownLoadImage(course.getImage(), image);
-//        location.setText(course.getLocation());
-//        likes.setText(course.getLikes());
+        if(course.getImage() == null)
+            setElements();
+        else {
+            name.setText(course.getName());
+            PicassoImage.DownLoadImage(course.getImage(), image);
+            location.setText(course.getLocation());
+            likes.setText(String.valueOf(course.getLikes()));
+        }
+
         if (dao.checkLikedCourse(course.getCode(), userID).equals("true")) {
             like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
             isLiked = true;
@@ -69,10 +69,23 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    public void setElements() {
+        PlaceVO firstPlace = dao.getPlaceData(course.getPlaceCode(0));
+        PicassoImage.DownLoadImage(firstPlace.getImageURL(),image);
+        name.setText(course.getName());
+        likes.setText(String.valueOf(course.getLikes()));
+
+        String[] area = firstPlace.getLocation().split(" ");
+        if(area.length >= 2)
+            location.setText(area[1]);
+        else
+            location.setText(area[0]);
+    }
+
     private View.OnClickListener onContainerClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            activity.changeToPlaceFragment(place.getCode(), PlaceFragment.VIA_SEARCH);
+            activity.changeToCourseFragment(course, CourseFragment.VIA_NORMAL);
         }
     };
 
