@@ -23,6 +23,8 @@ import com.ensharp.seoul.seoultheplace.UIElement.CustomAnimationDialog;
 import com.ensharp.seoul.seoultheplace.UIElement.PlaceListAdapter;
 import com.ensharp.seoul.seoultheplace.UIElement.RecycleViewOnItemTouchListener;
 import com.ensharp.seoul.seoultheplace.UIElement.RecycleViewUtil;
+import com.ensharp.seoul.seoultheplace.UIElement.ViewFindUtils;
+import com.flyco.tablayout.SegmentTabLayout;
 
 import org.w3c.dom.Text;
 
@@ -36,12 +38,11 @@ public class LikeFragment extends Fragment {
     private String useremail;
     private RecyclerView courseViewPager;
     private RecyclerView placeViewPager;
-    private CourseFragmentPagerAdapter courseViewAdapter;
     private TextView noCourseMessage;
     private TextView noPlaceMessage;
 
-    private int currentPlacePosition = 0;
-    private int currentCoursePosition = 0;
+    private String[] titles = {"코스, 플레이스"};
+    private ArrayList<Fragment> fragments = new ArrayList<>();
 
     private DAO dao;
 
@@ -52,8 +53,8 @@ public class LikeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        showCourseCardView(currentCoursePosition);
-        showPlaceCardView(currentPlacePosition);
+        showCourseCardView();
+        showPlaceCardView();
     }
 
     @Override
@@ -74,6 +75,12 @@ public class LikeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_like, container, false);
 
+        // 탭
+//        fragments.add(new LikedCourseFragment());
+//        fragments.add(new LikedPlaceFragment());
+//        SegmentTabLayout tabLayout = ViewFindUtils.find(rootView, R.id.fl_change);
+//        tabLayout.setTabData(titles, getActivity(), R.id.fl_change, fragments);
+
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.cource_text);
         placeText = (TextView) rootView.findViewById(R.id.place_text);
@@ -91,7 +98,7 @@ public class LikeFragment extends Fragment {
     }
 
     // 플레이스 카드 뷰
-    protected void showPlaceCardView(int currentPosition) {
+    protected void showPlaceCardView() {
         ArrayList<PlaceVO> places = dao.getLikedPlaceList(useremail);
         if(places == null || places.size() == 0) {
             noPlaceMessage.setVisibility(View.VISIBLE);
@@ -106,7 +113,7 @@ public class LikeFragment extends Fragment {
     }
 
     // 코스 카드 뷰
-    protected void showCourseCardView(int currentPosition) {
+    protected void showCourseCardView() {
         ArrayList<CourseVO> courses = dao.getLikedCourseList(useremail);
         if(courses == null || courses.size() == 0){
             noCourseMessage.setVisibility(View.VISIBLE);
@@ -118,11 +125,5 @@ public class LikeFragment extends Fragment {
         courseViewPager.setLayoutManager(RecycleViewUtil.createHorizontalLayoutManager(getContext()));
         CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail);
         courseViewPager.setAdapter(courseListAdapter);
-
-//        courseViewAdapter = new CourseFragmentPagerAdapter(getChildFragmentManager(), dpToPixels(2, getActivity()));
-//        courseViewAdapter.setCourseData(courses);
-//        ShadowTransformer courseCardShadowTransformer = new ShadowTransformer(courseViewPager, courseViewAdapter);
-//        courseViewPager.setPageTransformer(false, courseCardShadowTransformer);
-//        courseViewPager.setAdapter(courseViewAdapter);
     }
 }

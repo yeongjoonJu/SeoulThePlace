@@ -54,7 +54,11 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // For Download Image
     implementation 'com.squareup.picasso:picasso:2.71828'
-    //For Shadow
-    implementation 'com.sdsmdg.harjot:materialshadows:1.2.5'
+    // For Tab
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.flyco.roundview:FlycoRoundView_Lib:1.1.2@aar'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:1.5.0@aar'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 }
 apply plugin: 'com.google.gms.google-services'
