@@ -11,6 +11,7 @@
         card_view:cardCornerRadius="20dp">
 
     <LinearLayout
+            android:id="@+id/place_card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
