@@ -43,7 +43,7 @@ public class TagAdapter extends ArrayAdapter<String> {
                     R.layout.tagbutton, parent, false);
         }
 
-        String currentTag = getItem(position);
+        String currentTag = "#" + getItem(position);
         final Button tagButton = (Button) listItemView.findViewById(R.id.tagButton);
 
         if(!currentTag.equals(choicedType)) {

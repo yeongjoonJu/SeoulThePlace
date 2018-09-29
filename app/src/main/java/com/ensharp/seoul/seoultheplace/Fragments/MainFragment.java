@@ -262,6 +262,7 @@ public class MainFragment extends Fragment {
 
         // 결과가 없으면 결과없음 출력
         if(courseViewPager.getVisibility() == View.INVISIBLE && placeViewPager.getVisibility() == View.INVISIBLE) {
+            noSearchResult.setText("검색 결과가 없습니다");
             noSearchResult.setVisibility(View.VISIBLE);
         }
 
@@ -277,9 +278,14 @@ public class MainFragment extends Fragment {
     public void renewCardView(String type) {
         placeViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setVisibility(View.VISIBLE);
-        noSearchResult.setVisibility(View.GONE);
         showCourseCardView(TYPE, type);
         showPlaceCardView(TYPE, type);
+        if(placeViewPager.getVisibility() == View.INVISIBLE && courseViewPager.getVisibility() == View.INVISIBLE) {
+            noSearchResult.setText("추천 플레이스 및 코스가 없습니다");
+            noSearchResult.setVisibility(View.VISIBLE);
+        }
+        else
+            noSearchResult.setVisibility(View.GONE);
     }
 
     // 플레이스 카드 뷰
