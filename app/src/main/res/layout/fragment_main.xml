@@ -26,16 +26,16 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="55dp"
+                    android:layout_height="45dp"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_backpack"/>
+                    android:src="@drawable/whitebackpack"/>
                 <Button
                     android:id="@+id/transform_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="검색"
                     android:layout_alignParentRight="true"
-                    android:textColor="@color/white"
+                    android:textColor="#000000"
                     android:background="@drawable/item_maintransform"
                     android:fontFamily="@font/font_family"
                     android:layout_margin="8dp"

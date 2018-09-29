@@ -30,7 +30,7 @@
         <EditText
             android:id="@+id/oriemail"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="8dp"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="8dp"
@@ -46,7 +46,7 @@
         <EditText
             android:id="@+id/oriname"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="8dp"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="8dp"
@@ -60,9 +60,25 @@
             android:textColorHint="#999999" />
 
         <EditText
+            android:id="@+id/oriPhone"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/texteditbox2"
+            android:fontFamily="@font/font_family"
+            android:hint="전화번호 (010XXXXXXXX)"
+            android:inputType="number"
+            android:maxLength="13"
+            android:paddingLeft="10dp"
+            android:textColor="#ffffff"
+            android:textColorHint="#999999" />
+
+        <EditText
             android:id="@+id/oripasswd"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="8dp"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="8dp"
@@ -78,7 +94,7 @@
         <EditText
             android:id="@+id/oripasswd1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="8dp"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="8dp"
@@ -94,7 +110,7 @@
         <Button
             android:id="@+id/orisignup"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="128dp"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="8dp"

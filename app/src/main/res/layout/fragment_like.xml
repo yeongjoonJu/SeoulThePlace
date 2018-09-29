@@ -16,15 +16,16 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_margin="12dp"
-            android:text="좋아요"
-            android:gravity="center"
-            android:foregroundGravity="center"
-            android:textColor="#3B3B44"
-            android:textSize="28sp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bottom_bar"
             android:fontFamily="@font/font_family"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="좋아요"
+            android:textColor="#3B3B44"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
     </RelativeLayout>
