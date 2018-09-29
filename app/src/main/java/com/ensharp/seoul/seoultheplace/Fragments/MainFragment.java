@@ -193,15 +193,19 @@ public class MainFragment extends Fragment {
                 if (!isFocused) return;
                 searchEditText.getText().clear();
                 inputMethodManager.showSoftInput(view, 0);
-                recentList.setVisibility(View.VISIBLE);
+                //recentList.setVisibility(View.VISIBLE);
+                viewInvisible();
             }
         });
+
+
 
         // 플레이스 카드 뷰
         searchView.setController(new JJBarWithErrorIconController());
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                viewVisible();
                 search(rootView);
             }
         });

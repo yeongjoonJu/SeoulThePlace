@@ -15,7 +15,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
@@ -91,24 +90,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, fragments[0])
                 .commit();
-
-        rootLayout = (LinearLayout) findViewById(R.id.linear_wrapper);
-        rootLayout.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        int rootViewHeight = rootLayout.getRootView().getHeight();
-                        int linearWrapperHeight = rootLayout.getHeight();
-                        int diff = rootViewHeight - linearWrapperHeight;
-                        // 키보드가 내려간 상태면
-                        if(currentFragment.equals(fragments[0]) && diff < dpToPx(40)) {
-                            ((MainFragment)fragments[0]).viewVisible();
-                        }
-                        else {
-                            ((MainFragment)fragments[0]).viewInvisible();
-                        }
-                    }
-                });
 
         String[] neededPermissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
