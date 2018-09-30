@@ -58,4 +58,8 @@
 
     <!--내가 만든 코스-->
     <dimen name="there_is_no_course">19sp</dimen>
+
+    <!--추천 코스/플레이스 통합-->
+    <dimen name="overall_name">17sp</dimen>
+    <dimen name="overall_location">14sp</dimen>
 </resources>

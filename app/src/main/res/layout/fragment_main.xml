@@ -141,10 +141,10 @@
                 android:id="@+id/course_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:padding="4dp"
-                android:paddingStart="12dp"
+                android:paddingStart="14dp"
                 android:background="#FFFFFF"
                 android:text="코스"/>
 
@@ -152,7 +152,7 @@
                 android:id="@+id/course_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.4"
                 android:layout_gravity="bottom"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
@@ -160,8 +160,7 @@
                 android:paddingEnd="@dimen/card_padding"
                 android:paddingLeft="@dimen/card_padding"
                 android:paddingRight="@dimen/card_padding"
-                android:paddingStart="@dimen/card_padding"
-                android:layout_marginTop="8dp"/>
+                android:paddingStart="@dimen/card_padding" />
 
             <TextView
                 android:fontFamily="@font/font_family"
@@ -169,10 +168,10 @@
                 android:id="@+id/place_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:padding="4dp"
-                android:paddingStart="12dp"
+                android:paddingStart="14dp"
                 android:background="#FFFFFF"
                 android:text="플레이스"/>
 
@@ -180,7 +179,7 @@
                 android:id="@+id/place_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.4"
                 android:layout_gravity="bottom"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
