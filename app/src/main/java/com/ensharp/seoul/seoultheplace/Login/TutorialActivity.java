@@ -44,4 +44,10 @@ public class TutorialActivity extends Activity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        convertToMainActivity();
+    }
 }
