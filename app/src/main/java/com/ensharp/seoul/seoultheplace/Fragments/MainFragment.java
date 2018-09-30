@@ -28,6 +28,7 @@ public class MainFragment extends Fragment {
     ArrayList<String> tags = new ArrayList<String>(
             Arrays.asList(new String[]{"연인끼리", "혼자서", "친구끼리", "먹방투어", "가족끼리", "옛날로", "연예인처럼", "힐링·산책", "인생샷", "문화·예술", "활동적인"}));
     private static final String[] CHANNELS = new String[]{"타입별", "검색"};
+    private View rootView;
     private MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;
     private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
@@ -49,11 +50,11 @@ public class MainFragment extends Fragment {
     RecyclerView placeViewPager;
     CourseFragmentPagerAdapter courseViewAdapter;
     PlaceFragmentPagerAdapter placeViewAdapter;
-    Button transformButton;
+    LinearLayout searchButton;
+    ImageView transformButton;
 
     // 검색
     EditText searchEditText;
-    ImageButton searchButton;
     ArrayList<PlaceVO> searchPlaceResult = null;
     ArrayList<CourseVO> searchCourseResult = null;
     TextView noSearchResult;
@@ -134,7 +135,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // 화면 구성 요소
         courseText = (TextView) rootView.findViewById(R.id.course_text);
@@ -142,7 +143,6 @@ public class MainFragment extends Fragment {
         searchBar = (FrameLayout) rootView.findViewById(R.id.search_bar);
         tagListView = (HorizontalListView) rootView.findViewById(R.id.tagListView);
         searchEditText = (EditText) rootView.findViewById(R.id.search_edittext);
-        searchButton = (ImageButton) rootView.findViewById(R.id.search_button);
         noSearchResult = (TextView) rootView.findViewById(R.id.no_search_result);
         recentList = (LinearLayout) rootView.findViewById(R.id.recent_search);
         recentListView = (ListView) rootView.findViewById(R.id.recent_listview);
@@ -150,12 +150,14 @@ public class MainFragment extends Fragment {
         searchView = (JJSearchView) rootView.findViewById(R.id.jjsv);
         placeViewPager = (RecyclerView) rootView.findViewById(R.id.place_search_result);
         courseViewPager = (RecyclerView) rootView.findViewById(R.id.course_search_result);
-        transformButton = (Button) rootView.findViewById(R.id.transform_button);
+        searchButton = (LinearLayout) rootView.findViewById(R.id.search_button);
+        transformButton = (ImageView) rootView.findViewById(R.id.transform_button);
+        transformButton.setTag("검색");
 
-        transformButton.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(transformButton.getText().equals("추천")) {
+                if(transformButton.getTag().equals("추천")) {
                     screenStatus = TYPE;
                     recentList.setVisibility(View.GONE);
                     searchBar.setVisibility(View.GONE);
@@ -166,7 +168,8 @@ public class MainFragment extends Fragment {
                     tagAdapter.setMainFragment(mainFragment);
                     tagListView.setAdapter(tagAdapter);
                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    transformButton.setText("검색");
+                    transformButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_home_search));
+                    transformButton.setTag("검색");
                 }
                 else {
                     screenStatus = SEARCH;
@@ -179,7 +182,8 @@ public class MainFragment extends Fragment {
                     courseViewPager.setVisibility(View.INVISIBLE);
                     placeViewPager.setVisibility(View.INVISIBLE);
                     noSearchResult.setVisibility(View.GONE);
-                    transformButton.setText("추천");
+                    transformButton.setBackground(getContext().getResources().getDrawable(R.drawable.home_colored));
+                    transformButton.setTag("추천");
                     initSearchBar();
                     loadRecentSearch();
                 }

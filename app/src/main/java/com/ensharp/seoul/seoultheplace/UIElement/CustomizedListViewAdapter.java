@@ -81,6 +81,13 @@ public class CustomizedListViewAdapter extends BaseSwipeAdapter {
             }
         });
 
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment.changeToCourseFragment(customizedCourses.get(position));
+            }
+        });
+
         cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -5,16 +5,22 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.ensharp.seoul.seoultheplace.Course.CourseModifyFragment;
@@ -44,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         // course, place 초기화
         setContentView(R.layout.activity_main);
-
         fragments = new Fragment[]{
                 new MainFragment(), new CustomizedFragment(), new LikeFragment(), new SettingFragment()
         };

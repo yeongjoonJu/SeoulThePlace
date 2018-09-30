@@ -2,8 +2,10 @@ package com.ensharp.seoul.seoultheplace.UIElement;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,9 @@ public class TagAdapter extends ArrayAdapter<String> {
 
         String currentTag = "#" + getItem(position);
         final Button tagButton = (Button) listItemView.findViewById(R.id.tagButton);
+        tagButton.setTextSize(17);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanum_square_round_bold);
+        tagButton.setTypeface(typeface);
 
         if(!currentTag.equals(choicedType)) {
             tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_unchoicedtag));

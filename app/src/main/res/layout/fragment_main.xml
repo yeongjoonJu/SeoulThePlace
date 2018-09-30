@@ -9,13 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="4"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="4">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.8"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -26,56 +26,68 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginBottom="9dp"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/whitebackpack"/>
-                <Button
-                    android:id="@+id/transform_button"
+                    android:src="@drawable/new_backpack" />
+
+                <LinearLayout
+                    android:id="@+id/search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="검색"
                     android:layout_alignParentRight="true"
-                    android:textColor="#000000"
-                    android:background="@drawable/item_maintransform"
-                    android:fontFamily="@font/font_family"
-                    android:layout_margin="8dp"
-                    android:textSize="16sp"/>
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/transform_button"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/item_home_search"
+                        android:gravity="center|right" />
+
+                </LinearLayout>
+
             </RelativeLayout>
 
             <com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView
                 android:id="@+id/tagListView"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.ensharp.seoul.seoultheplace.UIElement.HorizontalListView>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp" />
 
             <FrameLayout
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:visibility="gone">
 
                 <com.ensharp.seoul.seoultheplace.UIElement.SearchBar.JJSearchView
                     android:id="@+id/jjsv"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"/>
+                    android:layout_height="120dp" />
 
                 <EditText
                     android:id="@+id/search_edittext"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="이름, 지역, 태그별로 검색 가능"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="55dp"
                     android:layout_weight="4"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:background="@null"
-                    android:visibility="gone"
-                    android:textColor="#00BDFC"
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:inputType="text"/>
+                    android:textColor="#00BDFC"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/end"
@@ -84,76 +96,78 @@
                     android:layout_gravity="center|right"
                     android:layout_marginRight="30dp"
                     android:background="@null"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </FrameLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_height="0dp"
+            android:id="@+id/recent_search"
             android:layout_width="match_parent"
-            android:layout_weight="3.3"
-            android:orientation="vertical"
+            android:layout_height="0dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
+            android:layout_weight="3.3"
+            android:background="@drawable/item_recent"
+            android:orientation="vertical"
             android:padding="12dp"
-            android:id="@+id/recent_search"
-            android:visibility="gone"
-            android:background="@drawable/item_recent" >
+            android:visibility="gone">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:textSize="20sp"
                 android:fontFamily="@font/font_family"
-                android:text="최근 검색"/>
+                android:text="최근 검색"
+                android:textSize="20sp" />
+
             <ListView
+                android:id="@+id/recent_listview"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:id="@+id/recent_listview"/>
+                android:layout_height="250dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="8dp"
-            android:layout_weight="3.2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:background="#ffffff">
+            android:layout_marginTop="8dp"
+            android:layout_weight="3.2"
+            android:background="#ffffff"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/no_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="16dp"
-                android:visibility="gone"
+                android:fontFamily="@font/font_family"
+                android:text="검색 결과가 없습니다."
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:textAlignment="center"
-                android:fontFamily="@font/font_family"
-                android:layout_gravity="center_vertical"
-                android:text="검색 결과가 없습니다."/>
+                android:visibility="gone" />
 
             <TextView
-                android:fontFamily="@font/font_family"
-                android:visibility="gone"
                 android:id="@+id/course_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/black"
+                android:background="#FFFFFF"
+                android:fontFamily="@font/font_family"
                 android:padding="4dp"
                 android:paddingStart="14dp"
-                android:background="#FFFFFF"
-                android:text="코스"/>
+                android:text="코스"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/course_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.4"
                 android:layout_gravity="bottom"
+                android:layout_weight="1.4"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingBottom="14dp"
@@ -163,31 +177,31 @@
                 android:paddingStart="@dimen/card_padding" />
 
             <TextView
-                android:fontFamily="@font/font_family"
-                android:visibility="gone"
                 android:id="@+id/place_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/black"
+                android:background="#FFFFFF"
+                android:fontFamily="@font/font_family"
                 android:padding="4dp"
                 android:paddingStart="14dp"
-                android:background="#FFFFFF"
-                android:text="플레이스"/>
+                android:text="플레이스"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/place_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.4"
                 android:layout_gravity="bottom"
+                android:layout_weight="1.4"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingBottom="12dp"
                 android:paddingEnd="@dimen/card_padding"
                 android:paddingLeft="@dimen/card_padding"
                 android:paddingRight="@dimen/card_padding"
-                android:paddingStart="@dimen/card_padding"/>
+                android:paddingStart="@dimen/card_padding" />
         </LinearLayout>
     </LinearLayout>
 
