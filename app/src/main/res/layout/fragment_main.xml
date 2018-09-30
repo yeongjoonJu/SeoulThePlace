@@ -75,6 +75,7 @@
                     android:visibility="gone"
                     android:textColor="#00BDFC"
                     android:maxLines="1"
+                    android:hint="검색"
                     android:inputType="text"/>
 
                 <Button
