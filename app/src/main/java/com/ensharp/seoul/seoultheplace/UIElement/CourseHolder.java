@@ -13,6 +13,7 @@ import com.ensharp.seoul.seoultheplace.R;
 public class CourseHolder extends RecyclerView.ViewHolder {
     private DAO dao = new DAO();
     private MainActivity activity;
+    private CourseListAdapter courseListAdapter;
     private Context context;
     private CourseVO course;
     private String userID;
@@ -26,10 +27,11 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     private ImageView like;
     private boolean isLiked = false;
 
-    public CourseHolder(View itemView, MainActivity activity) {
+    public CourseHolder(View itemView, MainActivity activity, CourseListAdapter courseListAdapter) {
         super(itemView);
 
         this.activity = activity;
+        this.courseListAdapter = courseListAdapter;
         container = (CardView) itemView.findViewById(R.id.courseView);
         container.setElevation(0);
         container.setCardElevation(0);
@@ -94,6 +96,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
             if (isLiked) {
                 like.setImageDrawable(context.getDrawable(R.drawable.unchoiced_heart));
                 isLiked = false;
+                courseListAdapter.notifyDataUpdated(course);
             } else {
                 like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
                 isLiked = true;

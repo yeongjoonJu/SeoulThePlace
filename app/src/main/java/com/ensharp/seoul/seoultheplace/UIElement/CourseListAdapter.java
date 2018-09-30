@@ -44,7 +44,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(type == 0) {
             LayoutInflater inflaterMainCategory = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflaterMainCategory.inflate(R.layout.item_course_info, parent, false);
-            CourseHolder holder = new CourseHolder(view, activity);
+            CourseHolder holder = new CourseHolder(view, activity, this);
             return holder;
         }
         else {
@@ -71,6 +71,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
         return courses.size();
+    }
+
+    public void notifyDataUpdated(CourseVO course) {
+        courses.remove(course);
+        notifyDataSetChanged();
     }
 
     public CourseVO getItemAtPosition(int position) {

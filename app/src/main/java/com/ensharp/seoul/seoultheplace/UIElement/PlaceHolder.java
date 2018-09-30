@@ -21,6 +21,7 @@ import com.ensharp.seoul.seoultheplace.R;
 public class PlaceHolder extends RecyclerView.ViewHolder {
     private DAO dao = new DAO();
     private MainActivity activity;
+    private PlaceListAdapter placeListAdapter;
     private Context context;
     private PlaceVO place;
     private String userID;
@@ -32,10 +33,11 @@ public class PlaceHolder extends RecyclerView.ViewHolder {
     private ImageView like;
     private boolean isLiked = false;
 
-    public PlaceHolder(View itemView, MainActivity activity) {
+    public PlaceHolder(View itemView, MainActivity activity, PlaceListAdapter placeListAdapter) {
         super(itemView);
 
         this.activity = activity;
+        this.placeListAdapter = placeListAdapter;
         container = (CardView) itemView.findViewById(R.id.container);
         container.setOnClickListener(onContainerClickListener);
         image = (ImageView) itemView.findViewById(R.id.place_image);
@@ -75,6 +77,7 @@ public class PlaceHolder extends RecyclerView.ViewHolder {
             if (isLiked) {
                 like.setImageDrawable(context.getDrawable(R.drawable.unchoiced_heart));
                 isLiked = false;
+                placeListAdapter.notifyDataUpdated(place);
             } else {
                 like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
                 isLiked = true;

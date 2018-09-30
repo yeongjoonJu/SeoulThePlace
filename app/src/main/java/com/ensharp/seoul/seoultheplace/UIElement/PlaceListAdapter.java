@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.PlaceVO;
@@ -44,7 +46,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if(type == 0) {
             LayoutInflater inflaterMainCategory = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflaterMainCategory.inflate(R.layout.item_place_info, parent, false);
-            PlaceHolder holder = new PlaceHolder(view, activity);
+            PlaceHolder holder = new PlaceHolder(view, activity, this);
             return holder;
         }
         else {
@@ -71,6 +73,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return places.size();
+    }
+
+    public void notifyDataUpdated(PlaceVO place) {
+        places.remove(place);
+        notifyDataSetChanged();
     }
 
     public PlaceVO getItemAtPosition(int position) {
