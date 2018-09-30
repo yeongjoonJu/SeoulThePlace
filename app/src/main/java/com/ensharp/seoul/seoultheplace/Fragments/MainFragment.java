@@ -232,7 +232,7 @@ public class MainFragment extends Fragment {
         end.setVisibility(View.VISIBLE);
     }
 
-    private void search(View v) {
+    public void search(View v) {
         recentList.setVisibility(View.GONE);
         courseViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setVisibility(View.VISIBLE);
