@@ -9,14 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.ensharp.seoul.seoultheplace.Fragments.MainFragment;
 import com.ensharp.seoul.seoultheplace.R;
 
 import java.util.ArrayList;
 
 public class RecentSearchAdapter extends ArrayAdapter<String> {
     private EditText editText;
+    private MainFragment mainFragment;
 
-    public RecentSearchAdapter(Activity context, ArrayList<String> recents) { super(context, 0, recents); }
+    public RecentSearchAdapter(Activity context, MainFragment mainFragment, ArrayList<String> recents) {
+        super(context, 0, recents);
+        this.mainFragment = mainFragment;
+    }
 
     public void setEditText(EditText editText) {
         this.editText = editText;
@@ -37,6 +43,7 @@ public class RecentSearchAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 editText.setText(word.getText());
+                mainFragment.searchPlaceAndCourse();
             }
         });
 

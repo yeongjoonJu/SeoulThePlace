@@ -124,7 +124,7 @@ public class MainFragment extends Fragment {
             if(word != null)
                 recentSearchList.add(word);
         }
-        listAdapter = new RecentSearchAdapter(getActivity(), recentSearchList);
+        listAdapter = new RecentSearchAdapter(getActivity(), this, recentSearchList);
 
         // 최근 검색
         listAdapter.setEditText(searchEditText);
@@ -207,20 +207,7 @@ public class MainFragment extends Fragment {
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewVisible();
-                search(rootView);
-                // 최근 검색어 SharedPreference에 저장
-                if(listAdapter != null) {
-                    SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    for (int i = 0; i < listAdapter.getCount(); i++) {
-                        if (i >= 6)
-                            break;
-                        if (listAdapter.getItem(i) != null)
-                            editor.putString("RecentSearch" + i, listAdapter.getItem(i));
-                    }
-                    editor.commit();
-                }
+                searchPlaceAndCourse();
             }
         });
 
@@ -229,6 +216,23 @@ public class MainFragment extends Fragment {
         tagListView.setAdapter(tagAdapter);
 
         return rootView;
+    }
+
+    public void searchPlaceAndCourse() {
+        viewVisible();
+        search(rootView);
+        // 최근 검색어 SharedPreference에 저장
+        if(listAdapter != null) {
+            SharedPreferences preferences = getActivity().getSharedPreferences("SeoulThePlace", getActivity().MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            for (int i = 0; i < listAdapter.getCount(); i++) {
+                if (i >= 6)
+                    break;
+                if (listAdapter.getItem(i) != null)
+                    editor.putString("RecentSearch" + i, listAdapter.getItem(i));
+            }
+            editor.commit();
+        }
     }
 
     private void initSearchBar() {
