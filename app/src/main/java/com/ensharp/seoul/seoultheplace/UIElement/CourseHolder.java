@@ -96,12 +96,13 @@ public class CourseHolder extends RecyclerView.ViewHolder {
             if (isLiked) {
                 like.setImageDrawable(context.getDrawable(R.drawable.unchoiced_heart));
                 isLiked = false;
+                dao.likeCourse(course.getCode(), userID);
                 courseListAdapter.notifyDataUpdated(course);
             } else {
                 like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
                 isLiked = true;
+                dao.likeCourse(course.getCode(), userID);
             }
-            dao.likeCourse(course.getCode(), userID);
         }
     };
 }

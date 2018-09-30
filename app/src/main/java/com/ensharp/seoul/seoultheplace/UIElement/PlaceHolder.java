@@ -77,12 +77,13 @@ public class PlaceHolder extends RecyclerView.ViewHolder {
             if (isLiked) {
                 like.setImageDrawable(context.getDrawable(R.drawable.unchoiced_heart));
                 isLiked = false;
+                dao.likePlace(place.getCode(), userID);
                 placeListAdapter.notifyDataUpdated(place);
             } else {
                 like.setImageDrawable(context.getDrawable(R.drawable.choiced_heart));
                 isLiked = true;
+                dao.likePlace(place.getCode(), userID);
             }
-            dao.likePlace(place.getCode(), userID);
         }
     };
 }

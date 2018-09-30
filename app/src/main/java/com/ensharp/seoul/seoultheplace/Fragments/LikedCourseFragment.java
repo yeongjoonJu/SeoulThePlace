@@ -58,14 +58,18 @@ public class LikedCourseFragment extends Fragment {
         ArrayList<CourseVO> courses = dao.getLikedCourseList(useremail);
 
         if(courses == null || courses.size() == 0){
-            noCourseMessage.setVisibility(View.VISIBLE);
-            courseViewPager.setVisibility(View.GONE);
+            showMessage();
             return;
         }
 
         courseViewPager.setVisibility(View.VISIBLE);
         courseViewPager.setLayoutManager(RecycleViewUtil.createVerticalLayoutManager(getContext()));
-        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), courses, useremail);
+        CourseListAdapter courseListAdapter = new CourseListAdapter((MainActivity)getActivity(), getContext(), this, courses, useremail);
         courseViewPager.setAdapter(courseListAdapter);
+    }
+
+    public void showMessage() {
+        noCourseMessage.setVisibility(View.VISIBLE);
+        courseViewPager.setVisibility(View.GONE);
     }
 }

@@ -55,14 +55,18 @@ public class LikedPlaceFragment extends Fragment {
     protected void showPlaceCardView() {
         ArrayList<PlaceVO> places = dao.getLikedPlaceList(useremail);
         if(places == null || places.size() == 0) {
-            noPlaceMessage.setVisibility(View.VISIBLE);
-            placeViewPager.setVisibility(View.GONE);
+            showMessage();
             return;
         }
 
         placeViewPager.setVisibility(View.VISIBLE);
         placeViewPager.setLayoutManager(RecycleViewUtil.createVerticalLayoutManager(getContext()));
-        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), places, useremail);
+        PlaceListAdapter placeListAdapter = new PlaceListAdapter((MainActivity)getActivity(), getContext(), this, places, useremail);
         placeViewPager.setAdapter(placeListAdapter);
+    }
+
+    public void showMessage() {
+        noPlaceMessage.setVisibility(View.VISIBLE);
+        placeViewPager.setVisibility(View.GONE);
     }
 }

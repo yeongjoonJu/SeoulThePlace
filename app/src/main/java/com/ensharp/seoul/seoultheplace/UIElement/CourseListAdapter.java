@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.ensharp.seoul.seoultheplace.CourseVO;
 import com.ensharp.seoul.seoultheplace.DAO;
+import com.ensharp.seoul.seoultheplace.Fragments.LikedCourseFragment;
 import com.ensharp.seoul.seoultheplace.MainActivity;
 import com.ensharp.seoul.seoultheplace.R;
 
@@ -17,13 +18,15 @@ public class CourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private DAO dao = new DAO();
     private MainActivity activity;
     private Context context;
+    private LikedCourseFragment likedCourseFragment;
     private List<CourseVO> courses;
     private String userID;
     private int type = 0;
 
-    public CourseListAdapter(MainActivity activity, Context context, List<CourseVO> courses, String userID) {
+    public CourseListAdapter(MainActivity activity, Context context, LikedCourseFragment likedCourseFragment, List<CourseVO> courses, String userID) {
         this.activity = activity;
         this.context = context;
+        this.likedCourseFragment = likedCourseFragment;
         this.courses = courses;
         this.userID = userID;
     }
@@ -76,6 +79,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void notifyDataUpdated(CourseVO course) {
         courses.remove(course);
         notifyDataSetChanged();
+        if (courses.size() == 0)
+            likedCourseFragment.showMessage();
     }
 
     public CourseVO getItemAtPosition(int position) {

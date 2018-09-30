@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.CourseFragmentPagerAdapter;
 import com.ensharp.seoul.seoultheplace.Course.PlaceView.PlaceFragmentPagerAdapter;
@@ -36,6 +37,8 @@ public class LikeFragment extends Fragment {
     private String useremail;
     private String[] titles = {"코스", "플레이스"};
     private ArrayList<Fragment> fragments = new ArrayList<>();
+    private SegmentTabLayout tabLayout;
+    private View rootView;
 
     private DAO dao;
 
@@ -64,15 +67,24 @@ public class LikeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_like, container, false);
+        rootView = inflater.inflate(R.layout.fragment_like, container, false);
 
         // 탭
         fragments.clear();
         fragments.add(new LikedCourseFragment());
         fragments.add(new LikedPlaceFragment());
-        SegmentTabLayout tabLayout = ViewFindUtils.find(rootView, R.id.toggle_tab);
+        tabLayout = ViewFindUtils.find(rootView, R.id.toggle_tab);
         tabLayout.setTabData(titles, getActivity(), R.id.course_place_fragment, fragments);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (tabLayout.getCurrentTab() == 1) {
+            tabLayout.setCurrentTab(0);
+        }
     }
 }
