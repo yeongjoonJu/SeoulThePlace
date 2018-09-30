@@ -73,12 +73,10 @@ public class TagAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 // 같은 버튼을 클릭했다면
-                if(preChoicedButton != null && preChoicedButton.equals(tagButton))
+                if(preChoicedButton != null && choicedType.equals(tagButton.getText().toString()))
                     return;
 
                 choicedType = tagButton.getText().toString();
-                tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
-                tagButton.setTextColor(Color.BLACK);
 
                 //이전에 선택되어있던 버튼의 색을 변경
                 if(preChoicedButton != null) {
@@ -86,6 +84,8 @@ public class TagAdapter extends ArrayAdapter<String> {
                     preChoicedButton.setTextColor(0xFF777788);
                 }
                 preChoicedButton = tagButton;
+                tagButton.setBackground(getContext().getResources().getDrawable(R.drawable.item_choicedtag));
+                tagButton.setTextColor(Color.BLACK);
 
                 mainFragment.renewCardView(getItem(position));
             }
