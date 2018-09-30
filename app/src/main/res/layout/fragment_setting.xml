@@ -25,7 +25,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:text="더보기"
             android:textColor="#ff000000"
-            android:textSize="25sp"
+            android:textSize="@dimen/maintab_title"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -38,9 +38,9 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="@dimen/setting_icon_size"
+                android:layout_height="@dimen/setting_icon_size"
+                android:layout_marginLeft="@dimen/setting_margin_left"
                 android:src="@drawable/setting_logout" />
 
             <Button
@@ -56,7 +56,7 @@
 
                 android:text="로그아웃"
                 android:textColor="#ff000000"
-                android:textSize="20sp" />
+                android:textSize="@dimen/setting_text_size" />
 
         </LinearLayout>
 
@@ -71,9 +71,9 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="@dimen/setting_icon_size"
+                android:layout_height="@dimen/setting_icon_size"
+                android:layout_marginLeft="@dimen/setting_margin_left"
                 android:src="@drawable/setting_user" />
 
             <Button
@@ -89,7 +89,7 @@
 
                 android:text="만든이들"
                 android:textColor="#ff000000"
-                android:textSize="20sp" />
+                android:textSize="@dimen/setting_text_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,9 +103,9 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="@dimen/setting_icon_size"
+                android:layout_height="@dimen/setting_icon_size"
+                android:layout_marginLeft="@dimen/setting_margin_left"
                 android:scaleType="centerCrop"
                 android:src="@drawable/setting_info" />
 
@@ -113,13 +113,15 @@
                 android:id="@+id/introduceApps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:background="@null"
                 android:fontFamily="@font/font_family"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical|left"
                 android:text="앱소개"
                 android:textColor="#ff000000"
-                android:textSize="20sp" />
+                android:textSize="@dimen/setting_text_size" />
 
         </LinearLayout>
 

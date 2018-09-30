@@ -22,6 +22,9 @@
 
     <dimen name="regular_plus_button">56dp</dimen>
 
+    <!--메인 탭들-->
+    <dimen name="maintab_title">20sp</dimen>
+
     <!--for floating action button-->
     <dimen name="fab_size_normal">56dp</dimen>
     <dimen name="fab_size_mini">40dp</dimen>
@@ -62,4 +65,10 @@
     <!--추천 코스/플레이스 통합-->
     <dimen name="overall_name">17sp</dimen>
     <dimen name="overall_location">14sp</dimen>
+
+    <!--더보기탭 -->
+    <dimen name="setting_icon_size">25dp</dimen>
+    <dimen name="setting_text_size">16sp</dimen>
+    <dimen name="setting_margin_left">30dp</dimen>
+
 </resources>
