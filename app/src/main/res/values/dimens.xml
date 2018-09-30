@@ -55,4 +55,7 @@
     <dimen name="place_like_size">13sp</dimen>
     <dimen name="card_radius">30dp</dimen>
     <dimen name="card_radius_margin">-18dp</dimen>
+
+    <!--내가 만든 코스-->
+    <dimen name="there_is_no_course">19sp</dimen>
 </resources>

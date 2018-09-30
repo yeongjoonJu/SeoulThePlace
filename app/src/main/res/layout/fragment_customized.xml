@@ -14,7 +14,6 @@
         android:orientation="vertical">
 
         <TextView
-
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -27,15 +26,29 @@
             android:textSize="25sp"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.RecyclerView
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록된 코스가 없습니다"
+            android:gravity="center"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/font_family"
+            android:textSize="@dimen/there_is_no_course"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
+        <ListView
             android:id="@+id/customized_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:overScrollMode="never"
+            android:divider="@null"
             android:layout_marginHorizontal="40dp"
             android:paddingBottom="5dp"
             android:paddingTop="5dp" />
+
     </LinearLayout>
 
     <com.ensharp.seoul.seoultheplace.UIElement.FloatingButton.FloatingActionButton
